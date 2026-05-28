@@ -12,13 +12,17 @@ Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Querie
 
 ## Features
 
-- **Multi-domain input** — one bare domain name per line (no `www.` or `.com` needed)
-- **25 TLD extensions** — 10 default visible, 15 more via "Show more"
-- **Parallel queries** — all name × TLD combinations checked concurrently (up to 10 at a time)
+- **Smart input sanitization** — paste full URLs (`https://example.com/page`) and the app strips protocols, `www.`, TLD suffixes, and paths automatically
+- **Categorized TLD picker** — 5 collapsible categories (Popular, Country Codes, Business & Professional, Creative & Design, Tech & Startups), select-all per category, selected/available count
+- **Parallel RDAP queries** — all name × TLD combinations checked concurrently (up to 10 at a time)
 - **Streaming results** — Available / Taken / Error groups appear as results arrive, preserving your input order
-- **Click for details** — click any Taken domain to see registrar, dates, and nameservers *(Phase 3)*
-- **i18n** — English, Turkish, German; auto-detected from system locale, persisted across sessions
-- **Theme** — follows system light/dark mode with a manual override toggle
+- **Modern results UI** — colored left-border accent per status, "Available" badge, custom thin scrollbar
+- **14 languages** — EN, TR, DE, ES, FR, IT, PT, RU, ZH, JA, KO, AR, NL, PL; auto-detected from system locale
+- **RTL support** — full right-to-left layout when Arabic is selected
+- **Animated theme toggle** — sliding switch with sun/moon icon inside the thumb
+- **Fixed header & footer** — header always visible at top, footer always at bottom
+- **UI scale control** — resize the content area from 70% to 150% via footer +/− buttons, persisted across sessions
+- **Custom app icon** — indigo Z lettermark with globe arc overlays
 
 ---
 
@@ -45,11 +49,33 @@ No additional runtime or dependencies needed — the installer is self-contained
 
 ## Usage
 
-1. Type or paste domain names — one per line, bare names only (e.g. `google`, `myproject`)
-2. Select the TLD extensions you want to check
+1. Type or paste domain names — one per line, bare names only (e.g. `google`, `myproject`)  
+   Full URLs are accepted and cleaned automatically (`https://www.example.com/page` → `example`)
+2. Select TLD extensions from the categorized picker, or use "Select all" per category
 3. Click **Check availability**
 4. Results stream in and are split into **Available** (green) and **Taken** (red) groups
 5. Click any Taken domain to see WHOIS details *(coming in Phase 3)*
+
+## Supported languages
+
+| Code | Language | RTL |
+|------|----------|-----|
+| EN | English | — |
+| TR | Turkish | — |
+| DE | German | — |
+| ES | Spanish | — |
+| FR | French | — |
+| IT | Italian | — |
+| PT | Portuguese | — |
+| RU | Russian | — |
+| ZH | Chinese (Simplified) | — |
+| JA | Japanese | — |
+| KO | Korean | — |
+| AR | Arabic | ✓ |
+| NL | Dutch | — |
+| PL | Polish | — |
+
+Language is auto-detected from your system locale and saved across sessions. Switch at any time via the language selector in the top-right corner.
 
 ---
 
@@ -59,32 +85,37 @@ No additional runtime or dependencies needed — the installer is self-contained
 
 ```
 User input
-  └─► parse names × selected TLDs → Vec<DomainQuery>
-        └─► invoke("check_domains")          [Tauri command]
-              └─► tokio::task per pair, semaphore(10)
-                    └─► IANA RDAP bootstrap → GET {base}/domain/{name}.{tld}
-                          ├─ HTTP 200 → Taken    ─► emit("domain-result")
-                          ├─ HTTP 404 → Available ► emit("domain-result")
-                          └─ error   → Error    ─► emit("domain-result")
-        ◄── listen("domain-result") → accumulate into ordered Map
+  └─► sanitize (strip protocol / www / TLD / path)
+        └─► parse names × selected TLDs → Vec<DomainQuery>
+              └─► invoke("check_domains")          [Tauri command]
+                    └─► tokio::task per pair, semaphore(10)
+                          └─► IANA RDAP bootstrap → GET {base}/domain/{name}.{tld}
+                                ├─ HTTP 200 → Taken    ─► emit("domain-result")
+                                ├─ HTTP 404 → Available ► emit("domain-result")
+                                └─ error   → Error    ─► emit("domain-result")
+              ◄── listen("domain-result") → accumulate into ordered Map
 ```
 
-[RDAP](https://about.rdap.org/) is an HTTPS/JSON protocol — no text parsing needed for availability checks. The app fetches the [IANA RDAP bootstrap](https://data.iana.org/rdap/dns.json) on first run to discover the correct server per TLD. Coverage is broad for gTLDs (`.com`, `.net`, `.org`, `.io`, `.app`, `.dev`, `.ai` …) and most ccTLDs; a handful of ccTLDs (`.tr`, `.de`, `.fr`) have limited or no RDAP support and will show as errors — a port-43 WHOIS fallback is planned for Phase 3.
+[RDAP](https://about.rdap.org/) is an HTTPS/JSON protocol — no text parsing needed for availability checks. The app fetches the [IANA RDAP bootstrap](https://data.iana.org/rdap/dns.json) on first run to discover the correct server per TLD. Coverage is broad for gTLDs (`.com`, `.net`, `.org`, `.io`, `.app`, `.dev`, `.ai` …) and most ccTLDs; ccTLDs without RDAP support are shown as disabled in the picker with a tooltip.
 
 ## Project structure
 
 ```
 zonaly/
+├── scripts/                     # icon generation (icon.svg + generate-icons.mjs)
 ├── src/                         # React + TypeScript frontend
 │   ├── App.tsx                  # single-page layout + state
-│   ├── components/              # DomainInput, ExtensionPicker, ResultsList, ThemeToggle
-│   ├── hooks/useDomainCheck.ts  # Tauri event listener + invoke
-│   ├── i18n/locales/            # en.json, tr.json, de.json
+│   ├── components/              # AppLogo, AppFooter, DomainInput, ExtensionPicker,
+│   │                            # LanguageSelector, ResultsList, ResultRow,
+│   │                            # ThemeToggle, Toast
+│   ├── hooks/                   # useDomainCheck, useScale, useToast
+│   ├── i18n/locales/            # 14 language JSON files
 │   ├── theme/ThemeProvider.tsx  # system detect + manual override
-│   └── types/domain.ts          # TypeScript mirrors of Rust serde types
+│   ├── types/domain.ts          # TypeScript mirrors of Rust serde types
+│   └── utils/sanitizeDomains.ts # URL → bare domain name sanitizer
 └── src-tauri/                   # Rust backend
     └── src/
-        ├── commands.rs          # check_domains Tauri command
+        ├── commands.rs          # check_domains + open_url Tauri commands
         ├── types.rs             # DomainQuery / DomainResult / DomainStatus
         └── rdap/                # IANA bootstrap cache + per-domain HTTP client
 ```
@@ -119,6 +150,9 @@ npm run tauri build      # production bundle → src-tauri/target/release/bundle
 cargo check
 cargo clippy
 cargo fmt
+
+# Regenerate app icons after editing scripts/icon.svg
+node scripts/generate-icons.mjs
 ```
 
 ## Roadmap
@@ -127,7 +161,8 @@ cargo fmt
 |-------|--------|-------------|
 | 1 — Setup | ✅ Done | Tauri + React + TS scaffold, i18n, theme |
 | 2 — Core | ✅ Done | Input → parallel RDAP queries → streaming results |
-| 3 — Details | 🔜 Next | WHOIS popup (registrar, dates, nameservers), port-43 fallback |
+| 2.x — UX | ✅ Done | Categorized TLD picker, sanitization, 14 languages, RTL, footer |
+| 3 — Details | 🔜 Next | WHOIS popup (registrar, dates, nameservers), port-43 fallback for non-RDAP ccTLDs |
 | 4 — Polish | ⬜ Planned | Animations, error UX, keyboard shortcuts, packaging |
 
 ## Contributing
