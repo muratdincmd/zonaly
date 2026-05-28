@@ -8,6 +8,7 @@ import {
   ExtensionPicker,
   TLDS_ALL,
   TLDS_DEFAULT,
+  TLDS_NO_RDAP,
 } from "./components/ExtensionPicker";
 import { ResultsList } from "./components/ResultsList";
 import { ThemeToggle } from "./components/ThemeToggle";
@@ -49,10 +50,18 @@ function App() {
   const toggleTld = (tld: string) => {
     setSelectedTlds((prev) => {
       const next = new Set(prev);
-      if (next.has(tld)) {
-        next.delete(tld);
-      } else {
-        next.add(tld);
+      if (next.has(tld)) next.delete(tld);
+      else next.add(tld);
+      return next;
+    });
+  };
+
+  const bulkToggle = (tlds: string[], select: boolean) => {
+    setSelectedTlds((prev) => {
+      const next = new Set(prev);
+      for (const tld of tlds) {
+        if (select) next.add(tld);
+        else next.delete(tld);
       }
       return next;
     });
@@ -60,7 +69,9 @@ function App() {
 
   const handleCheck = () => {
     const names = parseInput(inputText);
-    const tlds = TLDS_ALL.filter((tld) => selectedTlds.has(tld));
+    const tlds = TLDS_ALL.filter(
+      (tld) => selectedTlds.has(tld) && !TLDS_NO_RDAP.has(tld),
+    );
     const queries: DomainQuery[] = names.flatMap((name) =>
       tlds.map((tld) => ({ name, tld })),
     );
@@ -73,7 +84,9 @@ function App() {
     .filter((r): r is DomainResult => r !== undefined);
 
   const canCheck =
-    !isChecking && parseInput(inputText).length > 0 && selectedTlds.size > 0;
+    !isChecking &&
+    parseInput(inputText).length > 0 &&
+    [...selectedTlds].some((tld) => !TLDS_NO_RDAP.has(tld));
 
   return (
     <div className="app">
@@ -86,7 +99,11 @@ function App() {
       </header>
       <main className="app-main">
         <DomainInput value={inputText} onChange={handleInputChange} />
-        <ExtensionPicker selected={selectedTlds} onToggle={toggleTld} />
+        <ExtensionPicker
+          selected={selectedTlds}
+          onToggle={toggleTld}
+          onBulkToggle={bulkToggle}
+        />
         <button
           type="button"
           className="check-btn"

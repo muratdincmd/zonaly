@@ -9,10 +9,16 @@
     "sanitized": "Eingabe automatisch bereinigt"
   },
   "extensions": {
-    "title": "Endungen",
-    "showMore": "Mehr Endungen anzeigen",
-    "showLess": "Weniger Endungen anzeigen",
-    "rdapUnavailable": "RDAP nicht verfügbar — wird in einem zukünftigen Update ergänzt"
+    "selectedCount": "{{count}} ausgewählt",
+    "totalCount": "{{count}} verfügbar",
+    "rdapUnavailable": "RDAP nicht verfügbar — wird in einem zukünftigen Update ergänzt",
+    "categories": {
+      "popular": "Beliebt",
+      "country": "Ländercodes",
+      "business": "Business & Professionell",
+      "creative": "Kreativ & Design",
+      "tech": "Tech & Startups"
+    }
   },
   "check": {
     "button": "Verfügbarkeit prüfen",

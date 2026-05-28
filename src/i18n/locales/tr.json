@@ -9,10 +9,16 @@
     "sanitized": "Giriş otomatik olarak temizlendi"
   },
   "extensions": {
-    "title": "Uzantılar",
-    "showMore": "Daha fazla uzantı göster",
-    "showLess": "Daha az uzantı göster",
-    "rdapUnavailable": "RDAP desteklenmiyor — gelecek bir güncellemede eklenecek"
+    "selectedCount": "{{count}} seçili",
+    "totalCount": "{{count}} mevcut",
+    "rdapUnavailable": "RDAP desteklenmiyor — gelecek bir güncellemede eklenecek",
+    "categories": {
+      "popular": "Popüler",
+      "country": "Ülke Kodları",
+      "business": "İş & Profesyonel",
+      "creative": "Yaratıcı & Tasarım",
+      "tech": "Teknoloji & Girişim"
+    }
   },
   "check": {
     "button": "Uygunluğu kontrol et",

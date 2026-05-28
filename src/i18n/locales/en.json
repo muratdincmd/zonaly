@@ -9,10 +9,16 @@
     "sanitized": "Input cleaned automatically"
   },
   "extensions": {
-    "title": "Extensions",
-    "showMore": "Show more extensions",
-    "showLess": "Show fewer extensions",
-    "rdapUnavailable": "RDAP not available — coming in a future update"
+    "selectedCount": "{{count}} selected",
+    "totalCount": "{{count}} available",
+    "rdapUnavailable": "RDAP not available — coming in a future update",
+    "categories": {
+      "popular": "Popular",
+      "country": "Country Codes",
+      "business": "Business & Professional",
+      "creative": "Creative & Design",
+      "tech": "Tech & Startups"
+    }
   },
   "check": {
     "button": "Check availability",
