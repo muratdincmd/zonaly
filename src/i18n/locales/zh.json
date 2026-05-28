@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Zonaly",
+    "tagline": "检查域名可用性"
+  },
+  "input": {
+    "label": "域名（每行一个，不含 www. 或 .com）",
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "输入已自动清理"
+  },
+  "extensions": {
+    "selectedCount": "已选 {{count}} 个",
+    "totalCount": "共 {{count}} 个可用",
+    "rdapUnavailable": "RDAP 暂不可用——将在未来更新中支持",
+    "categories": {
+      "popular": "热门",
+      "country": "国家代码",
+      "business": "商业与专业",
+      "creative": "创意与设计",
+      "tech": "科技与创业"
+    }
+  },
+  "check": {
+    "button": "检查可用性",
+    "loading": "检查中..."
+  },
+  "results": {
+    "available": "可注册",
+    "availableBadge": "可注册",
+    "taken": "已注册",
+    "error": "无法检查",
+    "empty": "输入域名并点击检查以查看结果。"
+  },
+  "theme": {
+    "toggle": "切换主题"
+  },
+  "footer": {
+    "scaleLabel": "界面缩放",
+    "decrease": "缩小",
+    "increase": "放大"
+  }
+}

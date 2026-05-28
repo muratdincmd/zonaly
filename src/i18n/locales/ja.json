@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Zonaly",
+    "tagline": "ドメインの空き状況を確認"
+  },
+  "input": {
+    "label": "ドメイン（1行1件、www. や .com は不要）",
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "入力を自動的にクリーンアップしました"
+  },
+  "extensions": {
+    "selectedCount": "{{count}} 件選択中",
+    "totalCount": "{{count}} 件利用可能",
+    "rdapUnavailable": "RDAP は利用不可 — 今後のアップデートで対応予定",
+    "categories": {
+      "popular": "人気",
+      "country": "国コード",
+      "business": "ビジネス・プロフェッショナル",
+      "creative": "クリエイティブ・デザイン",
+      "tech": "テック・スタートアップ"
+    }
+  },
+  "check": {
+    "button": "空き状況を確認",
+    "loading": "確認中..."
+  },
+  "results": {
+    "available": "取得可能",
+    "availableBadge": "取得可能",
+    "taken": "登録済み",
+    "error": "確認できませんでした",
+    "empty": "ドメインを入力して確認ボタンをクリックしてください。"
+  },
+  "theme": {
+    "toggle": "テーマを切り替え"
+  },
+  "footer": {
+    "scaleLabel": "UI スケール",
+    "decrease": "縮小",
+    "increase": "拡大"
+  }
+}

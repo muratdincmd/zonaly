@@ -1,12 +1,20 @@
 import { useTranslation } from "react-i18next";
 
+import { sanitizeDomains } from "../utils/sanitizeDomains";
+
 interface Props {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string, sanitized: boolean) => void;
 }
 
 export function DomainInput({ value, onChange }: Props) {
   const { t } = useTranslation();
+
+  const handleChange = (raw: string) => {
+    const { value: cleaned, changed } = sanitizeDomains(raw);
+    onChange(cleaned, changed);
+  };
+
   return (
     <div className="domain-input">
       <label htmlFor="domains" className="label">
@@ -16,7 +24,7 @@ export function DomainInput({ value, onChange }: Props) {
         id="domains"
         className="textarea"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => handleChange(e.target.value)}
         placeholder={t("input.placeholder")}
         rows={6}
         spellCheck={false}

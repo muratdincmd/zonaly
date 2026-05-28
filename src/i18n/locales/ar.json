@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Zonaly",
+    "tagline": "تحقق من توفر أسماء النطاقات"
+  },
+  "input": {
+    "label": "النطاقات (نطاق واحد في كل سطر، بدون www. أو .com)",
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "تم تنظيف الإدخال تلقائياً"
+  },
+  "extensions": {
+    "selectedCount": "{{count}} محدد",
+    "totalCount": "{{count}} متاح",
+    "rdapUnavailable": "RDAP غير متاح — سيتم إضافته في تحديث مستقبلي",
+    "categories": {
+      "popular": "الأكثر شيوعاً",
+      "country": "رموز الدول",
+      "business": "أعمال واحتراف",
+      "creative": "إبداعي وتصميم",
+      "tech": "تقنية وشركات ناشئة"
+    }
+  },
+  "check": {
+    "button": "تحقق من التوفر",
+    "loading": "جارٍ التحقق..."
+  },
+  "results": {
+    "available": "متاح",
+    "availableBadge": "متاح",
+    "taken": "محجوز",
+    "error": "تعذّر التحقق",
+    "empty": "أدخل النطاقات واضغط تحقق لعرض النتائج."
+  },
+  "theme": {
+    "toggle": "تبديل المظهر"
+  },
+  "footer": {
+    "scaleLabel": "مقياس الواجهة",
+    "decrease": "تصغير",
+    "increase": "تكبير"
+  }
+}

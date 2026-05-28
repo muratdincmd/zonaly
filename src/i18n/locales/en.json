@@ -5,12 +5,20 @@
   },
   "input": {
     "label": "Domains (one per line, no www. or .com)",
-    "placeholder": "google\napple\nmyproject"
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "Input cleaned automatically"
   },
   "extensions": {
-    "title": "Extensions",
-    "showMore": "Show more extensions",
-    "showLess": "Show fewer extensions"
+    "selectedCount": "{{count}} selected",
+    "totalCount": "{{count}} available",
+    "rdapUnavailable": "RDAP not available — coming in a future update",
+    "categories": {
+      "popular": "Popular",
+      "country": "Country Codes",
+      "business": "Business & Professional",
+      "creative": "Creative & Design",
+      "tech": "Tech & Startups"
+    }
   },
   "check": {
     "button": "Check availability",
@@ -18,11 +26,17 @@
   },
   "results": {
     "available": "Available",
+    "availableBadge": "Available",
     "taken": "Taken",
     "error": "Could not check",
     "empty": "Enter domains and click Check to see results."
   },
   "theme": {
     "toggle": "Toggle theme"
+  },
+  "footer": {
+    "scaleLabel": "UI scale",
+    "decrease": "Decrease scale",
+    "increase": "Increase scale"
   }
 }

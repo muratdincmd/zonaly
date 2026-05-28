@@ -3,6 +3,30 @@ use std::sync::Arc;
 use tauri::{AppHandle, Emitter, State};
 use tokio::task::JoinSet;
 
+#[tauri::command]
+pub fn open_url(url: String) -> Result<(), String> {
+    // Validate scheme to prevent arbitrary command execution
+    if !url.starts_with("https://") && !url.starts_with("http://") {
+        return Err("Only http/https URLs are allowed".into());
+    }
+    #[cfg(target_os = "windows")]
+    std::process::Command::new("cmd")
+        .args(["/c", "start", "", &url])
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    #[cfg(target_os = "macos")]
+    std::process::Command::new("open")
+        .arg(&url)
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    #[cfg(target_os = "linux")]
+    std::process::Command::new("xdg-open")
+        .arg(&url)
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}
+
 use crate::rdap::RdapClient;
 use crate::types::DomainQuery;
 

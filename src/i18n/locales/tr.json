@@ -5,12 +5,20 @@
   },
   "input": {
     "label": "Alan adları (her satıra bir tane, www. veya .com olmadan)",
-    "placeholder": "google\napple\nmyproject"
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "Giriş otomatik olarak temizlendi"
   },
   "extensions": {
-    "title": "Uzantılar",
-    "showMore": "Daha fazla uzantı göster",
-    "showLess": "Daha az uzantı göster"
+    "selectedCount": "{{count}} seçili",
+    "totalCount": "{{count}} mevcut",
+    "rdapUnavailable": "RDAP desteklenmiyor — gelecek bir güncellemede eklenecek",
+    "categories": {
+      "popular": "Popüler",
+      "country": "Ülke Kodları",
+      "business": "İş & Profesyonel",
+      "creative": "Yaratıcı & Tasarım",
+      "tech": "Teknoloji & Girişim"
+    }
   },
   "check": {
     "button": "Uygunluğu kontrol et",
@@ -18,11 +26,17 @@
   },
   "results": {
     "available": "Müsait",
+    "availableBadge": "Müsait",
     "taken": "Kayıtlı",
     "error": "Kontrol edilemedi",
     "empty": "Alan adlarını girin ve sonuçları görmek için Kontrol Et'e tıklayın."
   },
   "theme": {
     "toggle": "Temayı değiştir"
+  },
+  "footer": {
+    "scaleLabel": "Arayüz ölçeği",
+    "decrease": "Küçült",
+    "increase": "Büyüt"
   }
 }

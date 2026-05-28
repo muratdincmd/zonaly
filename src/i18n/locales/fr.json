@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Zonaly",
+    "tagline": "Vérifiez la disponibilité des domaines"
+  },
+  "input": {
+    "label": "Domaines (un par ligne, sans www. ni .com)",
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "Entrée nettoyée automatiquement"
+  },
+  "extensions": {
+    "selectedCount": "{{count}} sélectionnées",
+    "totalCount": "{{count}} disponibles",
+    "rdapUnavailable": "RDAP non disponible — à venir dans une prochaine mise à jour",
+    "categories": {
+      "popular": "Populaires",
+      "country": "Codes pays",
+      "business": "Business & professionnel",
+      "creative": "Créatif & design",
+      "tech": "Tech & startups"
+    }
+  },
+  "check": {
+    "button": "Vérifier la disponibilité",
+    "loading": "Vérification..."
+  },
+  "results": {
+    "available": "Disponible",
+    "availableBadge": "Disponible",
+    "taken": "Pris",
+    "error": "Impossible de vérifier",
+    "empty": "Entrez des domaines et cliquez sur Vérifier pour voir les résultats."
+  },
+  "theme": {
+    "toggle": "Changer le thème"
+  },
+  "footer": {
+    "scaleLabel": "Échelle de l'interface",
+    "decrease": "Réduire l'échelle",
+    "increase": "Augmenter l'échelle"
+  }
+}
