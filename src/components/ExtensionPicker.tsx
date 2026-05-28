@@ -34,6 +34,19 @@ export const TLDS_MORE = [
 
 export const TLDS_ALL = [...TLDS_DEFAULT, ...TLDS_MORE];
 
+// ccTLDs with no RDAP endpoint in the IANA bootstrap.
+// Add/remove entries here as coverage changes.
+export const TLDS_NO_RDAP = new Set([
+  "de",
+  "fr",
+  "tr",
+  "eu",
+  "uk",
+  "us",
+  "ca",
+  "au",
+]);
+
 interface Props {
   selected: Set<string>;
   onToggle: (tld: string) => void;
@@ -47,16 +60,35 @@ export function ExtensionPicker({ selected, onToggle }: Props) {
   return (
     <div className="ext-picker">
       <div className="ext-grid">
-        {tlds.map((tld) => (
-          <label key={tld} className="ext-chip">
-            <input
-              type="checkbox"
-              checked={selected.has(tld)}
-              onChange={() => onToggle(tld)}
-            />
-            <span>.{tld}</span>
-          </label>
-        ))}
+        {tlds.map((tld) => {
+          const unavailable = TLDS_NO_RDAP.has(tld);
+          return unavailable ? (
+            <span
+              key={tld}
+              className="ext-chip ext-chip-disabled"
+              title={t("extensions.rdapUnavailable")}
+              aria-disabled="true"
+            >
+              <input
+                type="checkbox"
+                disabled
+                checked={false}
+                readOnly
+                tabIndex={-1}
+              />
+              <span>.{tld}</span>
+            </span>
+          ) : (
+            <label key={tld} className="ext-chip">
+              <input
+                type="checkbox"
+                checked={selected.has(tld)}
+                onChange={() => onToggle(tld)}
+              />
+              <span>.{tld}</span>
+            </label>
+          );
+        })}
       </div>
       <button
         type="button"

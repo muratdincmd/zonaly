@@ -11,7 +11,8 @@
   "extensions": {
     "title": "Uzantılar",
     "showMore": "Daha fazla uzantı göster",
-    "showLess": "Daha az uzantı göster"
+    "showLess": "Daha az uzantı göster",
+    "rdapUnavailable": "RDAP desteklenmiyor — gelecek bir güncellemede eklenecek"
   },
   "check": {
     "button": "Uygunluğu kontrol et",

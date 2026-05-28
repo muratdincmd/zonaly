@@ -11,7 +11,8 @@
   "extensions": {
     "title": "Endungen",
     "showMore": "Mehr Endungen anzeigen",
-    "showLess": "Weniger Endungen anzeigen"
+    "showLess": "Weniger Endungen anzeigen",
+    "rdapUnavailable": "RDAP nicht verfügbar — wird in einem zukünftigen Update ergänzt"
   },
   "check": {
     "button": "Verfügbarkeit prüfen",

@@ -336,6 +336,17 @@ button {
   background: color-mix(in srgb, var(--accent) 6%, var(--bg-elevated));
 }
 
+.ext-chip-disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+}
+
+.ext-chip-disabled:hover {
+  border-color: var(--border);
+  background: var(--bg-elevated);
+}
+
 .ext-chip input[type="checkbox"] {
   margin: 0;
   accent-color: var(--accent);

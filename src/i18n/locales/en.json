@@ -11,7 +11,8 @@
   "extensions": {
     "title": "Extensions",
     "showMore": "Show more extensions",
-    "showLess": "Show fewer extensions"
+    "showLess": "Show fewer extensions",
+    "rdapUnavailable": "RDAP not available — coming in a future update"
   },
   "check": {
     "button": "Check availability",
