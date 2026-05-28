@@ -126,12 +126,13 @@ button {
   position: relative;
 }
 
+/* Trigger button */
 .lang-trigger {
   display: flex;
   align-items: center;
   gap: 0.3rem;
   height: 30px;
-  padding: 0 0.6rem;
+  padding: 0 0.55rem;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--bg-elevated);
@@ -139,10 +140,10 @@ button {
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 600;
+  white-space: nowrap;
   transition:
     border-color var(--transition),
     background var(--transition);
-  white-space: nowrap;
 }
 
 .lang-trigger:hover {
@@ -154,10 +155,10 @@ button {
 }
 
 .lang-chevron {
-  width: 12px;
-  height: 12px;
+  width: 11px;
+  height: 11px;
   color: var(--text-muted);
-  transition: transform 180ms ease;
+  transition: transform 200ms ease;
   flex-shrink: 0;
 }
 
@@ -165,64 +166,74 @@ button {
   transform: rotate(180deg);
 }
 
+/* Dropdown popup */
 .lang-menu {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + 8px);
   right: 0;
-  min-width: 90px;
-  max-height: 320px;
-  overflow-y: auto;
-  margin: 0;
-  padding: 0.3rem;
-  list-style: none;
+  width: 210px;
+  padding: 0.5rem;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 8px 24px -4px rgba(0, 0, 0, 0.12);
+    0 4px 8px -2px rgba(0, 0, 0, 0.1),
+    0 12px 32px -4px rgba(0, 0, 0, 0.14);
   z-index: 100;
-  animation: lang-menu-in 140ms ease;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--accent) 35%, transparent) transparent;
-}
-.lang-menu::-webkit-scrollbar { width: 4px; }
-.lang-menu::-webkit-scrollbar-track { background: transparent; }
-.lang-menu::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--accent) 35%, transparent);
-  border-radius: 999px;
+  animation: lang-menu-in 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top right;
 }
 
 @keyframes lang-menu-in {
-  from { opacity: 0; transform: translateY(-4px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+  from { opacity: 0; transform: scale(0.92) translateY(-6px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
 }
 
-.lang-option {
+/* 3-column grid */
+.lang-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.3rem;
+}
+
+/* Individual tile */
+.lang-tile {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 0.65rem;
-  border-radius: 7px;
-  cursor: pointer;
-  font-size: 0.82rem;
-  font-weight: 500;
+  justify-content: center;
+  padding: 0.5rem 0.25rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
   color: var(--text-muted);
-  transition: background var(--transition), color var(--transition);
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition);
 }
 
-.lang-option:hover {
+.lang-tile:hover {
   background: color-mix(in srgb, var(--accent) 8%, var(--bg-elevated));
   color: var(--text);
+  border-color: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
-.lang-option-active {
+.lang-tile-active {
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg-elevated));
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   color: var(--accent);
-  font-weight: 700;
 }
 
-.lang-option-active:hover {
-  background: color-mix(in srgb, var(--accent) 10%, var(--bg-elevated));
+.lang-tile-active:hover {
+  background: color-mix(in srgb, var(--accent) 18%, var(--bg-elevated));
+}
+
+.lang-tile-code {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
 }
 
 /* ── Theme toggle switch ─────────────────────────────────────────────────── */

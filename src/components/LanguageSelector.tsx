@@ -18,6 +18,8 @@ const LANGUAGES = [
   { code: "pl", label: "PL" },
 ] as const;
 
+type LangCode = (typeof LANGUAGES)[number]["code"];
+
 export function LanguageSelector() {
   const { i18n } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -26,39 +28,32 @@ export function LanguageSelector() {
   const current =
     LANGUAGES.find((l) => i18n.language.startsWith(l.code)) ?? LANGUAGES[0];
 
-  const select = (code: string) => {
+  const select = (code: LangCode) => {
     void i18n.changeLanguage(code);
-    // RTL support: set dir on <html> for Arabic
     document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
     setOpen(false);
   };
 
-  // Sync dir on mount in case localStorage restored a language
   useEffect(() => {
     document.documentElement.dir =
       i18n.language.startsWith("ar") ? "rtl" : "ltr";
   }, [i18n.language]);
 
-  // Close on outside click
   useEffect(() => {
     if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
+    const onMouse = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node))
         setOpen(false);
-      }
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [open]);
-
-  // Close on Escape
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
-    document.addEventListener("keydown", handler);
-    return () => document.removeEventListener("keydown", handler);
+    document.addEventListener("mousedown", onMouse);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onMouse);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
   return (
@@ -86,26 +81,25 @@ export function LanguageSelector() {
       </button>
 
       {open && (
-        <ul className="lang-menu" role="listbox">
-          {LANGUAGES.map((lang) => (
-            <li
-              key={lang.code}
-              role="option"
-              aria-selected={lang.code === current.code}
-              className={`lang-option ${lang.code === current.code ? "lang-option-active" : ""}`}
-              onClick={() => select(lang.code)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  select(lang.code);
-                }
-              }}
-              tabIndex={0}
-            >
-              <span>{lang.label}</span>
-            </li>
-          ))}
-        </ul>
+        <div className="lang-menu" role="listbox" aria-label="Select language">
+          <div className="lang-grid">
+            {LANGUAGES.map((lang) => {
+              const active = lang.code === current.code;
+              return (
+                <button
+                  key={lang.code}
+                  type="button"
+                  role="option"
+                  aria-selected={active}
+                  className={`lang-tile ${active ? "lang-tile-active" : ""}`}
+                  onClick={() => select(lang.code)}
+                >
+                  <span className="lang-tile-code">{lang.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       )}
     </div>
   );
