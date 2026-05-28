@@ -12,11 +12,32 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "Zonaly",
         "width": 900,
         "height": 720,
         "minWidth": 640,
-        "minHeight": 480
+        "minHeight": 480,
+        "decorations": true,
+        "transparent": false,
+        "resizable": true,
+        "center": true,
+        "visible": false
+      },
+      {
+        "label": "splashscreen",
+        "title": "Zonaly",
+        "width": 280,
+        "height": 280,
+        "decorations": false,
+        "transparent": true,
+        "shadow": false,
+        "resizable": false,
+        "center": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "focus": true,
+        "url": "splashscreen.html"
       }
     ],
     "security": {

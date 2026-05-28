@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zonaly</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Fully transparent window — only the icon tile + orbit render. */
+    html, body {
+      width: 100%; height: 100%;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .stage {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent;
+      opacity: 1;
+      transition: opacity 0.35s ease;
+    }
+    .stage.fade-out { opacity: 0; }
+
+    /* ── Loader: icon tile + orbiting dot ──────────────────────────────── */
+    .loader {
+      position: relative;
+      width: 132px;
+      height: 132px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Icon tile: fades in with scale-up, then loops a gentle pulse ── */
+    .icon-wrap {
+      width: 96px;
+      height: 96px;
+      opacity: 0;
+      transform: scale(0.78);
+      animation:
+        tile-in 0.5s ease forwards,
+        tile-pulse 1.6s 0.55s ease-in-out infinite;
+    }
+    .icon-wrap svg { display: block; width: 100%; height: 100%; }
+
+    @keyframes tile-in {
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes tile-pulse {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.05); }
+    }
+
+    /* ── Orbit: a square track rotated 360°, with a single dot pinned
+         to its top edge. Rotating the track moves the dot in a circle. */
+    .orbit-track {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      animation:
+        orbit-fade 0.4s 0.35s ease forwards,
+        orbit-spin 1.3s 0.35s linear infinite;
+    }
+    .orbit-dot {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #a5b4fc;
+      box-shadow:
+        0 0 8px  rgba(165, 180, 252, 0.9),
+        0 0 16px rgba(129, 140, 248, 0.7),
+        0 0 24px rgba(129, 140, 248, 0.4);
+      transform: translateX(-50%);
+    }
+
+    @keyframes orbit-fade {
+      to { opacity: 1; }
+    }
+    @keyframes orbit-spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="loader">
+      <!-- Static icon tile — exact reproduction of icon.svg, scaled to 96px -->
+      <div class="icon-wrap">
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="tile-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#4338ca"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Rounded gradient background -->
+          <rect width="96" height="96" rx="21" ry="21" fill="url(#tile-grad)"/>
+          <rect width="96" height="96" rx="21" ry="21"
+                fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+
+          <!-- Globe arcs -->
+          <ellipse cx="48" cy="48" rx="25.3" ry="25.3"
+                   fill="none" stroke="rgba(255,255,255,0.13)" stroke-width="2.1"/>
+          <ellipse cx="48" cy="48" rx="25.3" ry="10.5"
+                   fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.7"/>
+          <ellipse cx="48" cy="48" rx="25.3" ry="3.75"
+                   fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.3"/>
+          <ellipse cx="48" cy="48" rx="10.5" ry="25.3"
+                   fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.7"/>
+
+          <!-- Z lettermark — fully drawn, white, with rounded caps -->
+          <g fill="none" stroke="white" stroke-width="7.7"
+             stroke-linecap="round" stroke-linejoin="round">
+            <line x1="29.8" y1="29.1" x2="66.7" y2="29.1"/>
+            <line x1="66.7" y1="29.1" x2="29.8" y2="67.5"/>
+            <line x1="29.8" y1="67.5" x2="66.7" y2="67.5"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Orbiting glow dot -->
+      <div class="orbit-track">
+        <div class="orbit-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Splash plays for ~1.9 s, then a 0.35 s fade hands off to the main window.
+    const FADE_START_MS = 1900;
+    let closed = false;
+
+    function closeSplash() {
+      if (closed) return;
+      closed = true;
+      if (window.__TAURI_INTERNALS__ && window.__TAURI_INTERNALS__.invoke) {
+        window.__TAURI_INTERNALS__
+          .invoke('close_splashscreen')
+          .catch((e) => console.error('close_splashscreen failed:', e));
+      }
+    }
+
+    setTimeout(() => {
+      document.getElementById('stage').classList.add('fade-out');
+    }, FADE_START_MS);
+
+    document
+      .getElementById('stage')
+      .addEventListener('transitionend', closeSplash, { once: true });
+
+    // Safety fallback — if transitionend never fires, close after 3 s anyway.
+    setTimeout(closeSplash, 3000);
+  </script>
+</body>
+</html>

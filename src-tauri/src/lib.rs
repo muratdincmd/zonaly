@@ -13,6 +13,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::check_domains,
             commands::open_url,
+            commands::close_splashscreen,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,7 +1,25 @@
 use std::sync::Arc;
 
-use tauri::{AppHandle, Emitter, State};
+use tauri::{AppHandle, Emitter, Manager, State};
 use tokio::task::JoinSet;
+
+#[tauri::command]
+pub fn close_splashscreen(app: AppHandle) {
+    // Reveal main first (with explicit size + centring) so there is no
+    // visible gap between splash closing and main appearing.
+    if let Some(main) = app.get_webview_window("main") {
+        let _ = main.set_size(tauri::Size::Logical(tauri::LogicalSize {
+            width: 900.0,
+            height: 720.0,
+        }));
+        let _ = main.center();
+        let _ = main.show();
+        let _ = main.set_focus();
+    }
+    if let Some(splash) = app.get_webview_window("splashscreen") {
+        let _ = splash.close();
+    }
+}
 
 #[tauri::command]
 pub fn open_url(url: String) -> Result<(), String> {
