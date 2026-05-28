@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { AppLogo } from "./components/AppLogo";
 import { DomainInput } from "./components/DomainInput";
+import { LanguageSelector } from "./components/LanguageSelector";
 import {
   ExtensionPicker,
   TLDS_ALL,
@@ -70,7 +71,10 @@ function App() {
     <div className="app">
       <header className="app-header">
         <AppLogo />
-        <ThemeToggle />
+        <div className="header-controls">
+          <LanguageSelector />
+          <ThemeToggle />
+        </div>
       </header>
       <main className="app-main">
         <DomainInput value={inputText} onChange={setInputText} />

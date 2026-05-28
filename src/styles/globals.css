@@ -80,6 +80,109 @@ button {
   color: var(--accent);
 }
 
+/* ── Header controls (lang selector + theme toggle) ─────────────────────── */
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Language selector ───────────────────────────────────────────────────── */
+
+.lang-selector {
+  position: relative;
+}
+
+.lang-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 30px;
+  padding: 0 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-elevated);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition:
+    border-color var(--transition),
+    background var(--transition);
+  white-space: nowrap;
+}
+
+.lang-trigger:hover {
+  border-color: var(--border-focus);
+}
+
+.lang-label {
+  letter-spacing: 0.03em;
+}
+
+.lang-chevron {
+  width: 12px;
+  height: 12px;
+  color: var(--text-muted);
+  transition: transform 180ms ease;
+  flex-shrink: 0;
+}
+
+.lang-chevron-open {
+  transform: rotate(180deg);
+}
+
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 110px;
+  margin: 0;
+  padding: 0.3rem;
+  list-style: none;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 8px 24px -4px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  animation: lang-menu-in 140ms ease;
+}
+
+@keyframes lang-menu-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: background var(--transition), color var(--transition);
+}
+
+.lang-option:hover {
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg-elevated));
+  color: var(--text);
+}
+
+.lang-option-active {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.lang-option-active:hover {
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-elevated));
+}
+
 /* ── Theme toggle switch ─────────────────────────────────────────────────── */
 
 .theme-switch {
