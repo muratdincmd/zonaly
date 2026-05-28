@@ -51,6 +51,91 @@ button {
   font-family: inherit;
 }
 
+/* ── Custom title bar (Windows only — rendered by TitleBar.tsx) ───────────── */
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 0.5rem 0 0.75rem;
+  flex-shrink: 0;
+  /* Pinned to the very top of the viewport, above everything else */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition), border-color var(--transition);
+  user-select: none;
+  -webkit-app-region: drag; /* fallback for WebView2 */
+}
+
+.titlebar-left {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+
+/* Scale logo down slightly to fit the compact bar */
+.titlebar .app-logo-icon { width: 22px; height: 22px; }
+.titlebar .app-logo-wordmark { font-size: 1rem; }
+
+/* TAB BAR GOES HERE — centre area stretches to fill remaining space */
+.titlebar-centre {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  -webkit-app-region: drag;
+}
+
+.titlebar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+
+/* ── Window control buttons ── */
+.titlebar-win-btns {
+  display: flex;
+  align-items: center;
+  margin-left: 0.35rem;
+}
+
+.titlebar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+  border-radius: 0;
+  flex-shrink: 0;
+}
+
+.titlebar-btn:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
+.titlebar-btn--close:hover {
+  background: #e74c3c;
+  color: #fff;
+}
+
+/* ── When the custom title bar is present, push content down 36px ── */
+.app--custom-titlebar {
+  padding-top: 36px;
+}
+
 /* ── Layout ───────────────────────────────────────────────────────────────── */
 
 .app {

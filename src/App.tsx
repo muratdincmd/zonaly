@@ -13,11 +13,13 @@ import {
 } from "./components/ExtensionPicker";
 import { ResultsList } from "./components/ResultsList";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { TitleBar } from "./components/TitleBar";
 import { Toast } from "./components/Toast";
 import { useDomainCheck } from "./hooks/useDomainCheck";
 import { useScale } from "./hooks/useScale";
 import { useToast } from "./hooks/useToast";
 import type { DomainQuery, DomainResult } from "./types/domain";
+import { useCustomTitleBar } from "./utils/platform";
 
 const DOMAIN_RE = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
 
@@ -92,15 +94,19 @@ function App() {
     [...selectedTlds].some((tld) => !TLDS_NO_RDAP.has(tld));
 
   return (
-    <div className="app">
-      {/* Sticky header — never scales */}
-      <header className="app-header">
-        <AppLogo />
-        <div className="header-controls">
-          <LanguageSelector />
-          <ThemeToggle />
-        </div>
-      </header>
+    <div className={`app${useCustomTitleBar ? " app--custom-titlebar" : ""}`}>
+      {/* Custom title bar on Windows; native header on macOS/Linux */}
+      {useCustomTitleBar ? (
+        <TitleBar />
+      ) : (
+        <header className="app-header">
+          <AppLogo />
+          <div className="header-controls">
+            <LanguageSelector />
+            <ThemeToggle />
+          </div>
+        </header>
+      )}
 
       {/* Scrollable content — only this area scales */}
       <main className="app-main">
