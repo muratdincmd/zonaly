@@ -33,5 +33,10 @@
   },
   "theme": {
     "toggle": "Temayı değiştir"
+  },
+  "footer": {
+    "scaleLabel": "Arayüz ölçeği",
+    "decrease": "Küçült",
+    "increase": "Büyüt"
   }
 }

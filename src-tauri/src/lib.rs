@@ -10,7 +10,10 @@ use rdap::RdapClient;
 pub fn run() {
     tauri::Builder::default()
         .manage(Arc::new(RdapClient::new()))
-        .invoke_handler(tauri::generate_handler![commands::check_domains])
+        .invoke_handler(tauri::generate_handler![
+            commands::check_domains,
+            commands::open_url,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

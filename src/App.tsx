@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { AppFooter } from "./components/AppFooter";
 import { AppLogo } from "./components/AppLogo";
 import { DomainInput } from "./components/DomainInput";
 import { LanguageSelector } from "./components/LanguageSelector";
@@ -14,6 +15,7 @@ import { ResultsList } from "./components/ResultsList";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { Toast } from "./components/Toast";
 import { useDomainCheck } from "./hooks/useDomainCheck";
+import { useScale } from "./hooks/useScale";
 import { useToast } from "./hooks/useToast";
 import type { DomainQuery, DomainResult } from "./types/domain";
 
@@ -41,6 +43,7 @@ function App() {
   const [submittedQueries, setSubmittedQueries] = useState<DomainQuery[]>([]);
   const { results, isChecking, run } = useDomainCheck();
   const { toast, show: showToast, dismiss: dismissToast } = useToast(3000);
+  useScale();
 
   const handleInputChange = (value: string, sanitized: boolean) => {
     setInputText(value);
@@ -90,6 +93,7 @@ function App() {
 
   return (
     <div className="app">
+      {/* Sticky header — never scales */}
       <header className="app-header">
         <AppLogo />
         <div className="header-controls">
@@ -97,23 +101,31 @@ function App() {
           <ThemeToggle />
         </div>
       </header>
+
+      {/* Scrollable content — only this area scales */}
       <main className="app-main">
-        <DomainInput value={inputText} onChange={handleInputChange} />
-        <ExtensionPicker
-          selected={selectedTlds}
-          onToggle={toggleTld}
-          onBulkToggle={bulkToggle}
-        />
-        <button
-          type="button"
-          className="check-btn"
-          disabled={!canCheck}
-          onClick={handleCheck}
-        >
-          {isChecking ? t("check.loading") : t("check.button")}
-        </button>
-        <ResultsList results={orderedResults} />
+        <div className="app-main-inner">
+          <DomainInput value={inputText} onChange={handleInputChange} />
+          <ExtensionPicker
+            selected={selectedTlds}
+            onToggle={toggleTld}
+            onBulkToggle={bulkToggle}
+          />
+          <button
+            type="button"
+            className="check-btn"
+            disabled={!canCheck}
+            onClick={handleCheck}
+          >
+            {isChecking ? t("check.loading") : t("check.button")}
+          </button>
+          <ResultsList results={orderedResults} />
+        </div>
       </main>
+
+      {/* Sticky footer — never scales */}
+      <AppFooter />
+
       <Toast toast={toast} onDismiss={dismissToast} />
     </div>
   );

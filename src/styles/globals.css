@@ -7,19 +7,15 @@
 html {
   margin: 0;
   padding: 0;
-  /* Scroll lives on html — scrollbar appears at window edge */
+  /* html is the scroll owner — scrollbar renders at the far right window edge */
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar flush against window right edge */
-html::-webkit-scrollbar {
-  width: 5px;
-}
-html::-webkit-scrollbar-track {
-  background: transparent;
-}
+/* Scrollbar flush against the window right edge */
+html::-webkit-scrollbar { width: 5px; }
+html::-webkit-scrollbar-track { background: transparent; }
 html::-webkit-scrollbar-thumb {
   background: color-mix(in srgb, var(--accent) 35%, transparent);
   border-radius: 999px;
@@ -49,14 +45,13 @@ body {
   transition:
     background var(--transition),
     color var(--transition);
-  overflow: visible;
 }
 
 button {
   font-family: inherit;
 }
 
-/* ── Layout ──────────────────────────────────────────────────────────────── */
+/* ── Layout ───────────────────────────────────────────────────────────────── */
 
 .app {
   display: flex;
@@ -64,15 +59,17 @@ button {
   min-height: 100vh;
   max-width: 720px;
   margin: 0 auto;
-  padding: 0;
+  /* Reserve space so content never hides behind the fixed footer (~46px) */
+  padding-bottom: 46px;
 }
 
-/* Fixed header — sticks to viewport top as html scrolls */
+/* Header: sticky so it stays at viewport top as html scrolls */
 .app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 2rem;
+  flex-shrink: 0;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -290,11 +287,127 @@ button {
 
 /* ── Main content ────────────────────────────────────────────────────────── */
 
+/* No overflow here — html is the scroll owner */
 .app-main {
+  flex: 1;
+}
+
+/* Scaled content wrapper — only this div transforms */
+.app-main-inner {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   padding: 1.5rem 2rem 2rem;
+  transform-origin: top center;
+  transform: scale(var(--content-scale, 1));
+  width: calc(100% / var(--content-scale, 1));
+  margin: 0 auto;
+}
+
+/* ── Footer — position:fixed pins it to viewport bottom regardless of scroll */
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+/* Inner row: same max-width + padding as the header */
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0.55rem 2rem;
+}
+
+/* Left cluster */
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.footer-link {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  gap: 0.3rem;
+  transition: color var(--transition);
+  cursor: pointer;
+}
+
+.footer-link:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-sep {
+  font-size: 0.72rem;
+  color: var(--border);
+  user-select: none;
+}
+
+.footer-gh-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* Scale control */
+.scale-control {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.scale-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition:
+    background var(--transition),
+    border-color var(--transition);
+}
+
+.scale-btn:hover:not(:disabled) {
+  border-color: var(--border-focus);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg-elevated));
+}
+
+.scale-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.scale-value {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  min-width: 34px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Domain input ────────────────────────────────────────────────────────── */

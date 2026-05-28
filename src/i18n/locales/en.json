@@ -33,5 +33,10 @@
   },
   "theme": {
     "toggle": "Toggle theme"
+  },
+  "footer": {
+    "scaleLabel": "UI scale",
+    "decrease": "Decrease scale",
+    "increase": "Increase scale"
   }
 }

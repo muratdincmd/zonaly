@@ -33,5 +33,10 @@
   },
   "theme": {
     "toggle": "Design umschalten"
+  },
+  "footer": {
+    "scaleLabel": "UI-Skalierung",
+    "decrease": "Verkleinern",
+    "increase": "Vergrößern"
   }
 }
