@@ -60,7 +60,8 @@
         "sidebarImage": "icons/installer-sidebar.bmp",
         "installerIcon": "icons/icon.ico",
         "displayLanguageSelector": false,
-        "installMode": "currentUser"
+        "installMode": "currentUser",
+        "installerHooks": "installer-hooks.nsh"
       }
     },
     "macOS": {
