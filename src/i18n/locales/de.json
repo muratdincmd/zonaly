@@ -1,0 +1,28 @@
+{
+  "app": {
+    "title": "Zonaly",
+    "tagline": "Domain-Verfügbarkeit prüfen"
+  },
+  "input": {
+    "label": "Domains (eine pro Zeile, ohne www. oder .com)",
+    "placeholder": "google\napple\nmyproject"
+  },
+  "extensions": {
+    "title": "Endungen",
+    "showMore": "Mehr Endungen anzeigen",
+    "showLess": "Weniger Endungen anzeigen"
+  },
+  "check": {
+    "button": "Verfügbarkeit prüfen",
+    "loading": "Prüfung läuft..."
+  },
+  "results": {
+    "available": "Verfügbar",
+    "taken": "Vergeben",
+    "error": "Prüfung fehlgeschlagen",
+    "empty": "Domains eingeben und auf Prüfen klicken, um Ergebnisse zu sehen."
+  },
+  "theme": {
+    "toggle": "Design umschalten"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "app": {
+    "title": "Zonaly",
+    "tagline": "Check domain availability"
+  },
+  "input": {
+    "label": "Domains (one per line, no www. or .com)",
+    "placeholder": "google\napple\nmyproject"
+  },
+  "extensions": {
+    "title": "Extensions",
+    "showMore": "Show more extensions",
+    "showLess": "Show fewer extensions"
+  },
+  "check": {
+    "button": "Check availability",
+    "loading": "Checking..."
+  },
+  "results": {
+    "available": "Available",
+    "taken": "Taken",
+    "error": "Could not check",
+    "empty": "Enter domains and click Check to see results."
+  },
+  "theme": {
+    "toggle": "Toggle theme"
+  }
+}
