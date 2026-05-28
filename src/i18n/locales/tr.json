@@ -5,7 +5,8 @@
   },
   "input": {
     "label": "Alan adları (her satıra bir tane, www. veya .com olmadan)",
-    "placeholder": "google\napple\nmyproject"
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "Giriş otomatik olarak temizlendi"
   },
   "extensions": {
     "title": "Uzantılar",

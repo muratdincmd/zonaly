@@ -5,7 +5,8 @@
   },
   "input": {
     "label": "Domains (one per line, no www. or .com)",
-    "placeholder": "google\napple\nmyproject"
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "Input cleaned automatically"
   },
   "extensions": {
     "title": "Extensions",

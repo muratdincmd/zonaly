@@ -11,7 +11,9 @@ import {
 } from "./components/ExtensionPicker";
 import { ResultsList } from "./components/ResultsList";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { Toast } from "./components/Toast";
 import { useDomainCheck } from "./hooks/useDomainCheck";
+import { useToast } from "./hooks/useToast";
 import type { DomainQuery, DomainResult } from "./types/domain";
 
 const DOMAIN_RE = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/;
@@ -37,6 +39,12 @@ function App() {
   );
   const [submittedQueries, setSubmittedQueries] = useState<DomainQuery[]>([]);
   const { results, isChecking, run } = useDomainCheck();
+  const { toast, show: showToast, dismiss: dismissToast } = useToast(3000);
+
+  const handleInputChange = (value: string, sanitized: boolean) => {
+    setInputText(value);
+    if (sanitized) showToast(t("input.sanitized"));
+  };
 
   const toggleTld = (tld: string) => {
     setSelectedTlds((prev) => {
@@ -77,7 +85,7 @@ function App() {
         </div>
       </header>
       <main className="app-main">
-        <DomainInput value={inputText} onChange={setInputText} />
+        <DomainInput value={inputText} onChange={handleInputChange} />
         <ExtensionPicker selected={selectedTlds} onToggle={toggleTld} />
         <button
           type="button"
@@ -89,6 +97,7 @@ function App() {
         </button>
         <ResultsList results={orderedResults} />
       </main>
+      <Toast toast={toast} onDismiss={dismissToast} />
     </div>
   );
 }

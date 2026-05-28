@@ -5,7 +5,8 @@
   },
   "input": {
     "label": "Domains (eine pro Zeile, ohne www. oder .com)",
-    "placeholder": "google\napple\nmyproject"
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "Eingabe automatisch bereinigt"
   },
   "extensions": {
     "title": "Endungen",
