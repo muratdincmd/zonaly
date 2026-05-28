@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Zonaly",
+    "tagline": "Проверьте доступность доменов"
+  },
+  "input": {
+    "label": "Домены (по одному на строку, без www. или .com)",
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "Ввод очищен автоматически"
+  },
+  "extensions": {
+    "selectedCount": "{{count}} выбрано",
+    "totalCount": "{{count}} доступно",
+    "rdapUnavailable": "RDAP недоступен — появится в будущем обновлении",
+    "categories": {
+      "popular": "Популярные",
+      "country": "Коды стран",
+      "business": "Бизнес и профессиональные",
+      "creative": "Творческие и дизайн",
+      "tech": "Технологии и стартапы"
+    }
+  },
+  "check": {
+    "button": "Проверить доступность",
+    "loading": "Проверка..."
+  },
+  "results": {
+    "available": "Доступен",
+    "availableBadge": "Доступен",
+    "taken": "Занят",
+    "error": "Не удалось проверить",
+    "empty": "Введите домены и нажмите Проверить для просмотра результатов."
+  },
+  "theme": {
+    "toggle": "Переключить тему"
+  },
+  "footer": {
+    "scaleLabel": "Масштаб интерфейса",
+    "decrease": "Уменьшить масштаб",
+    "increase": "Увеличить масштаб"
+  }
+}

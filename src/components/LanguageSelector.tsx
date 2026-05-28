@@ -5,6 +5,17 @@ const LANGUAGES = [
   { code: "en", label: "EN" },
   { code: "tr", label: "TR" },
   { code: "de", label: "DE" },
+  { code: "es", label: "ES" },
+  { code: "fr", label: "FR" },
+  { code: "it", label: "IT" },
+  { code: "pt", label: "PT" },
+  { code: "ru", label: "RU" },
+  { code: "zh", label: "ZH" },
+  { code: "ja", label: "JA" },
+  { code: "ko", label: "KO" },
+  { code: "ar", label: "AR" },
+  { code: "nl", label: "NL" },
+  { code: "pl", label: "PL" },
 ] as const;
 
 export function LanguageSelector() {
@@ -17,8 +28,16 @@ export function LanguageSelector() {
 
   const select = (code: string) => {
     void i18n.changeLanguage(code);
+    // RTL support: set dir on <html> for Arabic
+    document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
     setOpen(false);
   };
+
+  // Sync dir on mount in case localStorage restored a language
+  useEffect(() => {
+    document.documentElement.dir =
+      i18n.language.startsWith("ar") ? "rtl" : "ltr";
+  }, [i18n.language]);
 
   // Close on outside click
   useEffect(() => {

@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Zonaly",
+    "tagline": "도메인 가용성 확인"
+  },
+  "input": {
+    "label": "도메인 (한 줄에 하나, www. 또는 .com 없이)",
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "입력이 자동으로 정리되었습니다"
+  },
+  "extensions": {
+    "selectedCount": "{{count}}개 선택됨",
+    "totalCount": "{{count}}개 사용 가능",
+    "rdapUnavailable": "RDAP 지원 안 됨 — 향후 업데이트에서 추가 예정",
+    "categories": {
+      "popular": "인기",
+      "country": "국가 코드",
+      "business": "비즈니스 & 전문",
+      "creative": "크리에이티브 & 디자인",
+      "tech": "테크 & 스타트업"
+    }
+  },
+  "check": {
+    "button": "가용성 확인",
+    "loading": "확인 중..."
+  },
+  "results": {
+    "available": "등록 가능",
+    "availableBadge": "등록 가능",
+    "taken": "등록됨",
+    "error": "확인할 수 없음",
+    "empty": "도메인을 입력하고 확인을 클릭하면 결과를 볼 수 있습니다."
+  },
+  "theme": {
+    "toggle": "테마 전환"
+  },
+  "footer": {
+    "scaleLabel": "UI 크기",
+    "decrease": "축소",
+    "increase": "확대"
+  }
+}

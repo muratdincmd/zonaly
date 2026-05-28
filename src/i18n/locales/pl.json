@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Zonaly",
+    "tagline": "Sprawdź dostępność domen"
+  },
+  "input": {
+    "label": "Domeny (jedna na linię, bez www. lub .com)",
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "Dane wejściowe zostały automatycznie oczyszczone"
+  },
+  "extensions": {
+    "selectedCount": "{{count}} zaznaczonych",
+    "totalCount": "{{count}} dostępnych",
+    "rdapUnavailable": "RDAP niedostępny — pojawi się w przyszłej aktualizacji",
+    "categories": {
+      "popular": "Popularne",
+      "country": "Kody krajów",
+      "business": "Biznes i profesjonalne",
+      "creative": "Kreatywne i design",
+      "tech": "Tech i startupy"
+    }
+  },
+  "check": {
+    "button": "Sprawdź dostępność",
+    "loading": "Sprawdzanie..."
+  },
+  "results": {
+    "available": "Dostępna",
+    "availableBadge": "Dostępna",
+    "taken": "Zajęta",
+    "error": "Nie udało się sprawdzić",
+    "empty": "Wprowadź domeny i kliknij Sprawdź, aby zobaczyć wyniki."
+  },
+  "theme": {
+    "toggle": "Przełącz motyw"
+  },
+  "footer": {
+    "scaleLabel": "Skala interfejsu",
+    "decrease": "Zmniejsz skalę",
+    "increase": "Zwiększ skalę"
+  }
+}

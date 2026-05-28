@@ -1,0 +1,42 @@
+{
+  "app": {
+    "title": "Zonaly",
+    "tagline": "Controleer de beschikbaarheid van domeinen"
+  },
+  "input": {
+    "label": "Domeinen (één per regel, zonder www. of .com)",
+    "placeholder": "google\napple\nmyproject",
+    "sanitized": "Invoer automatisch opgeschoond"
+  },
+  "extensions": {
+    "selectedCount": "{{count}} geselecteerd",
+    "totalCount": "{{count}} beschikbaar",
+    "rdapUnavailable": "RDAP niet beschikbaar — komt in een toekomstige update",
+    "categories": {
+      "popular": "Populair",
+      "country": "Landcodes",
+      "business": "Zakelijk & professioneel",
+      "creative": "Creatief & design",
+      "tech": "Tech & startups"
+    }
+  },
+  "check": {
+    "button": "Beschikbaarheid controleren",
+    "loading": "Controleren..."
+  },
+  "results": {
+    "available": "Beschikbaar",
+    "availableBadge": "Beschikbaar",
+    "taken": "Bezet",
+    "error": "Kon niet controleren",
+    "empty": "Voer domeinen in en klik op Controleren om resultaten te zien."
+  },
+  "theme": {
+    "toggle": "Thema wisselen"
+  },
+  "footer": {
+    "scaleLabel": "UI-schaal",
+    "decrease": "Verkleinen",
+    "increase": "Vergroten"
+  }
+}
