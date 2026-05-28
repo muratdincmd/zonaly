@@ -4,12 +4,39 @@
   box-sizing: border-box;
 }
 
-html,
+html {
+  margin: 0;
+  padding: 0;
+  /* Scroll lives on html — scrollbar appears at window edge */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar flush against window right edge */
+html::-webkit-scrollbar {
+  width: 5px;
+}
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+html::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 999px;
+}
+html::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--accent) 60%, transparent);
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--accent) 35%, transparent) transparent;
+}
+
 body,
 #root {
   margin: 0;
   padding: 0;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 body {
@@ -22,7 +49,7 @@ body {
   transition:
     background var(--transition),
     color var(--transition);
-  overflow: hidden;
+  overflow: visible;
 }
 
 button {
@@ -34,18 +61,26 @@ button {
 .app {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100vh;
   max-width: 720px;
   margin: 0 auto;
-  padding: 1.75rem 2rem;
-  gap: 1.5rem;
+  padding: 0;
 }
 
+/* Fixed header — sticks to viewport top as html scrolls */
 .app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1.25rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition), border-color var(--transition);
 }
+
 
 /* ── Logo ────────────────────────────────────────────────────────────────── */
 
@@ -259,8 +294,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  flex: 1;
-  min-height: 0;
+  padding: 1.5rem 2rem 2rem;
 }
 
 /* ── Domain input ────────────────────────────────────────────────────────── */
@@ -515,35 +549,13 @@ button {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  overflow-y: auto;
-  min-height: 0;
   padding: 0.75rem;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--bg-elevated);
-  scroll-behavior: smooth;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
 }
 
-/* Custom scrollbar — Webkit */
-.results::-webkit-scrollbar {
-  width: 5px;
-}
-.results::-webkit-scrollbar-track {
-  background: transparent;
-}
-.results::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--accent) 35%, transparent);
-  border-radius: 999px;
-}
-.results::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--accent) 60%, transparent);
-}
-/* Firefox */
-.results {
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--accent) 35%, transparent) transparent;
-}
 
 .group {
   display: flex;
