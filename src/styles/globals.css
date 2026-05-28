@@ -29,14 +29,16 @@ button {
   font-family: inherit;
 }
 
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+
 .app {
   display: flex;
   flex-direction: column;
   height: 100%;
-  max-width: 760px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 1.5rem;
-  gap: 1.25rem;
+  padding: 1.75rem 2rem;
+  gap: 1.5rem;
 }
 
 .app-header {
@@ -45,25 +47,26 @@ button {
   align-items: center;
 }
 
-/* Logo */
+/* ── Logo ────────────────────────────────────────────────────────────────── */
+
 .app-logo {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.6rem;
   text-decoration: none;
   user-select: none;
 }
 
 .app-logo-icon {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
-  border-radius: 7px;
+  border-radius: 8px;
   display: block;
 }
 
 .app-logo-wordmark {
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1;
@@ -77,100 +80,124 @@ button {
   color: var(--accent);
 }
 
+/* ── Theme toggle ────────────────────────────────────────────────────────── */
+
 .theme-toggle {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--bg-elevated);
-  color: var(--text);
+  color: var(--text-muted);
   cursor: pointer;
-  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition:
     background var(--transition),
-    border var(--transition);
+    border-color var(--transition),
+    color var(--transition);
+  flex-shrink: 0;
+}
+
+.theme-toggle svg {
+  width: 17px;
+  height: 17px;
 }
 
 .theme-toggle:hover {
   border-color: var(--border-focus);
+  color: var(--text);
 }
+
+/* ── Main content ────────────────────────────────────────────────────────── */
 
 .app-main {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
   flex: 1;
   min-height: 0;
 }
 
+/* ── Domain input ────────────────────────────────────────────────────────── */
+
 .domain-input {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.label {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-.textarea {
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.75rem;
-  font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
-  font-size: 13px;
-  color: var(--text);
-  resize: vertical;
-  min-height: 100px;
-  outline: none;
-  transition: border var(--transition);
-}
-
-.textarea:focus {
-  border-color: var(--border-focus);
-}
-
-.ext-picker {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
+.label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.textarea {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
+  font-size: 13px;
+  color: var(--text);
+  resize: vertical;
+  min-height: 80px;
+  max-height: 180px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  line-height: 1.6;
+}
+
+.textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* ── Extension picker ────────────────────────────────────────────────────── */
+
+.ext-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .ext-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.5rem;
 }
 
 .ext-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.35rem 0.7rem;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--bg-elevated);
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 500;
   user-select: none;
   transition:
     background var(--transition),
-    border var(--transition);
+    border-color var(--transition);
 }
 
 .ext-chip:hover {
   border-color: var(--border-focus);
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg-elevated));
 }
 
 .ext-chip input[type="checkbox"] {
   margin: 0;
   accent-color: var(--accent);
+  width: 13px;
+  height: 13px;
 }
 
 .ext-toggle {
@@ -179,46 +206,63 @@ button {
   border: none;
   color: var(--accent);
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 500;
   padding: 0;
+  line-height: 1;
 }
 
 .ext-toggle:hover {
   color: var(--accent-hover);
 }
 
+/* ── Check button ────────────────────────────────────────────────────────── */
+
 .check-btn {
-  padding: 0.7rem 1.25rem;
+  width: 100%;
+  padding: 0.8rem 1.5rem;
   background: var(--accent);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background var(--transition);
-  align-self: flex-start;
+  letter-spacing: 0.01em;
+  transition:
+    background var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
 }
 
 .check-btn:hover:not(:disabled) {
   background: var(--accent-hover);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 35%, transparent);
+  transform: translateY(-1px);
+}
+
+.check-btn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .check-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
+/* ── Results ─────────────────────────────────────────────────────────────── */
+
 .empty {
   color: var(--text-muted);
-  font-size: 0.9rem;
-  margin: 1rem 0;
+  font-size: 0.88rem;
+  margin: 0.5rem 0;
 }
 
 .results {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
   overflow-y: auto;
   min-height: 0;
   padding-right: 0.25rem;
@@ -227,35 +271,35 @@ button {
 .group {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.5rem;
 }
 
 .group-title {
   margin: 0;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.07em;
   color: var(--text-muted);
 }
 
 .group-rows {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.35rem;
 }
 
 .row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 6px;
+  gap: 0.6rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--bg-elevated);
   transition:
     background var(--transition),
-    border var(--transition);
+    border-color var(--transition);
 }
 
 .row-taken {
@@ -264,30 +308,34 @@ button {
 
 .row-taken:hover {
   border-color: var(--taken);
+  background: color-mix(in srgb, var(--taken) 5%, var(--bg-elevated));
 }
 
 .row-taken:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 1px;
+  outline-offset: 2px;
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .dot-available {
   background: var(--available);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--available) 25%, transparent);
 }
 
 .dot-taken {
   background: var(--taken);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--taken) 25%, transparent);
 }
 
 .dot-error {
   background: var(--error);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--error) 25%, transparent);
 }
 
 .domain {
@@ -297,6 +345,6 @@ button {
 
 .error-msg {
   margin-left: auto;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
 }
