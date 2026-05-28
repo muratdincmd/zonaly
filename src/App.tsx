@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { AppLogo } from "./components/AppLogo";
 import { DomainInput } from "./components/DomainInput";
 import {
   ExtensionPicker,
@@ -68,7 +69,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>{t("app.title")}</h1>
+        <AppLogo />
         <ThemeToggle />
       </header>
       <main className="app-main">
