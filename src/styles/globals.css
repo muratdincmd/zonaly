@@ -514,53 +514,87 @@ button {
 .results {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
   overflow-y: auto;
   min-height: 0;
-  padding-right: 0.25rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-elevated);
+  scroll-behavior: smooth;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+}
+
+/* Custom scrollbar — Webkit */
+.results::-webkit-scrollbar {
+  width: 5px;
+}
+.results::-webkit-scrollbar-track {
+  background: transparent;
+}
+.results::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: 999px;
+}
+.results::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--accent) 60%, transparent);
+}
+/* Firefox */
+.results {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--accent) 35%, transparent) transparent;
 }
 
 .group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .group-title {
-  margin: 0;
-  font-size: 0.75rem;
+  margin: 0 0 0.1rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
   color: var(--text-muted);
+  padding-left: 0.1rem;
 }
 
 .group-rows {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 
+/* Row base */
 .row {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.6rem 0.9rem;
+  gap: 0.65rem;
+  padding: 0.55rem 0.8rem;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background: var(--bg-elevated);
+  border-left-width: 3px;
+  background: var(--bg);
   transition:
     background var(--transition),
     border-color var(--transition);
 }
 
+.row-available {
+  border-left-color: var(--available);
+}
+
 .row-taken {
+  border-left-color: var(--taken);
   cursor: pointer;
+  opacity: 0.75;
 }
 
 .row-taken:hover {
-  border-color: var(--taken);
-  background: color-mix(in srgb, var(--taken) 5%, var(--bg-elevated));
+  opacity: 1;
+  background: color-mix(in srgb, var(--taken) 5%, var(--bg));
 }
 
 .row-taken:focus-visible {
@@ -568,37 +602,74 @@ button {
   outline-offset: 2px;
 }
 
+.row-error {
+  border-left-color: var(--error);
+  opacity: 0.65;
+}
+
+/* Status dot */
 .dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .dot-available {
   background: var(--available);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--available) 25%, transparent);
 }
 
 .dot-taken {
   background: var(--taken);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--taken) 25%, transparent);
 }
 
 .dot-error {
   background: var(--error);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--error) 25%, transparent);
 }
 
+/* Domain name */
 .domain {
+  flex: 1;
   font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
   font-size: 13px;
+  line-height: 1;
+  min-width: 0;
+}
+
+.domain-name {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.domain-tld {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* Available badge */
+.result-badge {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.result-badge-available {
+  color: var(--available);
+  background: color-mix(in srgb, var(--available) 12%, transparent);
 }
 
 .error-msg {
   margin-left: auto;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ── Toast notification ──────────────────────────────────────────────────── */

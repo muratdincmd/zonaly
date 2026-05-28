@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import type { DomainResult } from "../types/domain";
 
 interface Props {
@@ -6,6 +8,7 @@ interface Props {
 }
 
 export function ResultRow({ result, onClick }: Props) {
+  const { t } = useTranslation();
   const kind = result.status.kind;
   const clickable = kind === "taken" && !!onClick;
 
@@ -28,9 +31,15 @@ export function ResultRow({ result, onClick }: Props) {
     >
       <span className={`dot dot-${kind}`} />
       <span className="domain">
-        {result.name}.{result.tld}
+        <span className="domain-name">{result.name}</span>
+        <span className="domain-tld">.{result.tld}</span>
       </span>
-      {result.status.kind === "error" && (
+      {kind === "available" && (
+        <span className="result-badge result-badge-available">
+          {t("results.availableBadge")}
+        </span>
+      )}
+      {kind === "error" && (
         <span className="error-msg">{result.status.message}</span>
       )}
     </div>

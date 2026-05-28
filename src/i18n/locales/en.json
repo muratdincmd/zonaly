@@ -26,6 +26,7 @@
   },
   "results": {
     "available": "Available",
+    "availableBadge": "Available",
     "taken": "Taken",
     "error": "Could not check",
     "empty": "Enter domains and click Check to see results."

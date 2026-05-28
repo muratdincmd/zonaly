@@ -26,6 +26,7 @@
   },
   "results": {
     "available": "Müsait",
+    "availableBadge": "Müsait",
     "taken": "Kayıtlı",
     "error": "Kontrol edilemedi",
     "empty": "Alan adlarını girin ve sonuçları görmek için Kontrol Et'e tıklayın."
