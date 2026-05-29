@@ -33,9 +33,8 @@ pub async fn query(http: &reqwest::Client, base_url: &str, fqdn: &str) -> Domain
     }
 }
 
-/// Pure mapping used by `query`. Extracted so it can be unit-tested without
-/// making real HTTP connections.
-pub fn status_from_http_code(code: u16) -> DomainStatus {
+#[cfg(test)]
+fn status_from_http_code(code: u16) -> DomainStatus {
     match code {
         200 => DomainStatus::Taken,
         404 => DomainStatus::Available,
