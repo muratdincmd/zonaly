@@ -4,9 +4,19 @@
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 ![Version](https://img.shields.io/github/v/release/muratdincmd/zonaly)
 
-**Domain availability checker** — paste domain names, pick TLD extensions, and get real-time parallel results in a clean desktop app.
+**Fast, private, multilingual desktop domain availability checker.** Paste domain names, pick TLD extensions, and get real-time parallel results — no accounts, no servers, nothing leaves your machine except the RDAP queries themselves.
 
 Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Queries the [RDAP](https://about.rdap.org/) protocol — the modern, structured successor to WHOIS.
+
+---
+
+## Why Zonaly?
+
+- **Native desktop, not a web tab.** Single-window Tauri app — opens instantly, integrates with the OS shell, no browser overhead.
+- **Privacy by design.** No middleman server, no telemetry, no account. Queries go directly from your machine to the official RDAP endpoint for each TLD.
+- **RDAP, not WHOIS.** Structured HTTPS/JSON responses instead of fragile WHOIS text parsing — faster, more reliable, and machine-readable.
+- **Bulk parallel checks.** Dozens of names × dozens of TLDs in a single click, with results streaming in as they arrive.
+- **Multilingual UX.** 14 languages with RTL support — auto-detected from your system locale.
 
 ---
 
@@ -110,6 +120,8 @@ User input
               ◄── listen("domain-result") → accumulate into ordered Map
 ```
 
+**Why RDAP over WHOIS?** RDAP is a structured, standardized HTTPS/JSON protocol — availability is a clean HTTP status code (200 = taken, 404 = available) instead of brittle, registry-specific WHOIS text parsing.
+
 [RDAP](https://about.rdap.org/) is an HTTPS/JSON protocol — no text parsing needed for availability checks. The app fetches the [IANA RDAP bootstrap](https://data.iana.org/rdap/dns.json) on first run to discover the correct server per TLD. Coverage is broad for gTLDs (`.com`, `.net`, `.org`, `.io`, `.app`, `.dev`, `.ai` …) and most ccTLDs; ccTLDs without RDAP support are shown as disabled in the picker with a tooltip.
 
 ## Project structure
@@ -178,7 +190,10 @@ node scripts/generate-icons.mjs
 | 2.x — UX | ✅ Done | Categorized TLD picker, sanitization, 14 languages, RTL, footer |
 | 3 — Shell | ✅ Done | Custom title bar, multi-tab support, splashscreen, installer branding |
 | 4 — Details | 🔜 Next | WHOIS popup (registrar, dates, nameservers), port-43 fallback for non-RDAP ccTLDs |
-| 5 — Polish | ⬜ Planned | Result animations, error UX, network-offline detection, MSI/DMG/AppImage packaging |
+| 5 — Testing | ⬜ Planned | Vitest unit tests, Rust unit tests, Playwright smoke tests, sanitizer edge cases |
+| 6 — Caching & Reliability | ⬜ Planned | Bootstrap cache expiration, request dedup, retry/backoff, timeout management |
+| 7 — Domain Intelligence | ⬜ Planned | Local history, saved sessions, export CSV/JSON, domain watchlists, expiration tracking |
+| 8 — Advanced | ⬜ Planned | WHOIS timeline, DNS health, registrar intelligence, notifications |
 
 ## Contributing
 
