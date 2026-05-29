@@ -29,7 +29,15 @@
     "availableBadge": "등록 가능",
     "taken": "등록됨",
     "error": "확인할 수 없음",
-    "empty": "도메인을 입력하고 확인을 클릭하면 결과를 볼 수 있습니다."
+    "empty": "도메인을 입력하고 확인을 클릭하면 결과를 볼 수 있습니다.",
+    "errors": {
+      "no_protocol": "{{tld}}에 사용 가능한 RDAP 또는 WHOIS 없음",
+      "timeout": "요청 시간 초과",
+      "rate_limited": "서버 속도 제한",
+      "http": "서버 오류 (HTTP {{code}})",
+      "network": "네트워크 오류",
+      "parse": "응답을 파싱할 수 없음"
+    }
   },
   "theme": {
     "toggle": "테마 전환"

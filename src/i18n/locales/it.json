@@ -29,7 +29,15 @@
     "availableBadge": "Disponibile",
     "taken": "Occupato",
     "error": "Impossibile verificare",
-    "empty": "Inserisci i domini e clicca su Verifica per vedere i risultati."
+    "empty": "Inserisci i domini e clicca su Verifica per vedere i risultati.",
+    "errors": {
+      "no_protocol": "Nessun RDAP o WHOIS disponibile per {{tld}}",
+      "timeout": "Richiesta scaduta",
+      "rate_limited": "Limite di velocità del server",
+      "http": "Errore server (HTTP {{code}})",
+      "network": "Errore di rete",
+      "parse": "Impossibile analizzare la risposta"
+    }
   },
   "theme": {
     "toggle": "Cambia tema"

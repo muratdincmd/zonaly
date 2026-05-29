@@ -78,7 +78,7 @@ impl RdapClient {
             name: query.name.clone(),
             tld: query.tld.clone(),
             status: DomainStatus::Error {
-                message: format!("No RDAP or WHOIS available for .{}", query.tld),
+                message: format!("err:no_protocol|.{}", query.tld),
             },
             source: None,
         }

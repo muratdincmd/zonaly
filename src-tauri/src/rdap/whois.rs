@@ -33,8 +33,8 @@ async fn query_raw(server: &str, fqdn: &str) -> Result<String, String> {
         TcpStream::connect(&addr),
     )
     .await
-    .map_err(|_| format!("WHOIS connect timeout to {server}"))?
-    .map_err(|e| format!("WHOIS connect failed: {e}"))?;
+    .map_err(|_| "err:timeout".to_string())?
+    .map_err(|e| format!("err:network|{e}"))?;
 
     let query = format!("{fqdn}\r\n");
     timeout(
@@ -42,8 +42,8 @@ async fn query_raw(server: &str, fqdn: &str) -> Result<String, String> {
         stream.write_all(query.as_bytes()),
     )
     .await
-    .map_err(|_| "WHOIS write timeout".to_string())?
-    .map_err(|e| format!("WHOIS write failed: {e}"))?;
+    .map_err(|_| "err:timeout".to_string())?
+    .map_err(|e| format!("err:network|{e}"))?;
 
     let mut buf = Vec::with_capacity(4096);
     let mut chunk = [0u8; 4096];
@@ -53,8 +53,8 @@ async fn query_raw(server: &str, fqdn: &str) -> Result<String, String> {
             stream.read(&mut chunk),
         )
         .await
-        .map_err(|_| "WHOIS read timeout".to_string())?
-        .map_err(|e| format!("WHOIS read failed: {e}"))?;
+        .map_err(|_| "err:timeout".to_string())?
+        .map_err(|e| format!("err:network|{e}"))?;
         if n == 0 {
             break;
         }
@@ -105,7 +105,7 @@ fn parse_availability(tld: &str, body: &str) -> DomainStatus {
                 DomainStatus::Taken
             } else {
                 DomainStatus::Error {
-                    message: "Unrecognized .tr WHOIS response".into(),
+                    message: "err:parse".into(),
                 }
             }
         }

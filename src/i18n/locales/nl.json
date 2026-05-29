@@ -29,7 +29,15 @@
     "availableBadge": "Beschikbaar",
     "taken": "Bezet",
     "error": "Kon niet controleren",
-    "empty": "Voer domeinen in en klik op Controleren om resultaten te zien."
+    "empty": "Voer domeinen in en klik op Controleren om resultaten te zien.",
+    "errors": {
+      "no_protocol": "Geen RDAP of WHOIS beschikbaar voor {{tld}}",
+      "timeout": "Verzoek verlopen",
+      "rate_limited": "Serverlimiet bereikt",
+      "http": "Serverfout (HTTP {{code}})",
+      "network": "Netwerkfout",
+      "parse": "Reactie kon niet worden verwerkt"
+    }
   },
   "theme": {
     "toggle": "Thema wisselen"

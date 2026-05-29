@@ -11,12 +11,12 @@ pub async fn query(http: &reqwest::Client, base_url: &str, fqdn: &str) -> Domain
         Ok(r) => r,
         Err(e) if e.is_timeout() => {
             return DomainStatus::Error {
-                message: "Request timed out".into(),
+                message: "err:timeout".into(),
             };
         }
         Err(e) => {
             return DomainStatus::Error {
-                message: format!("Network error: {e}"),
+                message: format!("err:network|{e}"),
             };
         }
     };
@@ -25,10 +25,10 @@ pub async fn query(http: &reqwest::Client, base_url: &str, fqdn: &str) -> Domain
         200 => DomainStatus::Taken,
         404 => DomainStatus::Available,
         429 => DomainStatus::Error {
-            message: "Rate limited by RDAP server".into(),
+            message: "err:rate_limited".into(),
         },
         code => DomainStatus::Error {
-            message: format!("Unexpected HTTP {code}"),
+            message: format!("err:http|{code}"),
         },
     }
 }

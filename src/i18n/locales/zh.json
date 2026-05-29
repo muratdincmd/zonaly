@@ -29,7 +29,15 @@
     "availableBadge": "可注册",
     "taken": "已注册",
     "error": "无法检查",
-    "empty": "输入域名并点击检查以查看结果。"
+    "empty": "输入域名并点击检查以查看结果。",
+    "errors": {
+      "no_protocol": "{{tld}} 无可用的 RDAP 或 WHOIS",
+      "timeout": "请求超时",
+      "rate_limited": "服务器限流",
+      "http": "服务器错误（HTTP {{code}}）",
+      "network": "网络错误",
+      "parse": "无法解析响应"
+    }
   },
   "theme": {
     "toggle": "切换主题"

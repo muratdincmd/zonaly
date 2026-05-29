@@ -29,7 +29,15 @@
     "availableBadge": "Available",
     "taken": "Taken",
     "error": "Could not check",
-    "empty": "Enter domains and click Check to see results."
+    "empty": "Enter domains and click Check to see results.",
+    "errors": {
+      "no_protocol": "No RDAP or WHOIS available for {{tld}}",
+      "timeout": "Request timed out",
+      "rate_limited": "Rate limited by server",
+      "http": "Server error (HTTP {{code}})",
+      "network": "Network error",
+      "parse": "Could not parse response"
+    }
   },
   "theme": {
     "toggle": "Toggle theme"

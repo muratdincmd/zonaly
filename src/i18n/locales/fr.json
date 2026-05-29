@@ -29,7 +29,15 @@
     "availableBadge": "Disponible",
     "taken": "Pris",
     "error": "Impossible de vérifier",
-    "empty": "Entrez des domaines et cliquez sur Vérifier pour voir les résultats."
+    "empty": "Entrez des domaines et cliquez sur Vérifier pour voir les résultats.",
+    "errors": {
+      "no_protocol": "Pas de RDAP ou WHOIS disponible pour {{tld}}",
+      "timeout": "Délai d'attente dépassé",
+      "rate_limited": "Limite de débit du serveur",
+      "http": "Erreur serveur (HTTP {{code}})",
+      "network": "Erreur réseau",
+      "parse": "Impossible d'analyser la réponse"
+    }
   },
   "theme": {
     "toggle": "Changer le thème"

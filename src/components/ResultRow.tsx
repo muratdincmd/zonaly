@@ -12,6 +12,21 @@ function openExternal(url: string) {
   void invoke("open_url", { url });
 }
 
+/** Map Rust error codes (e.g. "err:no_protocol|.fr") to translated strings. */
+function translateError(msg: string, t: (key: string, opts?: Record<string, unknown>) => string): string {
+  if (!msg.startsWith("err:")) return msg;
+  const [code, ctx] = msg.slice(4).split("|");
+  switch (code) {
+    case "no_protocol": return t("results.errors.no_protocol", { tld: ctx ?? "" });
+    case "timeout":     return t("results.errors.timeout");
+    case "rate_limited":return t("results.errors.rate_limited");
+    case "http":        return t("results.errors.http", { code: ctx ?? "" });
+    case "network":     return t("results.errors.network");
+    case "parse":       return t("results.errors.parse");
+    default:            return msg;
+  }
+}
+
 export function ResultRow({ result, onClick }: Props) {
   const { t } = useTranslation();
   const kind = result.status.kind;
@@ -45,7 +60,7 @@ export function ResultRow({ result, onClick }: Props) {
         </span>
       )}
       {kind === "error" && (
-        <span className="error-msg">{result.status.message}</span>
+        <span className="error-msg">{translateError(result.status.message, t)}</span>
       )}
       {kind === "taken" && (
         <button

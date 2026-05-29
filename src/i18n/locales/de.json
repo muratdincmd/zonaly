@@ -29,7 +29,15 @@
     "availableBadge": "Verfügbar",
     "taken": "Vergeben",
     "error": "Prüfung fehlgeschlagen",
-    "empty": "Domains eingeben und auf Prüfen klicken, um Ergebnisse zu sehen."
+    "empty": "Domains eingeben und auf Prüfen klicken, um Ergebnisse zu sehen.",
+    "errors": {
+      "no_protocol": "Kein RDAP oder WHOIS verfügbar für {{tld}}",
+      "timeout": "Zeitüberschreitung",
+      "rate_limited": "Server-Ratenlimit erreicht",
+      "http": "Serverfehler (HTTP {{code}})",
+      "network": "Netzwerkfehler",
+      "parse": "Antwort konnte nicht verarbeitet werden"
+    }
   },
   "theme": {
     "toggle": "Design umschalten"

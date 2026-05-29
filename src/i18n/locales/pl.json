@@ -29,7 +29,15 @@
     "availableBadge": "Dostępna",
     "taken": "Zajęta",
     "error": "Nie udało się sprawdzić",
-    "empty": "Wprowadź domeny i kliknij Sprawdź, aby zobaczyć wyniki."
+    "empty": "Wprowadź domeny i kliknij Sprawdź, aby zobaczyć wyniki.",
+    "errors": {
+      "no_protocol": "Brak RDAP lub WHOIS dla {{tld}}",
+      "timeout": "Przekroczono limit czasu",
+      "rate_limited": "Limit serwera osiągnięty",
+      "http": "Błąd serwera (HTTP {{code}})",
+      "network": "Błąd sieci",
+      "parse": "Nie udało się przetworzyć odpowiedzi"
+    }
   },
   "theme": {
     "toggle": "Przełącz motyw"
