@@ -130,7 +130,26 @@ function DetailsContent({ details }: { details: DomainDetails }) {
   return (
     <dl className="modal-grid">
       {details.registrar && (
-        <Field label={t("details.registrar")} value={details.registrar} />
+        <>
+          <dt className="modal-label">{t("details.registrar")}</dt>
+          <dd className="modal-value modal-registrar-row">
+            <span>{details.registrar}</span>
+            <button
+              type="button"
+              className="modal-registrar-link"
+              onClick={() => void invoke("open_url", {
+                url: `https://lookup.icann.org/en/lookup?name=${details.name}.${details.tld}`,
+              })}
+              aria-label="ICANN Lookup"
+              title={`ICANN Lookup: ${details.name}.${details.tld}`}
+            >
+              <svg width="11" height="11" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                <path d="M4 2H2a1 1 0 00-1 1v5a1 1 0 001 1h5a1 1 0 001-1V6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M6.5 1h2.5m0 0v2.5m0-2.5L5 4.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </dd>
+        </>
       )}
 
       {details.registered && (

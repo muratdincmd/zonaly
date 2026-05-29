@@ -1368,6 +1368,34 @@ button {
   color: var(--error);
 }
 
+.modal-registrar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.modal-registrar-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 0;
+  color: var(--accent);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 120ms ease, background 120ms ease;
+}
+
+.modal-registrar-link:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
 .modal-close {
   flex-shrink: 0;
   width: 28px;
