@@ -47,5 +47,40 @@
     "closeTabsToRight": "오른쪽 탭 닫기",
     "duplicateTab": "탭 복제",
     "maxTabsTooltip": "최대 탭 20개에 도달했습니다"
+  },
+  "details": {
+    "loading": "도메인 세부 정보 로딩 중…",
+    "error": "세부 정보를 불러올 수 없습니다",
+    "limited": "이 TLD에서는 제한된 세부 정보만 제공됩니다.",
+    "close": "닫기",
+    "registrar": "등록 대행사",
+    "registered": "등록일",
+    "expires": "만료일",
+    "updated": "마지막 업데이트",
+    "nameservers": "네임서버",
+    "statuses": "상태",
+    "source": { "rdap": "RDAP 통해", "whois": "WHOIS 통해" },
+    "statusLabels": {
+      "active": "활성", "ok": "활성", "inactive": "비활성",
+      "clienttransferprohibited": "이전 잠금",
+      "servertransferprohibited": "이전 잠금 (레지스트리)",
+      "clientupdateprohibited": "업데이트 잠금",
+      "serverupdateprohibited": "업데이트 잠금 (레지스트리)",
+      "clientdeleteprohibited": "삭제 잠금",
+      "serverdeleteprohibited": "삭제 잠금 (레지스트리)",
+      "clienthold": "보류 중", "serverhold": "보류 중 (레지스트리)",
+      "clientrenewprohibited": "갱신 잠금",
+      "serverrenewprohibited": "갱신 잠금 (레지스트리)",
+      "pendingdelete": "삭제 대기",
+      "pendingtransfer": "이전 대기",
+      "pendingupdate": "업데이트 대기",
+      "pendingrenew": "갱신 대기",
+      "pendingcreate": "생성 대기",
+      "redemptionperiod": "복구 기간",
+      "autorenewperiod": "자동 갱신",
+      "addperiod": "추가 기간",
+      "transferperiod": "이전 기간",
+      "renewperiod": "갱신 기간"
+    }
   }
 }

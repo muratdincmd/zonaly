@@ -47,5 +47,46 @@
     "closeTabsToRight": "Cerrar pestañas a la derecha",
     "duplicateTab": "Duplicar pestaña",
     "maxTabsTooltip": "Se alcanzó el máximo de 20 pestañas"
+  },
+  "details": {
+    "loading": "Cargando detalles del dominio…",
+    "error": "No se pudieron cargar los detalles",
+    "limited": "Detalles limitados disponibles para este TLD.",
+    "close": "Cerrar",
+    "registrar": "Registrador",
+    "registered": "Registrado",
+    "expires": "Expira",
+    "updated": "Última actualización",
+    "nameservers": "Servidores de nombres",
+    "statuses": "Estado",
+    "source": {
+      "rdap": "vía RDAP",
+      "whois": "vía WHOIS"
+    },
+    "statusLabels": {
+      "active": "Activo",
+      "ok": "Activo",
+      "inactive": "Inactivo",
+      "clienttransferprohibited": "Transferencia bloqueada",
+      "servertransferprohibited": "Transferencia bloqueada (registro)",
+      "clientupdateprohibited": "Actualización bloqueada",
+      "serverupdateprohibited": "Actualización bloqueada (registro)",
+      "clientdeleteprohibited": "Eliminación bloqueada",
+      "serverdeleteprohibited": "Eliminación bloqueada (registro)",
+      "clienthold": "En espera",
+      "serverhold": "En espera (registro)",
+      "clientrenewprohibited": "Renovación bloqueada",
+      "serverrenewprohibited": "Renovación bloqueada (registro)",
+      "pendingdelete": "Eliminación pendiente",
+      "pendingtransfer": "Transferencia pendiente",
+      "pendingupdate": "Actualización pendiente",
+      "pendingrenew": "Renovación pendiente",
+      "pendingcreate": "Creación pendiente",
+      "redemptionperiod": "Período de recuperación",
+      "autorenewperiod": "Auto-renovación",
+      "addperiod": "Período de adición",
+      "transferperiod": "Período de transferencia",
+      "renewperiod": "Período de renovación"
+    }
   }
 }

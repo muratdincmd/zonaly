@@ -47,5 +47,46 @@
     "closeTabsToRight": "Sağdaki sekmeleri kapat",
     "duplicateTab": "Sekmeyi çoğalt",
     "maxTabsTooltip": "Maksimum 20 sekme sınırına ulaşıldı"
+  },
+  "details": {
+    "loading": "Alan adı detayları yükleniyor…",
+    "error": "Detaylar yüklenemedi",
+    "limited": "Bu TLD için sınırlı detay mevcut.",
+    "close": "Kapat",
+    "registrar": "Kayıt Şirketi",
+    "registered": "Kayıt Tarihi",
+    "expires": "Bitiş Tarihi",
+    "updated": "Son Güncelleme",
+    "nameservers": "Ad Sunucuları",
+    "statuses": "Durum",
+    "source": {
+      "rdap": "RDAP ile",
+      "whois": "WHOIS ile"
+    },
+    "statusLabels": {
+      "active": "Aktif",
+      "ok": "Aktif",
+      "inactive": "Pasif",
+      "clienttransferprohibited": "Transfer kilitli",
+      "servertransferprohibited": "Transfer kilitli (sicil)",
+      "clientupdateprohibited": "Güncelleme kilitli",
+      "serverupdateprohibited": "Güncelleme kilitli (sicil)",
+      "clientdeleteprohibited": "Silme kilitli",
+      "serverdeleteprohibited": "Silme kilitli (sicil)",
+      "clienthold": "Beklemede",
+      "serverhold": "Beklemede (sicil)",
+      "clientrenewprohibited": "Yenileme kilitli",
+      "serverrenewprohibited": "Yenileme kilitli (sicil)",
+      "pendingdelete": "Silme bekliyor",
+      "pendingtransfer": "Transfer bekliyor",
+      "pendingupdate": "Güncelleme bekliyor",
+      "pendingrenew": "Yenileme bekliyor",
+      "pendingcreate": "Oluşturma bekliyor",
+      "redemptionperiod": "Kurtarma süresi",
+      "autorenewperiod": "Otomatik yenileme süresi",
+      "addperiod": "Ekleme süresi",
+      "transferperiod": "Transfer süresi",
+      "renewperiod": "Yenileme süresi"
+    }
   }
 }

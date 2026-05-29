@@ -47,5 +47,46 @@
     "closeTabsToRight": "Close tabs to the right",
     "duplicateTab": "Duplicate tab",
     "maxTabsTooltip": "Maximum 20 tabs reached"
+  },
+  "details": {
+    "loading": "Loading domain details…",
+    "error": "Could not load details",
+    "limited": "Limited details available for this TLD.",
+    "close": "Close",
+    "registrar": "Registrar",
+    "registered": "Registered",
+    "expires": "Expires",
+    "updated": "Last updated",
+    "nameservers": "Nameservers",
+    "statuses": "Status",
+    "source": {
+      "rdap": "via RDAP",
+      "whois": "via WHOIS"
+    },
+    "statusLabels": {
+      "active": "Active",
+      "ok": "Active",
+      "inactive": "Inactive",
+      "clienttransferprohibited": "Transfer locked",
+      "servertransferprohibited": "Transfer locked (registry)",
+      "clientupdateprohibited": "Updates locked",
+      "serverupdateprohibited": "Updates locked (registry)",
+      "clientdeleteprohibited": "Deletion locked",
+      "serverdeleteprohibited": "Deletion locked (registry)",
+      "clienthold": "On hold",
+      "serverhold": "On hold (registry)",
+      "clientrenewprohibited": "Renewal locked",
+      "serverrenewprohibited": "Renewal locked (registry)",
+      "pendingdelete": "Pending deletion",
+      "pendingtransfer": "Pending transfer",
+      "pendingupdate": "Pending update",
+      "pendingrenew": "Pending renewal",
+      "pendingcreate": "Pending creation",
+      "redemptionperiod": "Redemption period",
+      "autorenewperiod": "Auto-renew period",
+      "addperiod": "Add period",
+      "transferperiod": "Transfer period",
+      "renewperiod": "Renew period"
+    }
   }
 }

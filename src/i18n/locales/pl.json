@@ -47,5 +47,40 @@
     "closeTabsToRight": "Zamknij karty po prawej",
     "duplicateTab": "Duplikuj kartę",
     "maxTabsTooltip": "Osiągnięto maksymalny limit 20 kart"
+  },
+  "details": {
+    "loading": "Ładowanie szczegółów domeny…",
+    "error": "Nie udało się załadować szczegółów",
+    "limited": "Dla tego TLD dostępne są ograniczone szczegóły.",
+    "close": "Zamknij",
+    "registrar": "Rejestrator",
+    "registered": "Zarejestrowano",
+    "expires": "Wygasa",
+    "updated": "Ostatnia aktualizacja",
+    "nameservers": "Serwery DNS",
+    "statuses": "Status",
+    "source": { "rdap": "przez RDAP", "whois": "przez WHOIS" },
+    "statusLabels": {
+      "active": "Aktywna", "ok": "Aktywna", "inactive": "Nieaktywna",
+      "clienttransferprohibited": "Transfer zablokowany",
+      "servertransferprohibited": "Transfer zablokowany (rejestr)",
+      "clientupdateprohibited": "Aktualizacje zablokowane",
+      "serverupdateprohibited": "Aktualizacje zablokowane (rejestr)",
+      "clientdeleteprohibited": "Usuwanie zablokowane",
+      "serverdeleteprohibited": "Usuwanie zablokowane (rejestr)",
+      "clienthold": "Wstrzymana", "serverhold": "Wstrzymana (rejestr)",
+      "clientrenewprohibited": "Odnawianie zablokowane",
+      "serverrenewprohibited": "Odnawianie zablokowane (rejestr)",
+      "pendingdelete": "Oczekuje na usunięcie",
+      "pendingtransfer": "Oczekuje na transfer",
+      "pendingupdate": "Oczekuje na aktualizację",
+      "pendingrenew": "Oczekuje na odnowienie",
+      "pendingcreate": "Oczekuje na utworzenie",
+      "redemptionperiod": "Okres wykupu",
+      "autorenewperiod": "Automatyczne odnowienie",
+      "addperiod": "Okres dodawania",
+      "transferperiod": "Okres transferu",
+      "renewperiod": "Okres odnowienia"
+    }
   }
 }

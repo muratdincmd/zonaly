@@ -6,6 +6,33 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- **Domain details modal.** Clicking a Taken result row opens a themed modal
+  showing registrar, registration / expiry / last-updated dates, nameservers,
+  and EPP-style status codes (with human-readable, fully translated labels).
+  Closes on ESC, on the backdrop click, or via the close button.
+- **RDAP details parser** (`src-tauri/src/rdap/details.rs`). Extracts the
+  registrar (vCard `fn`), the standard event dates, `nameservers[].ldhName`,
+  and the `status` array from any RFC 9083 RDAP response.
+- **Port-43 WHOIS fallback** (`src-tauri/src/rdap/whois.rs`). When a TLD has
+  no RDAP endpoint, the backend now falls back to a port-43 `TcpStream`
+  query. Initial parsers cover `.de` (DENIC) and `.tr` (NIC.tr) with a
+  generic "no match" detector for everything else. `.de` and `.tr` removed
+  from `TLDS_NO_RDAP` — they're now selectable in the picker.
+- **`fetch_domain_details` Tauri command.** Returns a `DomainDetails`
+  payload via RDAP, or a minimal record sourced from WHOIS (the modal shows
+  a "limited details" note in that case).
+- **Source tagging.** `DomainResult` now carries a `source: "rdap" | "whois"`
+  field, surfaced as a badge in the details modal.
+- **`details.*` i18n keys** added to all 14 supported locales, including
+  human-readable labels for the most common EPP status codes
+  (`clientTransferProhibited`, `redemptionPeriod`, etc.).
+
+---
+
 ## [0.3.0] — 2026-05-29
 
 ### Added

@@ -59,10 +59,10 @@ export const TLDS_ALL: string[] = [
 // Legacy exports kept for App.tsx compatibility
 export const TLDS_DEFAULT = TLD_CATEGORIES[0].tlds.slice(0, 10);
 
-// ccTLDs with no RDAP endpoint in the IANA bootstrap.
-// Add/remove entries here as coverage expands.
+// ccTLDs with neither RDAP nor a port-43 WHOIS parser. Removed entries
+// (.tr, .de) are now handled by the Rust backend's port-43 fallback.
 export const TLDS_NO_RDAP = new Set([
-  "tr", "de", "fr", "eu", "uk", "us", "ca", "au",
+  "fr", "eu", "uk", "us", "ca", "au",
   "es", "it", "nl", "pl", "ru", "br", "jp", "cn",
   "in", "mx", "ar", "pt", "se", "no", "fi", "dk",
   "be", "ch", "at", "nz", "za", "kr", "sg", "hk",

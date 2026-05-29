@@ -47,5 +47,46 @@
     "closeTabsToRight": "Fermer les onglets à droite",
     "duplicateTab": "Dupliquer l'onglet",
     "maxTabsTooltip": "Maximum de 20 onglets atteint"
+  },
+  "details": {
+    "loading": "Chargement des détails du domaine…",
+    "error": "Impossible de charger les détails",
+    "limited": "Détails limités disponibles pour ce TLD.",
+    "close": "Fermer",
+    "registrar": "Bureau d'enregistrement",
+    "registered": "Enregistré le",
+    "expires": "Expire le",
+    "updated": "Dernière mise à jour",
+    "nameservers": "Serveurs DNS",
+    "statuses": "Statut",
+    "source": {
+      "rdap": "via RDAP",
+      "whois": "via WHOIS"
+    },
+    "statusLabels": {
+      "active": "Actif",
+      "ok": "Actif",
+      "inactive": "Inactif",
+      "clienttransferprohibited": "Transfert verrouillé",
+      "servertransferprohibited": "Transfert verrouillé (registre)",
+      "clientupdateprohibited": "Mises à jour verrouillées",
+      "serverupdateprohibited": "Mises à jour verrouillées (registre)",
+      "clientdeleteprohibited": "Suppression verrouillée",
+      "serverdeleteprohibited": "Suppression verrouillée (registre)",
+      "clienthold": "En attente",
+      "serverhold": "En attente (registre)",
+      "clientrenewprohibited": "Renouvellement verrouillé",
+      "serverrenewprohibited": "Renouvellement verrouillé (registre)",
+      "pendingdelete": "Suppression en attente",
+      "pendingtransfer": "Transfert en attente",
+      "pendingupdate": "Mise à jour en attente",
+      "pendingrenew": "Renouvellement en attente",
+      "pendingcreate": "Création en attente",
+      "redemptionperiod": "Période de rédemption",
+      "autorenewperiod": "Renouvellement auto",
+      "addperiod": "Période d'ajout",
+      "transferperiod": "Période de transfert",
+      "renewperiod": "Période de renouvellement"
+    }
   }
 }

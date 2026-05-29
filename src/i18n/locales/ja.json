@@ -47,5 +47,40 @@
     "closeTabsToRight": "右側のタブを閉じる",
     "duplicateTab": "タブを複製",
     "maxTabsTooltip": "タブの上限 20 枚に達しました"
+  },
+  "details": {
+    "loading": "ドメイン詳細を読み込み中…",
+    "error": "詳細を読み込めませんでした",
+    "limited": "この TLD では限定的な詳細のみ利用可能です。",
+    "close": "閉じる",
+    "registrar": "レジストラ",
+    "registered": "登録日",
+    "expires": "有効期限",
+    "updated": "最終更新",
+    "nameservers": "ネームサーバー",
+    "statuses": "ステータス",
+    "source": { "rdap": "RDAP 経由", "whois": "WHOIS 経由" },
+    "statusLabels": {
+      "active": "アクティブ", "ok": "アクティブ", "inactive": "非アクティブ",
+      "clienttransferprohibited": "移管ロック",
+      "servertransferprohibited": "移管ロック（レジストリ）",
+      "clientupdateprohibited": "更新ロック",
+      "serverupdateprohibited": "更新ロック（レジストリ）",
+      "clientdeleteprohibited": "削除ロック",
+      "serverdeleteprohibited": "削除ロック（レジストリ）",
+      "clienthold": "保留中", "serverhold": "保留中（レジストリ）",
+      "clientrenewprohibited": "更新ロック",
+      "serverrenewprohibited": "更新ロック（レジストリ）",
+      "pendingdelete": "削除待ち",
+      "pendingtransfer": "移管待ち",
+      "pendingupdate": "更新待ち",
+      "pendingrenew": "更新待ち",
+      "pendingcreate": "作成待ち",
+      "redemptionperiod": "復旧期間",
+      "autorenewperiod": "自動更新期間",
+      "addperiod": "追加期間",
+      "transferperiod": "移管期間",
+      "renewperiod": "更新期間"
+    }
   }
 }

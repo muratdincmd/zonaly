@@ -46,7 +46,18 @@ pub fn open_url(url: String) -> Result<(), String> {
 }
 
 use crate::rdap::RdapClient;
-use crate::types::DomainQuery;
+use crate::types::{DomainDetails, DomainQuery};
+
+#[tauri::command]
+pub async fn fetch_domain_details(
+    state: State<'_, Arc<RdapClient>>,
+    name: String,
+    tld: String,
+) -> Result<DomainDetails, String> {
+    let client = state.inner().clone();
+    let _permit = client.semaphore.clone().acquire_owned().await.ok();
+    client.fetch_details(&name, &tld).await
+}
 
 #[tauri::command]
 pub async fn check_domains(

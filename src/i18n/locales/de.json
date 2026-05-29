@@ -47,5 +47,46 @@
     "closeTabsToRight": "Tabs rechts schließen",
     "duplicateTab": "Tab duplizieren",
     "maxTabsTooltip": "Maximal 20 Tabs erreicht"
+  },
+  "details": {
+    "loading": "Domain-Details werden geladen…",
+    "error": "Details konnten nicht geladen werden",
+    "limited": "Eingeschränkte Details für diese TLD verfügbar.",
+    "close": "Schließen",
+    "registrar": "Registrar",
+    "registered": "Registriert am",
+    "expires": "Läuft ab",
+    "updated": "Zuletzt aktualisiert",
+    "nameservers": "Nameserver",
+    "statuses": "Status",
+    "source": {
+      "rdap": "über RDAP",
+      "whois": "über WHOIS"
+    },
+    "statusLabels": {
+      "active": "Aktiv",
+      "ok": "Aktiv",
+      "inactive": "Inaktiv",
+      "clienttransferprohibited": "Transfer gesperrt",
+      "servertransferprohibited": "Transfer gesperrt (Registry)",
+      "clientupdateprohibited": "Updates gesperrt",
+      "serverupdateprohibited": "Updates gesperrt (Registry)",
+      "clientdeleteprohibited": "Löschen gesperrt",
+      "serverdeleteprohibited": "Löschen gesperrt (Registry)",
+      "clienthold": "Gehalten",
+      "serverhold": "Gehalten (Registry)",
+      "clientrenewprohibited": "Verlängerung gesperrt",
+      "serverrenewprohibited": "Verlängerung gesperrt (Registry)",
+      "pendingdelete": "Löschung ausstehend",
+      "pendingtransfer": "Transfer ausstehend",
+      "pendingupdate": "Update ausstehend",
+      "pendingrenew": "Verlängerung ausstehend",
+      "pendingcreate": "Erstellung ausstehend",
+      "redemptionperiod": "Rückkaufzeitraum",
+      "autorenewperiod": "Autom. Verlängerung",
+      "addperiod": "Hinzufüge-Zeitraum",
+      "transferperiod": "Transfer-Zeitraum",
+      "renewperiod": "Verlängerungs-Zeitraum"
+    }
   }
 }

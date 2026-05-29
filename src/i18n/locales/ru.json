@@ -47,5 +47,40 @@
     "closeTabsToRight": "Закрыть вкладки справа",
     "duplicateTab": "Дублировать вкладку",
     "maxTabsTooltip": "Достигнут максимум 20 вкладок"
+  },
+  "details": {
+    "loading": "Загрузка сведений о домене…",
+    "error": "Не удалось загрузить сведения",
+    "limited": "Для этого TLD доступны ограниченные сведения.",
+    "close": "Закрыть",
+    "registrar": "Регистратор",
+    "registered": "Зарегистрирован",
+    "expires": "Истекает",
+    "updated": "Последнее обновление",
+    "nameservers": "DNS-серверы",
+    "statuses": "Статус",
+    "source": { "rdap": "через RDAP", "whois": "через WHOIS" },
+    "statusLabels": {
+      "active": "Активен", "ok": "Активен", "inactive": "Неактивен",
+      "clienttransferprohibited": "Перенос заблокирован",
+      "servertransferprohibited": "Перенос заблокирован (реестр)",
+      "clientupdateprohibited": "Изменения заблокированы",
+      "serverupdateprohibited": "Изменения заблокированы (реестр)",
+      "clientdeleteprohibited": "Удаление заблокировано",
+      "serverdeleteprohibited": "Удаление заблокировано (реестр)",
+      "clienthold": "На удержании", "serverhold": "На удержании (реестр)",
+      "clientrenewprohibited": "Продление заблокировано",
+      "serverrenewprohibited": "Продление заблокировано (реестр)",
+      "pendingdelete": "Ожидает удаления",
+      "pendingtransfer": "Ожидает переноса",
+      "pendingupdate": "Ожидает обновления",
+      "pendingrenew": "Ожидает продления",
+      "pendingcreate": "Ожидает создания",
+      "redemptionperiod": "Период восстановления",
+      "autorenewperiod": "Автопродление",
+      "addperiod": "Период добавления",
+      "transferperiod": "Период переноса",
+      "renewperiod": "Период продления"
+    }
   }
 }

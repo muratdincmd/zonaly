@@ -47,5 +47,40 @@
     "closeTabsToRight": "Chiudi schede a destra",
     "duplicateTab": "Duplica scheda",
     "maxTabsTooltip": "Raggiunto il massimo di 20 schede"
+  },
+  "details": {
+    "loading": "Caricamento dettagli dominio…",
+    "error": "Impossibile caricare i dettagli",
+    "limited": "Dettagli limitati disponibili per questo TLD.",
+    "close": "Chiudi",
+    "registrar": "Registrar",
+    "registered": "Registrato il",
+    "expires": "Scade il",
+    "updated": "Ultimo aggiornamento",
+    "nameservers": "Nameserver",
+    "statuses": "Stato",
+    "source": { "rdap": "via RDAP", "whois": "via WHOIS" },
+    "statusLabels": {
+      "active": "Attivo", "ok": "Attivo", "inactive": "Inattivo",
+      "clienttransferprohibited": "Trasferimento bloccato",
+      "servertransferprohibited": "Trasferimento bloccato (registro)",
+      "clientupdateprohibited": "Aggiornamenti bloccati",
+      "serverupdateprohibited": "Aggiornamenti bloccati (registro)",
+      "clientdeleteprohibited": "Eliminazione bloccata",
+      "serverdeleteprohibited": "Eliminazione bloccata (registro)",
+      "clienthold": "In sospeso", "serverhold": "In sospeso (registro)",
+      "clientrenewprohibited": "Rinnovo bloccato",
+      "serverrenewprohibited": "Rinnovo bloccato (registro)",
+      "pendingdelete": "Eliminazione in attesa",
+      "pendingtransfer": "Trasferimento in attesa",
+      "pendingupdate": "Aggiornamento in attesa",
+      "pendingrenew": "Rinnovo in attesa",
+      "pendingcreate": "Creazione in attesa",
+      "redemptionperiod": "Periodo di riscatto",
+      "autorenewperiod": "Auto-rinnovo",
+      "addperiod": "Periodo di aggiunta",
+      "transferperiod": "Periodo di trasferimento",
+      "renewperiod": "Periodo di rinnovo"
+    }
   }
 }
