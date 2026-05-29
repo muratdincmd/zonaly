@@ -66,6 +66,9 @@ export function DomainDetailsModal({ domain, onClose }: Props) {
               <span className="modal-domain-tld">.{domain.tld}</span>
             </h2>
             <SourceBadge source={state.kind === "ok" ? state.details.source : undefined} />
+            {state.kind === "ok" && isExpiredDate(state.details.expires) && (
+              <span className="modal-expired-badge">{t("details.expired")}</span>
+            )}
           </div>
           <button
             type="button"
@@ -304,6 +307,12 @@ function Field({ label, value }: { label: string; value: string }) {
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+
+function isExpiredDate(iso: string | undefined): boolean {
+  if (!iso) return false;
+  const d = new Date(iso);
+  return !isNaN(d.getTime()) && d.getTime() < Date.now();
+}
 
 function formatDate(iso: string): string {
   const d = new Date(iso);

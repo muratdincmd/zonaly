@@ -1358,6 +1358,19 @@ button {
   color: var(--text-muted);
 }
 
+.modal-expired-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--taken) 50%, transparent);
+  color: var(--taken);
+  background: color-mix(in srgb, var(--taken) 10%, transparent);
+  flex-shrink: 0;
+}
+
 .modal-source-rdap {
   border-color: color-mix(in srgb, var(--accent) 50%, transparent);
   color: var(--accent);
