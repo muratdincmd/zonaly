@@ -1,6 +1,6 @@
 [package]
 name = "zonaly"
-version = "0.2.0"
+version = "0.3.0"
 description = "Domain availability checker"
 authors = ["Zonaly"]
 edition = "2021"
