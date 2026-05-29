@@ -89,7 +89,7 @@ button {
   max-width: 200px;
   height: 28px;
   border-bottom: none;   /* bottom edge merges with title bar bottom border */
-  padding: 0 6px 0 0;
+  padding: 0 6px 1px 0; /* 1px bottom padding compensates for missing border */
   cursor: pointer;
   position: relative;
   user-select: none;
@@ -191,13 +191,11 @@ button {
 /* Close button */
 .tab-pill-close {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border: none;
   background: transparent;
   color: var(--text-muted);
-  font-size: 14px;
-  line-height: 1;
   cursor: pointer;
   border-radius: 3px;
   display: flex;
@@ -206,6 +204,7 @@ button {
   opacity: 0;
   transition: opacity 120ms ease, background 120ms ease;
   padding: 0;
+  margin-left: 4px;
   margin-right: 2px;
 }
 
@@ -224,7 +223,8 @@ button {
   flex-shrink: 0;
   width: 30px;
   height: 28px;
-  border-bottom: none;   /* merges with title bar bottom border */
+  border-bottom: none;
+  padding-bottom: 1px;   /* compensates for missing border, centres the + */
   margin-left: -1px;
   border: 1px solid var(--border);
   background: transparent;

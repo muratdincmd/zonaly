@@ -97,7 +97,10 @@ function TabPill({ tabId }: { tabId: string }) {
         aria-label={t("tabs.closeTab")}
         tabIndex={-1}
       >
-        ×
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true">
+          <line x1="0.75" y1="0.75" x2="7.25" y2="7.25" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+          <line x1="7.25" y1="0.75" x2="0.75" y2="7.25" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+        </svg>
       </button>
     </div>
   );
