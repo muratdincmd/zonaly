@@ -1,12 +1,14 @@
 mod bootstrap;
 mod client;
+mod details;
+mod whois;
 
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::{Mutex, Semaphore};
 
-use crate::types::{DomainQuery, DomainResult, DomainStatus};
+use crate::types::{DomainDetails, DomainQuery, DomainResult, DomainStatus, Source};
 
 const MAX_CONCURRENCY: usize = 10;
 const HTTP_TIMEOUT_SECS: u64 = 10;
@@ -48,19 +50,64 @@ impl RdapClient {
     }
 
     pub async fn check(&self, query: &DomainQuery) -> DomainResult {
-        let status = match self.base_url_for(&query.tld).await {
-            Some(base) => {
-                let fqdn = format!("{}.{}", query.name, query.tld);
-                client::query(&self.http, &base, &fqdn).await
-            }
-            None => DomainStatus::Error {
-                message: format!("RDAP unavailable for .{}", query.tld),
-            },
-        };
+        let fqdn = format!("{}.{}", query.name, query.tld);
+
+        // 1. Try RDAP first
+        if let Some(base) = self.base_url_for(&query.tld).await {
+            let status = client::query(&self.http, &base, &fqdn).await;
+            return DomainResult {
+                name: query.name.clone(),
+                tld: query.tld.clone(),
+                status,
+                source: Some(Source::Rdap),
+            };
+        }
+
+        // 2. Fall back to port-43 WHOIS for TLDs we explicitly support
+        if let Some(status) = whois::check(&query.tld, &fqdn).await {
+            return DomainResult {
+                name: query.name.clone(),
+                tld: query.tld.clone(),
+                status,
+                source: Some(Source::Whois),
+            };
+        }
+
+        // 3. Neither protocol available
         DomainResult {
             name: query.name.clone(),
             tld: query.tld.clone(),
-            status,
+            status: DomainStatus::Error {
+                message: format!("err:no_protocol|.{}", query.tld),
+            },
+            source: None,
         }
+    }
+
+    /// Fetch full domain details for a previously-checked domain.
+    /// Only RDAP-source domains return rich data; WHOIS-source TLDs return
+    /// a minimal record (details modal handles this gracefully).
+    pub async fn fetch_details(
+        &self,
+        name: &str,
+        tld: &str,
+    ) -> Result<DomainDetails, String> {
+        if let Some(base) = self.base_url_for(tld).await {
+            return details::fetch(&self.http, &base, name, tld).await;
+        }
+        if whois::server_for(tld).is_some() {
+            return Ok(DomainDetails {
+                name: name.to_string(),
+                tld: tld.to_string(),
+                source: Source::Whois,
+                registrar: None,
+                registered: None,
+                expires: None,
+                updated: None,
+                nameservers: Vec::new(),
+                statuses: Vec::new(),
+            });
+        }
+        Err(format!("No RDAP or WHOIS server known for .{tld}"))
     }
 }

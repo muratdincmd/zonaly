@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 
 import { AppFooter } from "./components/AppFooter";
 import { AppLogo } from "./components/AppLogo";
+import { DomainDetailsModal } from "./components/DomainDetailsModal";
 import { DomainInput } from "./components/DomainInput";
 import { LanguageSelector } from "./components/LanguageSelector";
 import {
@@ -45,6 +46,7 @@ function TabPanel({ tabId }: { tabId: string }) {
   const { tabs, dispatch } = useTabs();
   const tab = tabs.find((t) => t.id === tabId)!;
   const { toast, show: showToast, dismiss: dismissToast } = useToast(3000);
+  const [detailsFor, setDetailsFor] = useState<DomainResult | null>(null);
 
   // Track the active check so we can cancel listeners on unmount
   const checkRef = useRef<{ cancel: () => void } | null>(null);
@@ -144,11 +146,18 @@ function TabPanel({ tabId }: { tabId: string }) {
           >
             {tab.isChecking ? t("check.loading") : t("check.button")}
           </button>
-          <ResultsList results={orderedResults} />
+          <ResultsList results={orderedResults} onRowClick={setDetailsFor} />
         </div>
       </main>
 
       <Toast toast={toast} onDismiss={dismissToast} />
+
+      {detailsFor && (
+        <DomainDetailsModal
+          domain={detailsFor}
+          onClose={() => setDetailsFor(null)}
+        />
+      )}
     </>
   );
 }

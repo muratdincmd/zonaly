@@ -29,7 +29,15 @@
     "availableBadge": "可注册",
     "taken": "已注册",
     "error": "无法检查",
-    "empty": "输入域名并点击检查以查看结果。"
+    "empty": "输入域名并点击检查以查看结果。",
+    "errors": {
+      "no_protocol": "{{tld}} 无可用的 RDAP 或 WHOIS",
+      "timeout": "请求超时",
+      "rate_limited": "服务器限流",
+      "http": "服务器错误（HTTP {{code}}）",
+      "network": "网络错误",
+      "parse": "无法解析响应"
+    }
   },
   "theme": {
     "toggle": "切换主题"
@@ -47,5 +55,48 @@
     "closeTabsToRight": "关闭右侧标签页",
     "duplicateTab": "复制标签页",
     "maxTabsTooltip": "已达到最多 20 个标签页的限制"
+  },
+  "details": {
+    "loading": "正在加载域名详情…",
+    "error": "无法加载详情",
+    "limited": "此 TLD 仅提供有限详情。",
+    "close": "关闭",
+    "registrar": "注册商",
+    "registered": "注册日期",
+    "age": "域名年龄",
+    "ageYears": "{{count}} 年",
+    "ageYears_other": "{{count}} 年",
+    "ageYearsMonths": "{{years}} 年 {{months}} 月",
+    "expires": "到期日期",
+    "expired": "已过期",
+    "daysLeft": "剩余 {{count}} 天",
+    "daysLeft_other": "剩余 {{count}} 天",
+    "updated": "最后更新",
+    "nameservers": "域名服务器",
+    "copyNameserver": "复制域名服务器",
+    "statuses": "状态",
+    "source": { "rdap": "来自 RDAP", "whois": "来自 WHOIS" },
+    "statusLabels": {
+      "active": "已激活", "ok": "已激活", "inactive": "未激活",
+      "clienttransferprohibited": "禁止转移",
+      "servertransferprohibited": "禁止转移（注册局）",
+      "clientupdateprohibited": "禁止更新",
+      "serverupdateprohibited": "禁止更新（注册局）",
+      "clientdeleteprohibited": "禁止删除",
+      "serverdeleteprohibited": "禁止删除（注册局）",
+      "clienthold": "暂停", "serverhold": "暂停（注册局）",
+      "clientrenewprohibited": "禁止续费",
+      "serverrenewprohibited": "禁止续费（注册局）",
+      "pendingdelete": "待删除",
+      "pendingtransfer": "待转移",
+      "pendingupdate": "待更新",
+      "pendingrenew": "待续费",
+      "pendingcreate": "待创建",
+      "redemptionperiod": "赎回期",
+      "autorenewperiod": "自动续费期",
+      "addperiod": "添加期",
+      "transferperiod": "转移期",
+      "renewperiod": "续费期"
+    }
   }
 }

@@ -29,7 +29,15 @@
     "availableBadge": "取得可能",
     "taken": "登録済み",
     "error": "確認できませんでした",
-    "empty": "ドメインを入力して確認ボタンをクリックしてください。"
+    "empty": "ドメインを入力して確認ボタンをクリックしてください。",
+    "errors": {
+      "no_protocol": "{{tld}} の RDAP または WHOIS が利用不可",
+      "timeout": "リクエストがタイムアウトしました",
+      "rate_limited": "サーバーのレート制限に達しました",
+      "http": "サーバーエラー（HTTP {{code}}）",
+      "network": "ネットワークエラー",
+      "parse": "レスポンスを解析できませんでした"
+    }
   },
   "theme": {
     "toggle": "テーマを切り替え"
@@ -47,5 +55,48 @@
     "closeTabsToRight": "右側のタブを閉じる",
     "duplicateTab": "タブを複製",
     "maxTabsTooltip": "タブの上限 20 枚に達しました"
+  },
+  "details": {
+    "loading": "ドメイン詳細を読み込み中…",
+    "error": "詳細を読み込めませんでした",
+    "limited": "この TLD では限定的な詳細のみ利用可能です。",
+    "close": "閉じる",
+    "registrar": "レジストラ",
+    "registered": "登録日",
+    "age": "ドメイン年齢",
+    "ageYears": "{{count}} 年",
+    "ageYears_other": "{{count}} 年",
+    "ageYearsMonths": "{{years}} 年 {{months}} ヶ月",
+    "expires": "有効期限",
+    "expired": "期限切れ",
+    "daysLeft": "残り {{count}} 日",
+    "daysLeft_other": "残り {{count}} 日",
+    "updated": "最終更新",
+    "nameservers": "ネームサーバー",
+    "copyNameserver": "ネームサーバーをコピー",
+    "statuses": "ステータス",
+    "source": { "rdap": "RDAP 経由", "whois": "WHOIS 経由" },
+    "statusLabels": {
+      "active": "アクティブ", "ok": "アクティブ", "inactive": "非アクティブ",
+      "clienttransferprohibited": "移管ロック",
+      "servertransferprohibited": "移管ロック（レジストリ）",
+      "clientupdateprohibited": "更新ロック",
+      "serverupdateprohibited": "更新ロック（レジストリ）",
+      "clientdeleteprohibited": "削除ロック",
+      "serverdeleteprohibited": "削除ロック（レジストリ）",
+      "clienthold": "保留中", "serverhold": "保留中（レジストリ）",
+      "clientrenewprohibited": "更新ロック",
+      "serverrenewprohibited": "更新ロック（レジストリ）",
+      "pendingdelete": "削除待ち",
+      "pendingtransfer": "移管待ち",
+      "pendingupdate": "更新待ち",
+      "pendingrenew": "更新待ち",
+      "pendingcreate": "作成待ち",
+      "redemptionperiod": "復旧期間",
+      "autorenewperiod": "自動更新期間",
+      "addperiod": "追加期間",
+      "transferperiod": "移管期間",
+      "renewperiod": "更新期間"
+    }
   }
 }

@@ -29,7 +29,15 @@
     "availableBadge": "متاح",
     "taken": "محجوز",
     "error": "تعذّر التحقق",
-    "empty": "أدخل النطاقات واضغط تحقق لعرض النتائج."
+    "empty": "أدخل النطاقات واضغط تحقق لعرض النتائج.",
+    "errors": {
+      "no_protocol": "لا يوجد RDAP أو WHOIS متاح لـ {{tld}}",
+      "timeout": "انتهت مهلة الطلب",
+      "rate_limited": "تجاوز حد معدل الخادم",
+      "http": "خطأ في الخادم (HTTP {{code}})",
+      "network": "خطأ في الشبكة",
+      "parse": "تعذّر تحليل الاستجابة"
+    }
   },
   "theme": {
     "toggle": "تبديل المظهر"
@@ -47,5 +55,48 @@
     "closeTabsToRight": "إغلاق التبويبات على اليمين",
     "duplicateTab": "تكرار التبويب",
     "maxTabsTooltip": "تم الوصول إلى الحد الأقصى وهو 20 تبويبًا"
+  },
+  "details": {
+    "loading": "جاري تحميل تفاصيل النطاق…",
+    "error": "تعذر تحميل التفاصيل",
+    "limited": "تفاصيل محدودة متاحة لهذا النطاق.",
+    "close": "إغلاق",
+    "registrar": "المسجل",
+    "registered": "تاريخ التسجيل",
+    "age": "عمر النطاق",
+    "ageYears": "{{count}} سنة",
+    "ageYears_other": "{{count}} سنوات",
+    "ageYearsMonths": "{{years}} س {{months}} ش",
+    "expires": "تاريخ الانتهاء",
+    "expired": "منتهي الصلاحية",
+    "daysLeft": "{{count}} يوم متبقٍّ",
+    "daysLeft_other": "{{count}} أيام متبقية",
+    "updated": "آخر تحديث",
+    "nameservers": "خوادم الأسماء",
+    "copyNameserver": "نسخ خادم الأسماء",
+    "statuses": "الحالة",
+    "source": { "rdap": "عبر RDAP", "whois": "عبر WHOIS" },
+    "statusLabels": {
+      "active": "نشط", "ok": "نشط", "inactive": "غير نشط",
+      "clienttransferprohibited": "النقل مقفل",
+      "servertransferprohibited": "النقل مقفل (السجل)",
+      "clientupdateprohibited": "التحديثات مقفلة",
+      "serverupdateprohibited": "التحديثات مقفلة (السجل)",
+      "clientdeleteprohibited": "الحذف مقفل",
+      "serverdeleteprohibited": "الحذف مقفل (السجل)",
+      "clienthold": "معلق", "serverhold": "معلق (السجل)",
+      "clientrenewprohibited": "التجديد مقفل",
+      "serverrenewprohibited": "التجديد مقفل (السجل)",
+      "pendingdelete": "في انتظار الحذف",
+      "pendingtransfer": "في انتظار النقل",
+      "pendingupdate": "في انتظار التحديث",
+      "pendingrenew": "في انتظار التجديد",
+      "pendingcreate": "في انتظار الإنشاء",
+      "redemptionperiod": "فترة الاسترداد",
+      "autorenewperiod": "التجديد التلقائي",
+      "addperiod": "فترة الإضافة",
+      "transferperiod": "فترة النقل",
+      "renewperiod": "فترة التجديد"
+    }
   }
 }

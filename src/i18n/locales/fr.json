@@ -29,7 +29,15 @@
     "availableBadge": "Disponible",
     "taken": "Pris",
     "error": "Impossible de vérifier",
-    "empty": "Entrez des domaines et cliquez sur Vérifier pour voir les résultats."
+    "empty": "Entrez des domaines et cliquez sur Vérifier pour voir les résultats.",
+    "errors": {
+      "no_protocol": "Pas de RDAP ou WHOIS disponible pour {{tld}}",
+      "timeout": "Délai d'attente dépassé",
+      "rate_limited": "Limite de débit du serveur",
+      "http": "Erreur serveur (HTTP {{code}})",
+      "network": "Erreur réseau",
+      "parse": "Impossible d'analyser la réponse"
+    }
   },
   "theme": {
     "toggle": "Changer le thème"
@@ -47,5 +55,54 @@
     "closeTabsToRight": "Fermer les onglets à droite",
     "duplicateTab": "Dupliquer l'onglet",
     "maxTabsTooltip": "Maximum de 20 onglets atteint"
+  },
+  "details": {
+    "loading": "Chargement des détails du domaine…",
+    "error": "Impossible de charger les détails",
+    "limited": "Détails limités disponibles pour ce TLD.",
+    "close": "Fermer",
+    "registrar": "Bureau d'enregistrement",
+    "registered": "Enregistré le",
+    "age": "Ancienneté",
+    "ageYears": "{{count}} an",
+    "ageYears_other": "{{count}} ans",
+    "ageYearsMonths": "{{years}} an(s) {{months}} mois",
+    "expires": "Expire le",
+    "expired": "Expiré",
+    "daysLeft": "{{count}} jour restant",
+    "daysLeft_other": "{{count}} jours restants",
+    "updated": "Dernière mise à jour",
+    "nameservers": "Serveurs DNS",
+    "copyNameserver": "Copier le serveur DNS",
+    "statuses": "Statut",
+    "source": {
+      "rdap": "via RDAP",
+      "whois": "via WHOIS"
+    },
+    "statusLabels": {
+      "active": "Actif",
+      "ok": "Actif",
+      "inactive": "Inactif",
+      "clienttransferprohibited": "Transfert verrouillé",
+      "servertransferprohibited": "Transfert verrouillé (registre)",
+      "clientupdateprohibited": "Mises à jour verrouillées",
+      "serverupdateprohibited": "Mises à jour verrouillées (registre)",
+      "clientdeleteprohibited": "Suppression verrouillée",
+      "serverdeleteprohibited": "Suppression verrouillée (registre)",
+      "clienthold": "En attente",
+      "serverhold": "En attente (registre)",
+      "clientrenewprohibited": "Renouvellement verrouillé",
+      "serverrenewprohibited": "Renouvellement verrouillé (registre)",
+      "pendingdelete": "Suppression en attente",
+      "pendingtransfer": "Transfert en attente",
+      "pendingupdate": "Mise à jour en attente",
+      "pendingrenew": "Renouvellement en attente",
+      "pendingcreate": "Création en attente",
+      "redemptionperiod": "Période de rédemption",
+      "autorenewperiod": "Renouvellement auto",
+      "addperiod": "Période d'ajout",
+      "transferperiod": "Période de transfert",
+      "renewperiod": "Période de renouvellement"
+    }
   }
 }

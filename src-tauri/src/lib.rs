@@ -16,6 +16,7 @@ pub fn run() {
             commands::check_domains,
             commands::open_url,
             commands::close_splashscreen,
+            commands::fetch_domain_details,
         ])
         .setup(|_app| {
             // Remove native decorations on Windows so the custom React

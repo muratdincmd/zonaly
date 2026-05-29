@@ -29,7 +29,15 @@
     "availableBadge": "Disponível",
     "taken": "Ocupado",
     "error": "Não foi possível verificar",
-    "empty": "Insira domínios e clique em Verificar para ver os resultados."
+    "empty": "Insira domínios e clique em Verificar para ver os resultados.",
+    "errors": {
+      "no_protocol": "Nenhum RDAP ou WHOIS disponível para {{tld}}",
+      "timeout": "Tempo de solicitação esgotado",
+      "rate_limited": "Limite de taxa do servidor",
+      "http": "Erro do servidor (HTTP {{code}})",
+      "network": "Erro de rede",
+      "parse": "Não foi possível analisar a resposta"
+    }
   },
   "theme": {
     "toggle": "Alternar tema"
@@ -47,5 +55,48 @@
     "closeTabsToRight": "Fechar abas à direita",
     "duplicateTab": "Duplicar aba",
     "maxTabsTooltip": "Limite máximo de 20 abas atingido"
+  },
+  "details": {
+    "loading": "Carregando detalhes do domínio…",
+    "error": "Não foi possível carregar os detalhes",
+    "limited": "Detalhes limitados disponíveis para este TLD.",
+    "close": "Fechar",
+    "registrar": "Registrador",
+    "registered": "Registrado em",
+    "age": "Idade do domínio",
+    "ageYears": "{{count}} ano",
+    "ageYears_other": "{{count}} anos",
+    "ageYearsMonths": "{{years}} a. {{months}} m.",
+    "expires": "Expira em",
+    "expired": "Expirado",
+    "daysLeft": "{{count}} dia restante",
+    "daysLeft_other": "{{count}} dias restantes",
+    "updated": "Última atualização",
+    "nameservers": "Servidores DNS",
+    "copyNameserver": "Copiar servidor de nomes",
+    "statuses": "Status",
+    "source": { "rdap": "via RDAP", "whois": "via WHOIS" },
+    "statusLabels": {
+      "active": "Ativo", "ok": "Ativo", "inactive": "Inativo",
+      "clienttransferprohibited": "Transferência bloqueada",
+      "servertransferprohibited": "Transferência bloqueada (registro)",
+      "clientupdateprohibited": "Atualizações bloqueadas",
+      "serverupdateprohibited": "Atualizações bloqueadas (registro)",
+      "clientdeleteprohibited": "Exclusão bloqueada",
+      "serverdeleteprohibited": "Exclusão bloqueada (registro)",
+      "clienthold": "Em espera", "serverhold": "Em espera (registro)",
+      "clientrenewprohibited": "Renovação bloqueada",
+      "serverrenewprohibited": "Renovação bloqueada (registro)",
+      "pendingdelete": "Exclusão pendente",
+      "pendingtransfer": "Transferência pendente",
+      "pendingupdate": "Atualização pendente",
+      "pendingrenew": "Renovação pendente",
+      "pendingcreate": "Criação pendente",
+      "redemptionperiod": "Período de redenção",
+      "autorenewperiod": "Renovação automática",
+      "addperiod": "Período de adição",
+      "transferperiod": "Período de transferência",
+      "renewperiod": "Período de renovação"
+    }
   }
 }

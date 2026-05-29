@@ -29,7 +29,15 @@
     "availableBadge": "Beschikbaar",
     "taken": "Bezet",
     "error": "Kon niet controleren",
-    "empty": "Voer domeinen in en klik op Controleren om resultaten te zien."
+    "empty": "Voer domeinen in en klik op Controleren om resultaten te zien.",
+    "errors": {
+      "no_protocol": "Geen RDAP of WHOIS beschikbaar voor {{tld}}",
+      "timeout": "Verzoek verlopen",
+      "rate_limited": "Serverlimiet bereikt",
+      "http": "Serverfout (HTTP {{code}})",
+      "network": "Netwerkfout",
+      "parse": "Reactie kon niet worden verwerkt"
+    }
   },
   "theme": {
     "toggle": "Thema wisselen"
@@ -47,5 +55,48 @@
     "closeTabsToRight": "Tabbladen rechts sluiten",
     "duplicateTab": "Tabblad dupliceren",
     "maxTabsTooltip": "Maximum van 20 tabbladen bereikt"
+  },
+  "details": {
+    "loading": "Domeindetails laden…",
+    "error": "Kon details niet laden",
+    "limited": "Beperkte details beschikbaar voor deze TLD.",
+    "close": "Sluiten",
+    "registrar": "Registrar",
+    "registered": "Geregistreerd op",
+    "age": "Domeinleeftijd",
+    "ageYears": "{{count}} jaar",
+    "ageYears_other": "{{count}} jaar",
+    "ageYearsMonths": "{{years}} jr {{months}} mnd",
+    "expires": "Verloopt op",
+    "expired": "Verlopen",
+    "daysLeft": "{{count}} dag over",
+    "daysLeft_other": "{{count}} dagen over",
+    "updated": "Laatst bijgewerkt",
+    "nameservers": "Nameservers",
+    "copyNameserver": "Nameserver kopiëren",
+    "statuses": "Status",
+    "source": { "rdap": "via RDAP", "whois": "via WHOIS" },
+    "statusLabels": {
+      "active": "Actief", "ok": "Actief", "inactive": "Inactief",
+      "clienttransferprohibited": "Overdracht vergrendeld",
+      "servertransferprohibited": "Overdracht vergrendeld (registry)",
+      "clientupdateprohibited": "Updates vergrendeld",
+      "serverupdateprohibited": "Updates vergrendeld (registry)",
+      "clientdeleteprohibited": "Verwijdering vergrendeld",
+      "serverdeleteprohibited": "Verwijdering vergrendeld (registry)",
+      "clienthold": "In behandeling", "serverhold": "In behandeling (registry)",
+      "clientrenewprohibited": "Verlenging vergrendeld",
+      "serverrenewprohibited": "Verlenging vergrendeld (registry)",
+      "pendingdelete": "Verwijdering in afwachting",
+      "pendingtransfer": "Overdracht in afwachting",
+      "pendingupdate": "Update in afwachting",
+      "pendingrenew": "Verlenging in afwachting",
+      "pendingcreate": "Aanmaak in afwachting",
+      "redemptionperiod": "Hersteltermijn",
+      "autorenewperiod": "Auto-verlenging",
+      "addperiod": "Toevoegperiode",
+      "transferperiod": "Overdrachtsperiode",
+      "renewperiod": "Verlengingsperiode"
+    }
   }
 }

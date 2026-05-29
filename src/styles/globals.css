@@ -1152,6 +1152,35 @@ button {
   background: color-mix(in srgb, var(--available) 12%, transparent);
 }
 
+.row-external-link {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-muted);
+  opacity: 0.45;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.row:hover .row-external-link,
+.row-taken:focus-visible .row-external-link {
+  opacity: 1;
+}
+
+.row-external-link:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
 .error-msg {
   margin-left: auto;
   font-size: 0.72rem;
@@ -1252,4 +1281,300 @@ button {
 :root[dir="rtl"] .error-msg {
   margin-left: unset;
   margin-right: auto;
+}
+
+/* ── Domain details modal ────────────────────────────────────────────────── */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1500;
+  animation: modal-fade-in 160ms ease forwards;
+  padding: 1rem;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 540px;
+  max-height: calc(100vh - 4rem);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modal-card-in 220ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.25rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  gap: 0.75rem;
+}
+
+.modal-title-block {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.modal-domain {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.modal-domain-name { color: var(--text); }
+.modal-domain-tld  { color: var(--text-muted); font-weight: 600; }
+
+.modal-source {
+  flex-shrink: 0;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.modal-expired-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--taken) 50%, transparent);
+  color: var(--taken);
+  background: color-mix(in srgb, var(--taken) 10%, transparent);
+  flex-shrink: 0;
+}
+
+.modal-source-rdap {
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  color: var(--accent);
+}
+
+.modal-source-whois {
+  border-color: color-mix(in srgb, var(--error) 50%, transparent);
+  color: var(--error);
+}
+
+.modal-registrar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.modal-registrar-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  padding: 0;
+  color: var(--accent);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 120ms ease, background 120ms ease;
+}
+
+.modal-registrar-link:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.modal-close {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.modal-close:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
+.modal-body {
+  padding: 1.1rem 1.25rem 1.25rem;
+  overflow-y: auto;
+  min-height: 80px;
+}
+
+.modal-loading,
+.modal-error,
+.modal-empty {
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  padding: 1.25rem 0.5rem;
+  margin: 0;
+}
+
+.modal-error { color: var(--error); }
+
+/* Definition list grid: label | value */
+.modal-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 130px) 1fr;
+  gap: 0.7rem 1rem;
+  margin: 0;
+  align-items: baseline;
+}
+
+.modal-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.modal-value {
+  font-size: 0.92rem;
+  color: var(--text);
+  margin: 0;
+  word-break: break-word;
+}
+
+.modal-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+/* Nameserver pill wraps the code + copy button together */
+.modal-ns-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg-input);
+  overflow: hidden;
+}
+
+.modal-ns {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  padding: 0.15rem 0.45rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--text);
+}
+
+.modal-ns-copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 100%;
+  min-height: 22px;
+  border: none;
+  border-left: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.modal-ns-copy:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
+.modal-ns-copy--done {
+  color: var(--available);
+}
+
+/* Expiry row: date + badge inline */
+.modal-expiry-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.modal-expiry-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.modal-expiry-ok {
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.modal-expiry-warn {
+  color: #f59e0b;
+  background: color-mix(in srgb, #f59e0b 12%, transparent);
+}
+
+.modal-expiry-urgent,
+.modal-expiry-expired {
+  color: var(--taken);
+  background: color-mix(in srgb, var(--taken) 12%, transparent);
+}
+
+.modal-status-pill {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 500;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  color: var(--accent);
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modal-card-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }

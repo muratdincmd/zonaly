@@ -29,7 +29,15 @@
     "availableBadge": "Müsait",
     "taken": "Kayıtlı",
     "error": "Kontrol edilemedi",
-    "empty": "Alan adlarını girin ve sonuçları görmek için Kontrol Et'e tıklayın."
+    "empty": "Alan adlarını girin ve sonuçları görmek için Kontrol Et'e tıklayın.",
+    "errors": {
+      "no_protocol": "{{tld}} için RDAP veya WHOIS mevcut değil",
+      "timeout": "İstek zaman aşımına uğradı",
+      "rate_limited": "Sunucu hız sınırı uyguladı",
+      "http": "Sunucu hatası (HTTP {{code}})",
+      "network": "Ağ hatası",
+      "parse": "Yanıt ayrıştırılamadı"
+    }
   },
   "theme": {
     "toggle": "Temayı değiştir"
@@ -47,5 +55,54 @@
     "closeTabsToRight": "Sağdaki sekmeleri kapat",
     "duplicateTab": "Sekmeyi çoğalt",
     "maxTabsTooltip": "Maksimum 20 sekme sınırına ulaşıldı"
+  },
+  "details": {
+    "loading": "Alan adı detayları yükleniyor…",
+    "error": "Detaylar yüklenemedi",
+    "limited": "Bu TLD için sınırlı detay mevcut.",
+    "close": "Kapat",
+    "registrar": "Kayıt Şirketi",
+    "registered": "Kayıt Tarihi",
+    "age": "Alan adı yaşı",
+    "ageYears": "{{count}} yıl",
+    "ageYears_other": "{{count}} yıl",
+    "ageYearsMonths": "{{years}} yıl {{months}} ay",
+    "expires": "Bitiş Tarihi",
+    "expired": "Süresi Doldu",
+    "daysLeft": "{{count}} gün kaldı",
+    "daysLeft_other": "{{count}} gün kaldı",
+    "updated": "Son Güncelleme",
+    "nameservers": "Ad Sunucuları",
+    "copyNameserver": "Ad sunucusunu kopyala",
+    "statuses": "Durum",
+    "source": {
+      "rdap": "RDAP ile",
+      "whois": "WHOIS ile"
+    },
+    "statusLabels": {
+      "active": "Aktif",
+      "ok": "Aktif",
+      "inactive": "Pasif",
+      "clienttransferprohibited": "Transfer kilitli",
+      "servertransferprohibited": "Transfer kilitli (sicil)",
+      "clientupdateprohibited": "Güncelleme kilitli",
+      "serverupdateprohibited": "Güncelleme kilitli (sicil)",
+      "clientdeleteprohibited": "Silme kilitli",
+      "serverdeleteprohibited": "Silme kilitli (sicil)",
+      "clienthold": "Beklemede",
+      "serverhold": "Beklemede (sicil)",
+      "clientrenewprohibited": "Yenileme kilitli",
+      "serverrenewprohibited": "Yenileme kilitli (sicil)",
+      "pendingdelete": "Silme bekliyor",
+      "pendingtransfer": "Transfer bekliyor",
+      "pendingupdate": "Güncelleme bekliyor",
+      "pendingrenew": "Yenileme bekliyor",
+      "pendingcreate": "Oluşturma bekliyor",
+      "redemptionperiod": "Kurtarma süresi",
+      "autorenewperiod": "Otomatik yenileme süresi",
+      "addperiod": "Ekleme süresi",
+      "transferperiod": "Transfer süresi",
+      "renewperiod": "Yenileme süresi"
+    }
   }
 }

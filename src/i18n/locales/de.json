@@ -29,7 +29,15 @@
     "availableBadge": "Verfügbar",
     "taken": "Vergeben",
     "error": "Prüfung fehlgeschlagen",
-    "empty": "Domains eingeben und auf Prüfen klicken, um Ergebnisse zu sehen."
+    "empty": "Domains eingeben und auf Prüfen klicken, um Ergebnisse zu sehen.",
+    "errors": {
+      "no_protocol": "Kein RDAP oder WHOIS verfügbar für {{tld}}",
+      "timeout": "Zeitüberschreitung",
+      "rate_limited": "Server-Ratenlimit erreicht",
+      "http": "Serverfehler (HTTP {{code}})",
+      "network": "Netzwerkfehler",
+      "parse": "Antwort konnte nicht verarbeitet werden"
+    }
   },
   "theme": {
     "toggle": "Design umschalten"
@@ -47,5 +55,54 @@
     "closeTabsToRight": "Tabs rechts schließen",
     "duplicateTab": "Tab duplizieren",
     "maxTabsTooltip": "Maximal 20 Tabs erreicht"
+  },
+  "details": {
+    "loading": "Domain-Details werden geladen…",
+    "error": "Details konnten nicht geladen werden",
+    "limited": "Eingeschränkte Details für diese TLD verfügbar.",
+    "close": "Schließen",
+    "registrar": "Registrar",
+    "registered": "Registriert am",
+    "age": "Domain-Alter",
+    "ageYears": "{{count}} Jahr",
+    "ageYears_other": "{{count}} Jahre",
+    "ageYearsMonths": "{{years}} J. {{months}} Mo.",
+    "expires": "Läuft ab",
+    "expired": "Abgelaufen",
+    "daysLeft": "{{count}} Tag übrig",
+    "daysLeft_other": "{{count}} Tage übrig",
+    "updated": "Zuletzt aktualisiert",
+    "nameservers": "Nameserver",
+    "copyNameserver": "Nameserver kopieren",
+    "statuses": "Status",
+    "source": {
+      "rdap": "über RDAP",
+      "whois": "über WHOIS"
+    },
+    "statusLabels": {
+      "active": "Aktiv",
+      "ok": "Aktiv",
+      "inactive": "Inaktiv",
+      "clienttransferprohibited": "Transfer gesperrt",
+      "servertransferprohibited": "Transfer gesperrt (Registry)",
+      "clientupdateprohibited": "Updates gesperrt",
+      "serverupdateprohibited": "Updates gesperrt (Registry)",
+      "clientdeleteprohibited": "Löschen gesperrt",
+      "serverdeleteprohibited": "Löschen gesperrt (Registry)",
+      "clienthold": "Gehalten",
+      "serverhold": "Gehalten (Registry)",
+      "clientrenewprohibited": "Verlängerung gesperrt",
+      "serverrenewprohibited": "Verlängerung gesperrt (Registry)",
+      "pendingdelete": "Löschung ausstehend",
+      "pendingtransfer": "Transfer ausstehend",
+      "pendingupdate": "Update ausstehend",
+      "pendingrenew": "Verlängerung ausstehend",
+      "pendingcreate": "Erstellung ausstehend",
+      "redemptionperiod": "Rückkaufzeitraum",
+      "autorenewperiod": "Autom. Verlängerung",
+      "addperiod": "Hinzufüge-Zeitraum",
+      "transferperiod": "Transfer-Zeitraum",
+      "renewperiod": "Verlängerungs-Zeitraum"
+    }
   }
 }
