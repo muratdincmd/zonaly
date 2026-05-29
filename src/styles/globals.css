@@ -1409,14 +1409,83 @@ button {
   align-items: center;
 }
 
+/* Nameserver pill wraps the code + copy button together */
+.modal-ns-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg-input);
+  overflow: hidden;
+}
+
 .modal-ns {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.78rem;
   padding: 0.15rem 0.45rem;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: 5px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   color: var(--text);
+}
+
+.modal-ns-copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 100%;
+  min-height: 22px;
+  border: none;
+  border-left: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.modal-ns-copy:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
+.modal-ns-copy--done {
+  color: var(--available);
+}
+
+/* Expiry row: date + badge inline */
+.modal-expiry-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.modal-expiry-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.modal-expiry-ok {
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+.modal-expiry-warn {
+  color: #f59e0b;
+  background: color-mix(in srgb, #f59e0b 12%, transparent);
+}
+
+.modal-expiry-urgent,
+.modal-expiry-expired {
+  color: var(--taken);
+  background: color-mix(in srgb, var(--taken) 12%, transparent);
 }
 
 .modal-status-pill {

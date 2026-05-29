@@ -39,7 +39,6 @@ export function DomainDetailsModal({ domain, onClose }: Props) {
     return () => { cancelled = true; };
   }, [domain.name, domain.tld]);
 
-  // ESC closes the modal
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -85,13 +84,11 @@ export function DomainDetailsModal({ domain, onClose }: Props) {
           {state.kind === "loading" && (
             <p className="modal-loading">{t("details.loading")}</p>
           )}
-
           {state.kind === "error" && (
             <p className="modal-error">
               {t("details.error")}: {state.message}
             </p>
           )}
-
           {state.kind === "ok" && (
             <DetailsContent details={state.details} />
           )}
@@ -101,7 +98,7 @@ export function DomainDetailsModal({ domain, onClose }: Props) {
   );
 }
 
-// ── Source badge ─────────────────────────────────────────────────────────────
+// ── Source badge ──────────────────────────────────────────────────────────────
 
 function SourceBadge({ source }: { source?: "rdap" | "whois" }) {
   const { t } = useTranslation();
@@ -113,12 +110,11 @@ function SourceBadge({ source }: { source?: "rdap" | "whois" }) {
   );
 }
 
-// ── Body content ─────────────────────────────────────────────────────────────
+// ── Body content ──────────────────────────────────────────────────────────────
 
 function DetailsContent({ details }: { details: DomainDetails }) {
   const { t } = useTranslation();
 
-  // For WHOIS-source rows we only have the source itself — show a small note.
   const hasAnyField =
     details.registrar ||
     details.registered ||
@@ -136,12 +132,18 @@ function DetailsContent({ details }: { details: DomainDetails }) {
       {details.registrar && (
         <Field label={t("details.registrar")} value={details.registrar} />
       )}
+
       {details.registered && (
-        <Field label={t("details.registered")} value={formatDate(details.registered)} />
+        <>
+          <Field label={t("details.registered")} value={formatDate(details.registered)} />
+          <DomainAge registered={details.registered} />
+        </>
       )}
+
       {details.expires && (
-        <Field label={t("details.expires")} value={formatDate(details.expires)} />
+        <ExpiryField isoDate={details.expires} />
       )}
+
       {details.updated && (
         <Field label={t("details.updated")} value={formatDate(details.updated)} />
       )}
@@ -151,7 +153,7 @@ function DetailsContent({ details }: { details: DomainDetails }) {
           <dt className="modal-label">{t("details.nameservers")}</dt>
           <dd className="modal-value modal-list">
             {details.nameservers.map((ns) => (
-              <code key={ns} className="modal-ns">{ns}</code>
+              <NameserverPill key={ns} ns={ns} />
             ))}
           </dd>
         </>
@@ -173,6 +175,106 @@ function DetailsContent({ details }: { details: DomainDetails }) {
   );
 }
 
+// ── Expiry row with days-remaining badge ──────────────────────────────────────
+
+function ExpiryField({ isoDate }: { isoDate: string }) {
+  const { t } = useTranslation();
+  const d = new Date(isoDate);
+  if (isNaN(d.getTime())) {
+    return <Field label={t("details.expires")} value={isoDate} />;
+  }
+
+  const now = new Date();
+  const diffMs = d.getTime() - now.getTime();
+  const daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+  let urgency: "ok" | "warn" | "urgent" | "expired";
+  if (daysLeft < 0) urgency = "expired";
+  else if (daysLeft < 30) urgency = "urgent";
+  else if (daysLeft <= 90) urgency = "warn";
+  else urgency = "ok";
+
+  const badge =
+    urgency === "expired"
+      ? t("details.expired")
+      : t("details.daysLeft", { count: daysLeft });
+
+  return (
+    <>
+      <dt className="modal-label">{t("details.expires")}</dt>
+      <dd className="modal-value modal-expiry-row">
+        <span>{formatDate(isoDate)}</span>
+        <span className={`modal-expiry-badge modal-expiry-${urgency}`}>
+          {badge}
+        </span>
+      </dd>
+    </>
+  );
+}
+
+// ── Domain age row ────────────────────────────────────────────────────────────
+
+function DomainAge({ registered }: { registered: string }) {
+  const { t } = useTranslation();
+  const d = new Date(registered);
+  if (isNaN(d.getTime())) return null;
+
+  const now = new Date();
+  let years = now.getFullYear() - d.getFullYear();
+  let months = now.getMonth() - d.getMonth();
+  if (months < 0) { years -= 1; months += 12; }
+
+  const age =
+    months === 0
+      ? t("details.ageYears", { count: years })
+      : t("details.ageYearsMonths", { years, months });
+
+  return <Field label={t("details.age")} value={age} />;
+}
+
+// ── Nameserver pill with copy button ─────────────────────────────────────────
+
+function NameserverPill({ ns }: { ns: string }) {
+  const { t } = useTranslation();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(ns);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard access may fail silently
+    }
+  };
+
+  return (
+    <span className="modal-ns-pill">
+      <code className="modal-ns">{ns}</code>
+      <button
+        type="button"
+        className={`modal-ns-copy${copied ? " modal-ns-copy--done" : ""}`}
+        onClick={handleCopy}
+        aria-label={t("details.copyNameserver")}
+        title={t("details.copyNameserver")}
+      >
+        {copied ? (
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+            <polyline points="1.5,5.5 4.5,8.5 9.5,2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        ) : (
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+            <rect x="3.5" y="0.5" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
+            <path d="M1.5 3.5H1a.5.5 0 00-.5.5v6a.5.5 0 00.5.5h6a.5.5 0 00.5-.5V9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+          </svg>
+        )}
+      </button>
+    </span>
+  );
+}
+
+// ── Plain field ───────────────────────────────────────────────────────────────
+
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <>
@@ -182,7 +284,7 @@ function Field({ label, value }: { label: string; value: string }) {
   );
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -194,8 +296,6 @@ function formatDate(iso: string): string {
   });
 }
 
-/** Convert EPP/RDAP status codes to friendly labels via i18n keys. Falls back
- *  to the raw code if no translation exists. */
 function humanizeStatus(code: string, t: (key: string) => string): string {
   const key = `details.statusLabels.${normalizeStatusKey(code)}`;
   const translated = t(key);
@@ -203,6 +303,5 @@ function humanizeStatus(code: string, t: (key: string) => string): string {
 }
 
 function normalizeStatusKey(code: string): string {
-  // Strip URL portion if present ("active https://..."), lowercase, take first word
   return code.split(/\s+/)[0].toLowerCase();
 }
