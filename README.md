@@ -170,11 +170,15 @@ npm run tauri dev        # hot-reload for both Rust and React
 
 ```bash
 npm run typecheck        # tsc --noEmit
+npm test                 # Vitest unit tests (run once)
+npm run test:watch       # Vitest in watch mode
+npm run test:coverage    # Vitest + lcov coverage report
 npm run tauri build      # production bundle → src-tauri/target/release/bundle/
 
 # From src-tauri/
 cargo check
 cargo clippy
+cargo test               # Rust unit tests
 cargo fmt
 
 # Regenerate app icons after editing scripts/icon.svg
@@ -190,8 +194,8 @@ node scripts/generate-icons.mjs
 | 2.x — UX | ✅ Done | Categorized TLD picker, sanitization, 14 languages, RTL, footer |
 | 3 — Shell | ✅ Done | Custom title bar, multi-tab support, splashscreen, installer branding |
 | 4 — Details | ✅ Done | WHOIS popup (registrar, dates, nameservers), port-43 fallback for non-RDAP ccTLDs (.de, .tr) |
-| 5 — Testing | ⬜ Planned | Vitest unit tests, Rust unit tests, Playwright smoke tests, sanitizer edge cases |
-| 6 — Caching & Reliability | ⬜ Planned | Bootstrap cache expiration, request dedup, retry/backoff, timeout management |
+| 5 — Testing | ✅ Done | Vitest unit tests, Rust unit tests, Playwright smoke tests, sanitizer edge cases |
+| 6 — Caching & Reliability | 🔜 Next | Bootstrap cache expiration, request dedup, retry/backoff, timeout management |
 | 7 — Domain Intelligence | ⬜ Planned | Local history, saved sessions, export CSV/JSON, domain watchlists, expiration tracking |
 | 8 — Advanced | ⬜ Planned | WHOIS timeline, DNS health, registrar intelligence, notifications |
 

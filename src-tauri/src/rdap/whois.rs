@@ -134,3 +134,156 @@ fn is_generic_unavailable(lower_body: &str) -> bool {
     ];
     MARKERS.iter().any(|m| lower_body.contains(m))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // ── server_for ────────────────────────────────────────────────────────────
+
+    #[test]
+    fn server_for_de_and_tr() {
+        assert!(server_for("de").is_some());
+        assert!(server_for("tr").is_some());
+    }
+
+    #[test]
+    fn server_for_unknown_returns_none() {
+        assert!(server_for("io").is_none());
+        assert!(server_for("xyz").is_none());
+        assert!(server_for("").is_none());
+    }
+
+    // ── .de (DENIC) parsing ───────────────────────────────────────────────────
+
+    #[test]
+    fn de_free_status_is_available() {
+        let body = "% Whois server\nStatus: free\n";
+        assert!(matches!(
+            parse_availability("de", body),
+            DomainStatus::Available
+        ));
+    }
+
+    #[test]
+    fn de_connect_status_is_taken() {
+        let body = "Status: connect\nHolder: Some Corp\n";
+        assert!(matches!(
+            parse_availability("de", body),
+            DomainStatus::Taken
+        ));
+    }
+
+    #[test]
+    fn de_failed_status_is_taken() {
+        let body = "Status: failed\n";
+        assert!(matches!(
+            parse_availability("de", body),
+            DomainStatus::Taken
+        ));
+    }
+
+    #[test]
+    fn de_no_match_is_available() {
+        let body = "% No match for the selected source(s).";
+        assert!(matches!(
+            parse_availability("de", body),
+            DomainStatus::Available
+        ));
+    }
+
+    #[test]
+    fn de_structured_response_is_taken() {
+        let body = "Registrar: Some Registrar\nDomain: example.de\n";
+        assert!(matches!(
+            parse_availability("de", body),
+            DomainStatus::Taken
+        ));
+    }
+
+    // ── .tr (NIC.tr) parsing ──────────────────────────────────────────────────
+
+    #[test]
+    fn tr_no_match_found_is_available() {
+        let body = "No match found for 'example.tr'.";
+        assert!(matches!(
+            parse_availability("tr", body),
+            DomainStatus::Available
+        ));
+    }
+
+    #[test]
+    fn tr_domain_name_field_is_taken() {
+        let body = "** Domain Name: example.tr\n   Registrar: ...\n";
+        assert!(matches!(
+            parse_availability("tr", body),
+            DomainStatus::Taken
+        ));
+    }
+
+    #[test]
+    fn tr_domain_name_keyword_is_taken() {
+        let body = "Domain Name: example.tr\n";
+        assert!(matches!(
+            parse_availability("tr", body),
+            DomainStatus::Taken
+        ));
+    }
+
+    #[test]
+    fn tr_unrecognised_body_returns_error() {
+        let body = "Some completely unexpected response without any known pattern.";
+        assert!(matches!(
+            parse_availability("tr", body),
+            DomainStatus::Error { .. }
+        ));
+    }
+
+    // ── generic fallback ──────────────────────────────────────────────────────
+
+    #[test]
+    fn generic_not_found_is_available() {
+        let body = "Domain not found.";
+        assert!(matches!(
+            parse_availability("uk", body),
+            DomainStatus::Available
+        ));
+    }
+
+    #[test]
+    fn generic_structured_response_is_taken() {
+        let body = "Registrant: Some Person\n";
+        assert!(matches!(
+            parse_availability("uk", body),
+            DomainStatus::Taken
+        ));
+    }
+
+    // ── is_generic_unavailable ────────────────────────────────────────────────
+
+    #[test]
+    fn generic_unavailable_markers() {
+        let cases = [
+            "no match",
+            "not found",
+            "no entries found",
+            "no data found",
+            "is available",
+            "domain not found",
+            "no object found",
+            "available for purchase",
+            "no match for",
+        ];
+        for marker in cases {
+            assert!(
+                is_generic_unavailable(marker),
+                "marker '{marker}' should be detected as unavailable"
+            );
+        }
+    }
+
+    #[test]
+    fn generic_unavailable_returns_false_for_taken_body() {
+        assert!(!is_generic_unavailable("registrar: example registrar\n"));
+    }
+}
