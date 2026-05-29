@@ -38,5 +38,14 @@
     "scaleLabel": "UI スケール",
     "decrease": "縮小",
     "increase": "拡大"
+  },
+  "tabs": {
+    "newSearch": "新規検索",
+    "addTab": "新しいタブ",
+    "closeTab": "タブを閉じる",
+    "closeOtherTabs": "他のタブを閉じる",
+    "closeTabsToRight": "右側のタブを閉じる",
+    "duplicateTab": "タブを複製",
+    "maxTabsTooltip": "タブの上限 20 枚に達しました"
   }
 }

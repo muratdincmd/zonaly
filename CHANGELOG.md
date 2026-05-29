@@ -6,6 +6,47 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.3.0] — 2026-05-29
+
+### Added
+
+- **Custom title bar (Windows)** — frameless window with a branded title bar
+  rendered in React: Zonaly logo on the left, tab bar in the centre, language
+  selector + theme toggle + minimize / maximize / close buttons on the right.
+  macOS and Linux keep native window decorations.
+- **Multi-tab support** — up to 20 independent tabs, each with fully isolated
+  domain input, TLD selection, and results. Tabs are managed via `TabsContext`
+  (React `useReducer`). Each tab gets one of 10 cycling accent colours shown as
+  a left-side vertical bar.
+- **Tab bar UX** — tabs shrink proportionally when space is tight (min 40 px,
+  max 200 px); never wrap to a second line. Active tab highlighted with accent
+  border. Hover shows a 2 px brand-purple bottom line. Right-click context menu:
+  *Duplicate*, *Close*, *Close other tabs*, *Close tabs to the right*.
+  Tab titles auto-update from queried domain names (e.g. `google, apple +2`).
+- **Keyboard shortcuts** — `Ctrl+T` new tab, `Ctrl+W` close tab,
+  `Ctrl+Tab` / `Ctrl+Shift+Tab` cycle tabs, `Ctrl+1–9` switch by position.
+- **Transparent splashscreen** — frameless 280 × 280 window with the Zonaly icon
+  tile and an orbiting glow dot plays while the main window loads hidden, fixing
+  FOUC (flash of unstyled content). Main window is resized, centred, and shown
+  after the animation via the `close_splashscreen` Rust command.
+- **Custom installer branding** — Windows NSIS gets a 150 × 57 header banner and
+  164 × 314 sidebar image; macOS DMG gets a 660 × 400 background. All assets
+  generated from `icon.svg` via `scripts/generate-installer-assets.mjs`.
+- **Windows icon cache refresh** — NSIS `NSIS_HOOK_POSTINSTALL` calls
+  `ie4uinit.exe -ClearIconCache` and `SHChangeNotify(SHCNE_ASSOCCHANGED)` so
+  the desktop shortcut icon updates immediately after install or upgrade.
+- **Toast improvements** — notification now appears below the title bar
+  (`top: 36px + gap`). Enter animation drops in from above with a gentle zoom-in;
+  exit animation floats back up with a zoom-out (smooth, not abrupt).
+- **Tab i18n** — `tabs.*` keys added to all 14 supported locales.
+
+### Fixed
+
+- Rust clippy warning: `use tauri::Manager` gated behind
+  `#[cfg(target_os = "windows")]` so CI passes on Linux/macOS runners.
+
+---
+
 ## [0.2.0] — 2026-05-28
 
 ### Added

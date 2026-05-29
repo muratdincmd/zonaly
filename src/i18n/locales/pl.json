@@ -38,5 +38,14 @@
     "scaleLabel": "Skala interfejsu",
     "decrease": "Zmniejsz skalę",
     "increase": "Zwiększ skalę"
+  },
+  "tabs": {
+    "newSearch": "Nowe wyszukiwanie",
+    "addTab": "Nowa karta",
+    "closeTab": "Zamknij kartę",
+    "closeOtherTabs": "Zamknij inne karty",
+    "closeTabsToRight": "Zamknij karty po prawej",
+    "duplicateTab": "Duplikuj kartę",
+    "maxTabsTooltip": "Osiągnięto maksymalny limit 20 kart"
   }
 }

@@ -23,6 +23,10 @@ Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Querie
 - **Fixed header & footer** — header always visible at top, footer always at bottom
 - **UI scale control** — resize the content area from 70% to 150% via footer +/− buttons, persisted across sessions
 - **Custom app icon** — indigo Z lettermark with globe arc overlays
+- **Custom title bar (Windows)** — branded frameless title bar with logo, tab bar, and window controls; native chrome on macOS/Linux
+- **Multi-tab support** — up to 20 independent tabs, each with isolated input, TLD selection and results; keyboard shortcuts (Ctrl+T/W/Tab/1–9)
+- **Splashscreen** — transparent animated splash while the app loads, eliminating flash of unstyled content
+- **Installer branding** — custom NSIS banner/sidebar (Windows) and DMG background (macOS); icon cache auto-refreshed after install
 
 ---
 
@@ -162,8 +166,9 @@ node scripts/generate-icons.mjs
 | 1 — Setup | ✅ Done | Tauri + React + TS scaffold, i18n, theme |
 | 2 — Core | ✅ Done | Input → parallel RDAP queries → streaming results |
 | 2.x — UX | ✅ Done | Categorized TLD picker, sanitization, 14 languages, RTL, footer |
-| 3 — Details | 🔜 Next | WHOIS popup (registrar, dates, nameservers), port-43 fallback for non-RDAP ccTLDs |
-| 4 — Polish | ⬜ Planned | Animations, error UX, keyboard shortcuts, packaging |
+| 3 — Shell | ✅ Done | Custom title bar, multi-tab support, splashscreen, installer branding |
+| 4 — Details | 🔜 Next | WHOIS popup (registrar, dates, nameservers), port-43 fallback for non-RDAP ccTLDs |
+| 5 — Polish | ⬜ Planned | Result animations, error UX, network-offline detection, MSI/DMG/AppImage packaging |
 
 ## Contributing
 

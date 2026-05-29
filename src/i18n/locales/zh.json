@@ -38,5 +38,14 @@
     "scaleLabel": "界面缩放",
     "decrease": "缩小",
     "increase": "放大"
+  },
+  "tabs": {
+    "newSearch": "新搜索",
+    "addTab": "新建标签页",
+    "closeTab": "关闭标签页",
+    "closeOtherTabs": "关闭其他标签页",
+    "closeTabsToRight": "关闭右侧标签页",
+    "duplicateTab": "复制标签页",
+    "maxTabsTooltip": "已达到最多 20 个标签页的限制"
   }
 }

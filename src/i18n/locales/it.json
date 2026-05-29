@@ -38,5 +38,14 @@
     "scaleLabel": "Scala interfaccia",
     "decrease": "Riduci scala",
     "increase": "Aumenta scala"
+  },
+  "tabs": {
+    "newSearch": "Nuova ricerca",
+    "addTab": "Nuova scheda",
+    "closeTab": "Chiudi scheda",
+    "closeOtherTabs": "Chiudi altre schede",
+    "closeTabsToRight": "Chiudi schede a destra",
+    "duplicateTab": "Duplica scheda",
+    "maxTabsTooltip": "Raggiunto il massimo di 20 schede"
   }
 }

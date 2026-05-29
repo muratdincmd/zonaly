@@ -38,5 +38,14 @@
     "scaleLabel": "Échelle de l'interface",
     "decrease": "Réduire l'échelle",
     "increase": "Augmenter l'échelle"
+  },
+  "tabs": {
+    "newSearch": "Nouvelle recherche",
+    "addTab": "Nouvel onglet",
+    "closeTab": "Fermer l'onglet",
+    "closeOtherTabs": "Fermer les autres onglets",
+    "closeTabsToRight": "Fermer les onglets à droite",
+    "duplicateTab": "Dupliquer l'onglet",
+    "maxTabsTooltip": "Maximum de 20 onglets atteint"
   }
 }

@@ -38,5 +38,14 @@
     "scaleLabel": "Arayüz ölçeği",
     "decrease": "Küçült",
     "increase": "Büyüt"
+  },
+  "tabs": {
+    "newSearch": "Yeni Arama",
+    "addTab": "Yeni sekme",
+    "closeTab": "Sekmeyi kapat",
+    "closeOtherTabs": "Diğer sekmeleri kapat",
+    "closeTabsToRight": "Sağdaki sekmeleri kapat",
+    "duplicateTab": "Sekmeyi çoğalt",
+    "maxTabsTooltip": "Maksimum 20 sekme sınırına ulaşıldı"
   }
 }

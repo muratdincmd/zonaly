@@ -10,7 +10,7 @@ export function Toast({ toast, onDismiss }: Props) {
 
   return (
     <div
-      className="toast"
+      className={`toast${toast.exiting ? " toast--exit" : ""}`}
       role="status"
       aria-live="polite"
       onClick={onDismiss}

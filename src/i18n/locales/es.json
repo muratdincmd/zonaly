@@ -38,5 +38,14 @@
     "scaleLabel": "Escala de interfaz",
     "decrease": "Reducir escala",
     "increase": "Aumentar escala"
+  },
+  "tabs": {
+    "newSearch": "Nueva búsqueda",
+    "addTab": "Nueva pestaña",
+    "closeTab": "Cerrar pestaña",
+    "closeOtherTabs": "Cerrar otras pestañas",
+    "closeTabsToRight": "Cerrar pestañas a la derecha",
+    "duplicateTab": "Duplicar pestaña",
+    "maxTabsTooltip": "Se alcanzó el máximo de 20 pestañas"
   }
 }

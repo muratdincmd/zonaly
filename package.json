@@ -1,14 +1,16 @@
 {
   "name": "zonaly",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate-icons": "node scripts/generate-icons.mjs",
+    "generate-installer-assets": "node scripts/generate-installer-assets.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",

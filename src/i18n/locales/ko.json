@@ -38,5 +38,14 @@
     "scaleLabel": "UI 크기",
     "decrease": "축소",
     "increase": "확대"
+  },
+  "tabs": {
+    "newSearch": "새 검색",
+    "addTab": "새 탭",
+    "closeTab": "탭 닫기",
+    "closeOtherTabs": "다른 탭 닫기",
+    "closeTabsToRight": "오른쪽 탭 닫기",
+    "duplicateTab": "탭 복제",
+    "maxTabsTooltip": "최대 탭 20개에 도달했습니다"
   }
 }

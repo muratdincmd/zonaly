@@ -38,5 +38,14 @@
     "scaleLabel": "UI-schaal",
     "decrease": "Verkleinen",
     "increase": "Vergroten"
+  },
+  "tabs": {
+    "newSearch": "Nieuw zoeken",
+    "addTab": "Nieuw tabblad",
+    "closeTab": "Tabblad sluiten",
+    "closeOtherTabs": "Andere tabbladen sluiten",
+    "closeTabsToRight": "Tabbladen rechts sluiten",
+    "duplicateTab": "Tabblad dupliceren",
+    "maxTabsTooltip": "Maximum van 20 tabbladen bereikt"
   }
 }
