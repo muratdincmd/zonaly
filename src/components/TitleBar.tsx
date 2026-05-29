@@ -2,6 +2,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useState, useEffect } from "react";
 import { AppLogo } from "./AppLogo";
 import { LanguageSelector } from "./LanguageSelector";
+import { TabBar } from "./TabBar";
 import { ThemeToggle } from "./ThemeToggle";
 
 // Window control button SVG icons
@@ -40,9 +41,7 @@ function IconClose() {
 }
 
 interface TitleBarProps {
-  // TAB BAR GOES HERE — future prop for rendering a tab strip in the centre
-  // tabs?: TabItem[];
-  // onTabChange?: (id: string) => void;
+  // TAB BAR IS HERE — TabBar component renders in the centre slot
 }
 
 export function TitleBar(_props: TitleBarProps) {
@@ -73,9 +72,10 @@ export function TitleBar(_props: TitleBarProps) {
         <AppLogo />
       </div>
 
-      {/* Centre: reserved for future tab bar */}
-      {/* TAB BAR GOES HERE */}
-      <div className="titlebar-centre" data-tauri-drag-region />
+      {/* Centre: tab bar */}
+      <div className="titlebar-centre">
+        <TabBar />
+      </div>
 
       {/* Right: app controls + window buttons */}
       <div className="titlebar-right" onMouseDown={(e) => e.stopPropagation()}>

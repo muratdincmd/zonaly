@@ -51,6 +51,252 @@ button {
   font-family: inherit;
 }
 
+/* ── Tab bar ─────────────────────────────────────────────────────────────────
+   Visual target:
+   [Z Zonaly]  [Tab1][Tab2][Tab3][+]        [TR][toggle][— □ ×]
+               └── connected strip, no gaps ──┘
+   - All tabs same height, same border, zero gap between them
+   - Shared adjacent borders collapse (negative margin trick)
+   - First tab: top-left 6px radius only
+   - Middle/last content tabs: 0 radius
+   - + button: top-right 6px radius only, styled like a tab
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.tabbar {
+  display: flex;
+  align-items: flex-end; /* tabs touch the bottom of the title bar */
+  height: 100%;
+  overflow: hidden;
+  min-width: 0;
+  flex: 1;
+  margin-left: 14px;
+}
+
+.tabbar-strip {
+  display: flex;
+  align-items: flex-end;
+  min-width: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* ── Base tab pill ── */
+.tab-pill {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 36px;
+  max-width: 200px;
+  height: 28px;
+  border-bottom: none;   /* bottom edge merges with title bar bottom border */
+  padding: 0 6px 0 0;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  overflow: visible;
+
+  border-radius: 0;
+  border: 1px solid var(--border);
+  background: transparent;
+
+  margin-left: -1px;
+
+  transition:
+    background 130ms ease,
+    border-color 130ms ease,
+    flex-basis 180ms ease,
+    max-width 180ms ease;
+}
+
+/* First tab: top-left radius only */
+.tabbar-strip > div:first-child .tab-pill {
+  border-radius: 6px 0 0 0;
+  margin-left: 0; /* no negative margin on first */
+}
+
+/* Bring active tab above siblings so its border isn't hidden by the
+   negative-margin overlap of the next tab */
+.tab-pill--active {
+  z-index: 1;
+}
+
+/* Left accent bar — per-tab colour indicator */
+.tab-pill::before {
+  content: "";
+  flex-shrink: 0;
+  width: 3px;
+  height: 13px;
+  border-radius: 2px;
+  background: var(--tab-color, #7C6FE0);
+  margin: 0 7px;
+  opacity: 0.4;
+  transition: opacity 130ms ease;
+}
+
+.tab-pill--active::before {
+  opacity: 1;
+}
+
+/* Bottom hover line — brand purple, same for all tabs */
+.tab-pill::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #7C6FE0;
+  opacity: 0;
+  transition: opacity 130ms ease;
+  pointer-events: none;
+}
+
+.tab-pill:hover::after {
+  opacity: 1;
+}
+
+.tab-pill--active::after {
+  opacity: 0; /* active tab uses border highlight instead */
+}
+
+/* Hover */
+.tab-pill:hover {
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  z-index: 1;
+}
+
+/* Active */
+.tab-pill--active {
+  background: color-mix(in srgb, var(--text) 9%, transparent);
+  border-color: var(--border-focus);
+}
+
+/* Label */
+.tab-pill-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.tab-pill--active .tab-pill-label {
+  color: var(--text);
+}
+
+/* Close button */
+.tab-pill-close {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 120ms ease, background 120ms ease;
+  padding: 0;
+  margin-right: 2px;
+}
+
+.tab-pill--active .tab-pill-close,
+.tab-pill:hover .tab-pill-close {
+  opacity: 1;
+}
+
+.tab-pill-close:hover {
+  background: color-mix(in srgb, var(--text) 14%, transparent);
+  color: var(--text);
+}
+
+/* ── + add-tab button — styled like a tab, top-right radius only ── */
+.tabbar-add {
+  flex-shrink: 0;
+  width: 30px;
+  height: 28px;
+  border-bottom: none;   /* merges with title bar bottom border */
+  margin-left: -1px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms ease, color 120ms ease;
+  border-radius: 0 6px 0 0;
+}
+
+.tabbar-add:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  color: var(--text);
+  z-index: 1;
+  position: relative;
+}
+
+.tabbar-add--disabled,
+.tabbar-add:disabled {
+  opacity: 0.30;
+  cursor: not-allowed;
+}
+
+/* ── Context menu ── */
+.tab-context-menu {
+  position: fixed;
+  z-index: 2000;
+  min-width: 200px;
+  padding: 0.3rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.15),
+    0 1px 3px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tab-context-menu button {
+  width: 100%;
+  padding: 0.45rem 0.75rem;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  color: var(--text);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 100ms ease;
+}
+
+.tab-context-menu button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.tab-context-menu button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.tab-context-separator {
+  height: 1px;
+  background: var(--border);
+  margin: 0.2rem 0.4rem;
+}
+
 /* ── Custom title bar (Windows only — rendered by TitleBar.tsx) ───────────── */
 
 .titlebar {
@@ -83,12 +329,14 @@ button {
 .titlebar .app-logo-icon { width: 22px; height: 22px; }
 .titlebar .app-logo-wordmark { font-size: 1rem; }
 
-/* TAB BAR GOES HERE — centre area stretches to fill remaining space */
+/* TAB BAR IS HERE — centre area stretches to fill remaining space */
 .titlebar-centre {
   flex: 1;
   min-width: 0;
   height: 100%;
-  -webkit-app-region: drag;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
 }
 
 .titlebar-right {

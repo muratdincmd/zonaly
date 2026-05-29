@@ -38,5 +38,14 @@
     "scaleLabel": "مقياس الواجهة",
     "decrease": "تصغير",
     "increase": "تكبير"
+  },
+  "tabs": {
+    "newSearch": "بحث جديد",
+    "addTab": "تبويب جديد",
+    "closeTab": "إغلاق التبويب",
+    "closeOtherTabs": "إغلاق التبويبات الأخرى",
+    "closeTabsToRight": "إغلاق التبويبات على اليمين",
+    "duplicateTab": "تكرار التبويب",
+    "maxTabsTooltip": "تم الوصول إلى الحد الأقصى وهو 20 تبويبًا"
   }
 }

@@ -38,5 +38,14 @@
     "scaleLabel": "Escala da interface",
     "decrease": "Diminuir escala",
     "increase": "Aumentar escala"
+  },
+  "tabs": {
+    "newSearch": "Nova pesquisa",
+    "addTab": "Nova aba",
+    "closeTab": "Fechar aba",
+    "closeOtherTabs": "Fechar outras abas",
+    "closeTabsToRight": "Fechar abas à direita",
+    "duplicateTab": "Duplicar aba",
+    "maxTabsTooltip": "Limite máximo de 20 abas atingido"
   }
 }

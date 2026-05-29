@@ -38,5 +38,14 @@
     "scaleLabel": "UI scale",
     "decrease": "Decrease scale",
     "increase": "Increase scale"
+  },
+  "tabs": {
+    "newSearch": "New Search",
+    "addTab": "New tab",
+    "closeTab": "Close tab",
+    "closeOtherTabs": "Close other tabs",
+    "closeTabsToRight": "Close tabs to the right",
+    "duplicateTab": "Duplicate tab",
+    "maxTabsTooltip": "Maximum 20 tabs reached"
   }
 }

@@ -38,5 +38,14 @@
     "scaleLabel": "UI-Skalierung",
     "decrease": "Verkleinern",
     "increase": "Vergrößern"
+  },
+  "tabs": {
+    "newSearch": "Neue Suche",
+    "addTab": "Neuer Tab",
+    "closeTab": "Tab schließen",
+    "closeOtherTabs": "Andere Tabs schließen",
+    "closeTabsToRight": "Tabs rechts schließen",
+    "duplicateTab": "Tab duplizieren",
+    "maxTabsTooltip": "Maximal 20 Tabs erreicht"
   }
 }
