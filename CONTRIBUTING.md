@@ -55,4 +55,6 @@ See [README.md](README.md) for prerequisites and `npm run tauri dev` instruction
 
 - **Rust:** `cargo fmt` before committing; `cargo clippy -- -D warnings` must pass.
 - **TypeScript:** `npm run typecheck` must pass. No `any` without a comment explaining why.
+- **Tests:** `npm test` (Vitest) and `cargo test` (from `src-tauri/`) must both pass. Add tests for new pure utilities and Rust parsing logic.
 - **Commits:** Use [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`).
+- **Co-author lines:** Do not add `Co-Authored-By:` lines to commit messages.

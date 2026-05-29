@@ -6,6 +6,24 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- **Vitest test suite** — 70 frontend unit tests across three files:
+  `sanitizeDomains.test.ts` (URL sanitization edge cases),
+  `tabs.test.ts` (full tabs reducer coverage),
+  `ExtensionPicker.test.ts` (TLD list invariants).
+- **Rust unit tests** — 20 tests in `rdap/client.rs` and `rdap/whois.rs`
+  covering HTTP-status → `DomainStatus` mapping, `.de` DENIC availability
+  parsing, `.tr` NIC.tr parsing, and generic "no match" detection.
+- **CI integration** — `npm test` added to the TypeScript job; `cargo test`
+  added to the Rust job so tests run on every push and PR.
+- **Coverage reporting** — `npm run test:coverage` produces an lcov report
+  via `@vitest/coverage-v8` (no minimum threshold enforced yet).
+
+---
+
 ## [0.4.0] — 2026-05-29
 
 ### Added

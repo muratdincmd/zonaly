@@ -37,14 +37,14 @@ export interface TabState {
   color: string;
 }
 
-interface TabsState {
+export interface TabsState {
   tabs: TabState[];
   activeId: string;
   // monotonically increasing counter used to generate unique ids
   counter: number;
 }
 
-type TabsAction =
+export type TabsAction =
   | { type: "ADD_TAB"; afterId?: string; copyFrom?: string }
   | { type: "CLOSE_TAB"; id: string }
   | { type: "CLOSE_OTHER_TABS"; id: string }
@@ -61,7 +61,7 @@ type TabsAction =
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function makeTab(counter: number, overrides?: Partial<TabState>): TabState {
+export function makeTab(counter: number, overrides?: Partial<TabState>): TabState {
   return {
     id: `tab-${counter}`,
     title: "",                           // empty = show "New Search" placeholder
@@ -77,7 +77,7 @@ function makeTab(counter: number, overrides?: Partial<TabState>): TabState {
 
 // ── Reducer ───────────────────────────────────────────────────────────────────
 
-function reducer(state: TabsState, action: TabsAction): TabsState {
+export function reducer(state: TabsState, action: TabsAction): TabsState {
   switch (action.type) {
     case "ADD_TAB": {
       if (state.tabs.length >= MAX_TABS) return state;
