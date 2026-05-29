@@ -75,6 +75,8 @@ button {
 .tabbar-strip {
   display: flex;
   align-items: flex-end;
+  flex: 1 1 0;       /* grows to fill all available space inside .tabbar */
+  flex-wrap: nowrap; /* never wrap to second line */
   min-width: 0;
   overflow: hidden;
   height: 100%;
@@ -84,16 +86,17 @@ button {
 .tab-pill {
   display: flex;
   align-items: center;
-  flex: 1 1 0;
-  min-width: 36px;
-  max-width: 200px;
+  flex: 1 1 0;       /* fills the wrapper div */
+  min-width: 0;      /* wrapper enforces min-width: 40px */
+  max-width: none;   /* wrapper enforces max-width: 200px */
+  width: 100%;
   height: 28px;
-  border-bottom: none;   /* bottom edge merges with title bar bottom border */
-  padding: 0 6px 1px 0; /* 1px bottom padding compensates for missing border */
+  border-bottom: none;
+  padding: 0 6px 1px 0;
   cursor: pointer;
   position: relative;
   user-select: none;
-  overflow: visible;
+  overflow: hidden;  /* clip content rather than overflow */
 
   border-radius: 0;
   border: 1px solid var(--border);
@@ -106,6 +109,15 @@ button {
     border-color 130ms ease,
     flex-basis 180ms ease,
     max-width 180ms ease;
+}
+
+/* Wrapper div around each TabPill — must participate in flex layout */
+.tabbar-strip > div {
+  flex: 1 1 0;
+  min-width: 20px;
+  max-width: 150px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* First tab: top-left radius only */
