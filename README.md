@@ -32,7 +32,17 @@ Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Querie
 
 ## Screenshots
 
-> Coming after Phase 3.
+<p align="center">
+  <img src="public/screenshots/dark-theme.png" alt="Dark theme" width="49%" />
+  &nbsp;
+  <img src="public/screenshots/light-theme.png" alt="Light theme" width="49%" />
+</p>
+
+<p align="center">
+  <img src="public/screenshots/dark-theme-results.png" alt="Dark theme — results" width="49%" />
+  &nbsp;
+  <img src="public/screenshots/light-theme-results.png" alt="Light theme — results" width="49%" />
+</p>
 
 ---
 
