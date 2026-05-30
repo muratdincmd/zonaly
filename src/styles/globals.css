@@ -597,7 +597,7 @@ button {
 }
 
 .theme-switch.theme-switch-dark {
-  background: var(--accent);
+  background: var(--border);
 }
 
 .theme-switch-thumb {
