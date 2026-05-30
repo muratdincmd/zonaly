@@ -1578,3 +1578,451 @@ button {
   from { opacity: 0; transform: translateY(8px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }
+
+/* ── Check row (check button + icon buttons) ─────────────────────────────── */
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Check button fills remaining space; icon buttons stay fixed size */
+.check-row .check-btn {
+  flex: 1;
+  min-width: 0;
+}
+
+.save-session-btn,
+.panel-icon-btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition);
+}
+
+.save-session-btn:hover:not(:disabled),
+.panel-icon-btn:hover:not(:disabled) {
+  border-color: var(--border-focus);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg-elevated));
+  color: var(--text);
+}
+
+.save-session-btn:disabled,
+.panel-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Watchlist bookmark on result rows ───────────────────────────────────── */
+
+.row-watchlist-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-muted);
+  opacity: 0;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.row:hover .row-watchlist-btn,
+.row-taken:focus-visible .row-watchlist-btn {
+  opacity: 0.55;
+}
+
+.row-watchlist-btn:hover,
+.row-watchlist-btn--active {
+  opacity: 1 !important;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+}
+
+/* ── Results toolbar (export buttons) ───────────────────────────────────── */
+
+.results-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 0.6rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.results-toolbar-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 0.1rem;
+}
+
+.export-btn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition);
+}
+
+.export-btn:hover {
+  border-color: var(--border-focus);
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg));
+  color: var(--text);
+}
+
+/* ── Side panels (history / watchlist) ──────────────────────────────────── */
+
+.side-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.40);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 999;
+  animation: modal-fade-in 160ms ease forwards;
+}
+
+.side-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 340px;
+  max-width: 92vw;
+  background: var(--bg-elevated);
+  border-left: 1px solid var(--border);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.18);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  outline: none;
+}
+
+/* On Windows the custom title bar is 36px tall — offset panels so they
+   don't overlap the title bar chrome */
+.app--custom-titlebar .side-panel {
+  top: 36px;
+}
+
+.app--custom-titlebar .side-panel-backdrop {
+  top: 36px;
+}
+
+.side-panel-open {
+  transform: translateX(0);
+}
+
+.side-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.side-panel-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.side-panel-close {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms ease, color 120ms ease;
+  padding: 0;
+}
+
+.side-panel-close:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
+/* Tab switcher */
+.side-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.side-panel-tab {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition:
+    color var(--transition),
+    border-color var(--transition),
+    background var(--transition);
+}
+
+.side-panel-tab:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 4%, transparent);
+}
+
+.side-panel-tab--active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Scrollable body */
+.side-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.side-panel-body::-webkit-scrollbar { width: 4px; }
+.side-panel-body::-webkit-scrollbar-track { background: transparent; }
+.side-panel-body::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: 999px;
+}
+
+/* List container */
+.side-panel-list {
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.side-panel-empty {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin: 0;
+}
+
+/* Actions bar (Clear All, etc.) */
+.side-panel-list-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 0.25rem;
+}
+
+.side-panel-action-btn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition);
+}
+
+.side-panel-action-btn--danger:hover {
+  border-color: var(--taken);
+  color: var(--taken);
+  background: color-mix(in srgb, var(--taken) 8%, transparent);
+}
+
+/* Item row */
+.side-panel-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.side-panel-item:hover {
+  background: color-mix(in srgb, var(--accent) 5%, var(--bg));
+  border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+}
+
+.side-panel-item-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  cursor: pointer;
+}
+
+.side-panel-item-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.side-panel-item--watchlist .side-panel-item-title {
+  font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
+  font-size: 13px;
+}
+
+.side-panel-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.side-panel-item-time {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.side-panel-item-count {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* Status badges */
+.side-panel-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+}
+
+.side-panel-badge--available {
+  color: var(--available);
+  background: color-mix(in srgb, var(--available) 14%, transparent);
+}
+
+.side-panel-badge--taken {
+  color: var(--taken);
+  background: color-mix(in srgb, var(--taken) 14%, transparent);
+}
+
+.side-panel-badge--error {
+  color: var(--error);
+  background: color-mix(in srgb, var(--error) 14%, transparent);
+}
+
+/* Action buttons (rename, delete) */
+.side-panel-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.side-panel-item-action,
+.side-panel-item-delete {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  padding: 0;
+  transition: opacity 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.side-panel-item:hover .side-panel-item-action,
+.side-panel-item:hover .side-panel-item-delete {
+  opacity: 1;
+}
+
+.side-panel-item-action:hover {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+}
+
+.side-panel-item-delete:hover {
+  background: color-mix(in srgb, var(--taken) 12%, transparent);
+  color: var(--taken);
+}
+
+/* Inline rename input */
+.side-panel-rename-input {
+  width: 100%;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg-input);
+  border: 1px solid var(--border-focus);
+  border-radius: 5px;
+  padding: 0.15rem 0.4rem;
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* Spinning animation for "check now" button */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
+/* ── TitleBar icon buttons ────────────────────────────────────────────────── */
+
+.titlebar-btn--icon {
+  color: var(--text-muted);
+}
+
+.titlebar-btn--icon:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}

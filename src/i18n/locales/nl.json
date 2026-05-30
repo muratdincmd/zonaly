@@ -98,5 +98,38 @@
       "transferperiod": "Overdrachtsperiode",
       "renewperiod": "Verlengingsperiode"
     }
+  },
+  "history": {
+    "panelTitle": "Geschiedenis en sessies",
+    "tabHistory": "Geschiedenis",
+    "empty": "Nog geen zoekgeschiedenis.",
+    "clearAll": "Alles wissen",
+    "delete": "Verwijder item",
+    "restore": "Herstellen"
+  },
+  "sessions": {
+    "tabSaved": "Opgeslagen",
+    "empty": "Nog geen opgeslagen sessies.",
+    "save": "Huidige sessie opslaan",
+    "saved": "Sessie opgeslagen",
+    "rename": "Hernoemen",
+    "delete": "Sessie verwijderen",
+    "load": "Sessie laden",
+    "domainCount": "{{count}} domein",
+    "domainCount_other": "{{count}} domeinen",
+    "doubleClickToRename": "Dubbelklik om te hernoemen"
+  },
+  "watchlist": {
+    "panelTitle": "Volglijst",
+    "empty": "Geen domeinen in de volglijst.",
+    "add": "Toevoegen aan volglijst",
+    "remove": "Verwijderen uit volglijst",
+    "checkNow": "Nu controleren",
+    "lastChecked": "Laatst gecontroleerd:"
+  },
+  "export": {
+    "button": "Exporteren:",
+    "csv": "CSV",
+    "json": "JSON"
   }
 }

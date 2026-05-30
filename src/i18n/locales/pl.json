@@ -98,5 +98,38 @@
       "transferperiod": "Okres transferu",
       "renewperiod": "Okres odnowienia"
     }
+  },
+  "history": {
+    "panelTitle": "Historia i sesje",
+    "tabHistory": "Historia",
+    "empty": "Brak historii wyszukiwania.",
+    "clearAll": "Wyczyść wszystko",
+    "delete": "Usuń wpis",
+    "restore": "Przywróć"
+  },
+  "sessions": {
+    "tabSaved": "Zapisane",
+    "empty": "Brak zapisanych sesji.",
+    "save": "Zapisz bieżącą sesję",
+    "saved": "Sesja zapisana",
+    "rename": "Zmień nazwę",
+    "delete": "Usuń sesję",
+    "load": "Załaduj sesję",
+    "domainCount": "{{count}} domena",
+    "domainCount_other": "{{count}} domen",
+    "doubleClickToRename": "Dwukliknij, aby zmienić nazwę"
+  },
+  "watchlist": {
+    "panelTitle": "Lista obserwowanych",
+    "empty": "Lista obserwowanych jest pusta.",
+    "add": "Dodaj do obserwowanych",
+    "remove": "Usuń z obserwowanych",
+    "checkNow": "Sprawdź teraz",
+    "lastChecked": "Ostatnie sprawdzenie:"
+  },
+  "export": {
+    "button": "Eksportuj:",
+    "csv": "CSV",
+    "json": "JSON"
   }
 }

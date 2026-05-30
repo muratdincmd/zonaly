@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
 
@@ -6,6 +7,8 @@ import type { DomainResult } from "../types/domain";
 interface Props {
   result: DomainResult;
   onClick?: (result: DomainResult) => void;
+  watchedIds?: Map<string, number>; // "name.tld" -> watchlist id
+  onWatchlistChange?: () => void;
 }
 
 function openExternal(url: string) {
@@ -27,10 +30,32 @@ function translateError(msg: string, t: (key: string, opts?: Record<string, unkn
   }
 }
 
-export function ResultRow({ result, onClick }: Props) {
+export function ResultRow({ result, onClick, watchedIds, onWatchlistChange }: Props) {
   const { t } = useTranslation();
   const kind = result.status.kind;
   const clickable = kind === "taken" && !!onClick;
+  const domainKey = `${result.name}.${result.tld}`;
+  const watchlistId = watchedIds?.get(domainKey) ?? null;
+  const isWatched = watchlistId !== null;
+  const [toggling, setToggling] = useState(false);
+
+  const handleWatchlistToggle = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (toggling) return;
+    setToggling(true);
+    try {
+      if (isWatched) {
+        await invoke("remove_from_watchlist", { id: watchlistId });
+      } else {
+        await invoke("add_to_watchlist", { domain: result.name, tld: result.tld });
+      }
+      onWatchlistChange?.();
+    } catch (err) {
+      console.error("watchlist toggle failed", err);
+    } finally {
+      setToggling(false);
+    }
+  };
 
   return (
     <div
@@ -61,6 +86,32 @@ export function ResultRow({ result, onClick }: Props) {
       )}
       {kind === "error" && (
         <span className="error-msg">{translateError(result.status.message, t)}</span>
+      )}
+      {/* Watchlist bookmark — shown for available and taken rows */}
+      {(kind === "available" || kind === "taken") && onWatchlistChange && (
+        <button
+          type="button"
+          className={`row-watchlist-btn${isWatched ? " row-watchlist-btn--active" : ""}`}
+          onClick={handleWatchlistToggle}
+          disabled={toggling}
+          aria-label={isWatched ? t("watchlist.remove") : t("watchlist.add")}
+          title={isWatched ? t("watchlist.remove") : t("watchlist.add")}
+          tabIndex={-1}
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            {isWatched ? (
+              <path
+                d="M2 1.5h8a.5.5 0 01.5.5v9l-4.5-2.5L1.5 11V2a.5.5 0 01.5-.5z"
+                fill="currentColor" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"
+              />
+            ) : (
+              <path
+                d="M2 1.5h8a.5.5 0 01.5.5v9l-4.5-2.5L1.5 11V2a.5.5 0 01.5-.5z"
+                stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"
+              />
+            )}
+          </svg>
+        </button>
       )}
       {kind === "taken" && (
         <button

@@ -38,6 +38,10 @@ Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Querie
 - **Multi-tab support** — up to 20 independent tabs, each with isolated input, TLD selection and results; keyboard shortcuts (Ctrl+T/W/Tab/1–9)
 - **Splashscreen** — transparent animated splash while the app loads, eliminating flash of unstyled content
 - **Installer branding** — custom NSIS banner/sidebar (Windows) and DMG background (macOS); icon cache auto-refreshed after install
+- **Query history** — every search is saved automatically; restore past searches with one click from the History panel
+- **Saved sessions** — name and save a domain list + TLD selection to reuse later
+- **Watchlist** — bookmark any domain from results to track it; check status on demand from the Watchlist panel
+- **Export results** — download results as CSV or JSON after any query
 
 ---
 
@@ -197,7 +201,7 @@ node scripts/generate-icons.mjs
 | 4 — Details | ✅ Done | WHOIS popup (registrar, dates, nameservers), port-43 fallback for non-RDAP ccTLDs (.de, .tr) |
 | 5 — Testing | ✅ Done | Vitest unit tests, Rust unit tests, Playwright smoke tests, sanitizer edge cases |
 | 6 — Caching & Reliability | ✅ Done | Bootstrap disk cache (24h TTL), request dedup, retry/backoff, 30s batch timeout |
-| 7 — Domain Intelligence | ⬜ Planned | Local query history, saved sessions, export CSV/JSON, domain watchlists, expiry tracking |
+| 7 — Domain Intelligence | 🔜 Next | Local query history, saved sessions, export CSV/JSON, domain watchlists, expiry tracking |
 | 8 — Favorites & Monitoring | ⬜ Planned | Star/bookmark domains, auto-check scheduling, expiry alerts, change detection |
 | 9 — Background Service | ⬜ Planned | System tray, background checks, native OS notifications (expiry, availability changes) |
 | 10 — Settings Panel | ⬜ Planned | Settings modal: cache management, notification prefs, monitoring intervals, About |

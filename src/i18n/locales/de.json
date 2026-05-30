@@ -56,6 +56,39 @@
     "duplicateTab": "Tab duplizieren",
     "maxTabsTooltip": "Maximal 20 Tabs erreicht"
   },
+  "history": {
+    "panelTitle": "Verlauf & Sitzungen",
+    "tabHistory": "Verlauf",
+    "empty": "Noch kein Suchverlauf.",
+    "clearAll": "Alle löschen",
+    "delete": "Eintrag löschen",
+    "restore": "Wiederherstellen"
+  },
+  "sessions": {
+    "tabSaved": "Gespeichert",
+    "empty": "Noch keine gespeicherten Sitzungen.",
+    "save": "Aktuelle Sitzung speichern",
+    "saved": "Sitzung gespeichert",
+    "rename": "Umbenennen",
+    "delete": "Sitzung löschen",
+    "load": "Sitzung laden",
+    "domainCount": "{{count}} Domain",
+    "domainCount_other": "{{count}} Domains",
+    "doubleClickToRename": "Doppelklick zum Umbenennen"
+  },
+  "watchlist": {
+    "panelTitle": "Beobachtungsliste",
+    "empty": "Keine Domains in der Beobachtungsliste.",
+    "add": "Zur Beobachtungsliste hinzufügen",
+    "remove": "Aus Beobachtungsliste entfernen",
+    "checkNow": "Jetzt prüfen",
+    "lastChecked": "Zuletzt geprüft:"
+  },
+  "export": {
+    "button": "Exportieren:",
+    "csv": "CSV",
+    "json": "JSON"
+  },
   "details": {
     "loading": "Domain-Details werden geladen…",
     "error": "Details konnten nicht geladen werden",

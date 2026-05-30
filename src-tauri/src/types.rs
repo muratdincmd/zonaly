@@ -1,5 +1,14 @@
 use serde::{Deserialize, Serialize};
 
+/// A single result to be exported.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ExportResult {
+    pub name: String,
+    pub tld: String,
+    pub status: String,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DomainQuery {
     pub name: String,

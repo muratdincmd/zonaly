@@ -104,5 +104,38 @@
       "transferperiod": "Période de transfert",
       "renewperiod": "Période de renouvellement"
     }
+  },
+  "history": {
+    "panelTitle": "Historique et sessions",
+    "tabHistory": "Historique",
+    "empty": "Aucun historique de recherche pour l'instant.",
+    "clearAll": "Tout effacer",
+    "delete": "Supprimer l'entrée",
+    "restore": "Restaurer"
+  },
+  "sessions": {
+    "tabSaved": "Sauvegardées",
+    "empty": "Aucune session sauvegardée pour l'instant.",
+    "save": "Sauvegarder la session",
+    "saved": "Session sauvegardée",
+    "rename": "Renommer",
+    "delete": "Supprimer la session",
+    "load": "Charger la session",
+    "domainCount": "{{count}} domaine",
+    "domainCount_other": "{{count}} domaines",
+    "doubleClickToRename": "Double-clic pour renommer"
+  },
+  "watchlist": {
+    "panelTitle": "Liste de surveillance",
+    "empty": "Aucun domaine dans la liste.",
+    "add": "Ajouter à la liste",
+    "remove": "Retirer de la liste",
+    "checkNow": "Vérifier maintenant",
+    "lastChecked": "Dernière vérification :"
+  },
+  "export": {
+    "button": "Exporter :",
+    "csv": "CSV",
+    "json": "JSON"
   }
 }

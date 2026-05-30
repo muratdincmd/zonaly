@@ -98,5 +98,38 @@
       "transferperiod": "转移期",
       "renewperiod": "续费期"
     }
+  },
+  "history": {
+    "panelTitle": "历史与会话",
+    "tabHistory": "历史",
+    "empty": "暂无搜索历史。",
+    "clearAll": "清除全部",
+    "delete": "删除记录",
+    "restore": "恢复"
+  },
+  "sessions": {
+    "tabSaved": "已保存",
+    "empty": "暂无已保存的会话。",
+    "save": "保存当前会话",
+    "saved": "会话已保存",
+    "rename": "重命名",
+    "delete": "删除会话",
+    "load": "加载会话",
+    "domainCount": "{{count}} 个域名",
+    "domainCount_other": "{{count}} 个域名",
+    "doubleClickToRename": "双击以重命名"
+  },
+  "watchlist": {
+    "panelTitle": "监控列表",
+    "empty": "监控列表为空。",
+    "add": "添加到监控列表",
+    "remove": "从监控列表移除",
+    "checkNow": "立即检查",
+    "lastChecked": "最后检查："
+  },
+  "export": {
+    "button": "导出：",
+    "csv": "CSV",
+    "json": "JSON"
   }
 }

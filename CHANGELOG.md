@@ -6,7 +6,43 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [Unreleased]
+## [Unreleased] — Phase 7
+
+### Added
+
+- **Local query history.** Every `check_domains` run is automatically recorded.
+  Up to 100 entries are kept (FIFO). A slide-in **History panel** lets users
+  restore any past search — domain names and TLD selection are replayed into the
+  active tab with one click.
+- **Saved sessions.** Users can save the current domain list + TLD selection as
+  a named session (up to 50 stored). Sessions appear in the Saved tab of the
+  History panel; names can be edited inline with a double-click.
+- **Watchlist.** Each available or taken result row has a bookmark icon that
+  adds/removes the domain from a watchlist (up to 200 entries). A dedicated
+  **Watchlist panel** lists tracked domains, shows their last-checked status,
+  and provides a per-domain "Check now" button.
+- **CSV / JSON export.** When results are visible an Export toolbar appears at
+  the bottom of the results. Content is generated in Rust and downloaded via
+  `URL.createObjectURL` — no extra plugin required.
+- **History & Watchlist icon buttons** in the Windows custom title bar and the
+  native macOS/Linux header.
+- **12 new Tauri commands** for CRUD on history, sessions, watchlist, and export.
+- **Rust unit tests** for Phase 7 additions — 54 Rust tests total.
+- **i18n.** `history.*`, `sessions.*`, `watchlist.*`, `export.*` keys added to
+  all 14 supported locale files.
+
+### Notes
+
+- Storage is currently in-memory (resets on app restart). The `rusqlite` bundled
+  feature requires a C toolchain to compile SQLite natively; on Windows inside
+  OneDrive this triggers Application Control policy and blocks build scripts.
+  SQLite persistence will be re-introduced once the build environment is stable.
+- `.cargo/config.toml` (gitignored) sets `target-dir` outside OneDrive to fix
+  the build-script blocking issue locally.
+
+---
+
+## [Unreleased] — Phase 6
 
 ### Added
 
