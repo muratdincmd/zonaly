@@ -196,9 +196,12 @@ node scripts/generate-icons.mjs
 | 3 — Shell | ✅ Done | Custom title bar, multi-tab support, splashscreen, installer branding |
 | 4 — Details | ✅ Done | WHOIS popup (registrar, dates, nameservers), port-43 fallback for non-RDAP ccTLDs (.de, .tr) |
 | 5 — Testing | ✅ Done | Vitest unit tests, Rust unit tests, Playwright smoke tests, sanitizer edge cases |
-| 6 — Caching & Reliability | 🔜 Next | Bootstrap cache expiration, request dedup, retry/backoff, timeout management |
-| 7 — Domain Intelligence | ⬜ Planned | Local history, saved sessions, export CSV/JSON, domain watchlists, expiration tracking |
-| 8 — Advanced | ⬜ Planned | WHOIS timeline, DNS health, registrar intelligence, notifications |
+| 6 — Caching & Reliability | ✅ Done | Bootstrap disk cache (24h TTL), request dedup, retry/backoff, 30s batch timeout |
+| 7 — Domain Intelligence | ⬜ Planned | Local query history, saved sessions, export CSV/JSON, domain watchlists, expiry tracking |
+| 8 — Favorites & Monitoring | ⬜ Planned | Star/bookmark domains, auto-check scheduling, expiry alerts, change detection |
+| 9 — Background Service | ⬜ Planned | System tray, background checks, native OS notifications (expiry, availability changes) |
+| 10 — Settings Panel | ⬜ Planned | Settings modal: cache management, notification prefs, monitoring intervals, About |
+| 11 — Advanced DNS | ⬜ Planned | DNS record display (NS/MX/SOA/A), DNS health, registrar intelligence, parked domain detection |
 
 ## Contributing
 
