@@ -24,8 +24,9 @@ Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Querie
 
 - **Smart input sanitization** — paste full URLs (`https://example.com/page`) and the app strips protocols, `www.`, TLD suffixes, and paths automatically
 - **Categorized TLD picker** — 5 collapsible categories (Popular, Country Codes, Business & Professional, Creative & Design, Tech & Startups), select-all per category, selected/available count
-- **Parallel RDAP queries** — all name × TLD combinations checked concurrently (up to 10 at a time)
+- **Parallel RDAP queries** — all name × TLD combinations checked concurrently (up to 10 at a time), with automatic retry on transient errors
 - **Streaming results** — Available / Taken / Error groups appear as results arrive, preserving your input order
+- **Resilient & offline-friendly** — RDAP server list is cached locally for 24 hours; if the network is unavailable the app uses the cached list and retries failed queries up to twice before showing an error
 - **Modern results UI** — colored left-border accent per status, "Available" badge, custom thin scrollbar
 - **14 languages** — EN, TR, DE, ES, FR, IT, PT, RU, ZH, JA, KO, AR, NL, PL; auto-detected from system locale
 - **RTL support** — full right-to-left layout when Arabic is selected
