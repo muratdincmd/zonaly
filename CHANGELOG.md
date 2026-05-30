@@ -6,6 +6,33 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- **Bootstrap disk cache.** IANA RDAP bootstrap JSON is now cached to the
+  Tauri app-data directory with a 24-hour TTL. Subsequent launches use the
+  cached data instantly; on expiry the cache refreshes in-flight and falls
+  back to stale data if the network is unavailable.
+- **Request deduplication.** If the same domain+TLD is queried more than once
+  concurrently (e.g. double-click on Check), only one network request is made.
+  Duplicate callers subscribe to the first call's result via a tokio watch
+  channel and reuse it without hitting the network again.
+- **Retry with exponential backoff.** RDAP queries are retried up to 2 times
+  on transient failure. Backoff: 500 ms before first retry, 1 500 ms before
+  second. Rate-limited responses (429) wait 3 s before retry. Successful
+  responses (200, 404) and non-retriable client errors (4xx) are never retried.
+- **Per-request timeout tightened to 8 s** (down from 10 s). The reqwest
+  client timeout is now aligned with the documented value in CLAUDE.md.
+- **Overall batch timeout (30 s).** If the full set of domain checks has not
+  completed within 30 seconds, remaining in-flight tasks are cancelled and each
+  unfinished query is emitted as a timeout error to the frontend.
+- **Rust unit tests** for Phase 6 logic: HTTP classification (`classify_http`),
+  retry-decision helper, backoff constant ordering, bootstrap cache freshness /
+  expiry, and disk-cache JSON round-trip. Total Rust test count: 36.
+
+---
+
 ## [0.5.0] — 2026-05-29
 
 ### Added

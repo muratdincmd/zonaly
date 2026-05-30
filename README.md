@@ -24,8 +24,9 @@ Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Querie
 
 - **Smart input sanitization** — paste full URLs (`https://example.com/page`) and the app strips protocols, `www.`, TLD suffixes, and paths automatically
 - **Categorized TLD picker** — 5 collapsible categories (Popular, Country Codes, Business & Professional, Creative & Design, Tech & Startups), select-all per category, selected/available count
-- **Parallel RDAP queries** — all name × TLD combinations checked concurrently (up to 10 at a time)
+- **Parallel RDAP queries** — all name × TLD combinations checked concurrently (up to 10 at a time), with automatic retry on transient errors
 - **Streaming results** — Available / Taken / Error groups appear as results arrive, preserving your input order
+- **Resilient & offline-friendly** — RDAP server list is cached locally for 24 hours; if the network is unavailable the app uses the cached list and retries failed queries up to twice before showing an error
 - **Modern results UI** — colored left-border accent per status, "Available" badge, custom thin scrollbar
 - **14 languages** — EN, TR, DE, ES, FR, IT, PT, RU, ZH, JA, KO, AR, NL, PL; auto-detected from system locale
 - **RTL support** — full right-to-left layout when Arabic is selected
@@ -195,9 +196,12 @@ node scripts/generate-icons.mjs
 | 3 — Shell | ✅ Done | Custom title bar, multi-tab support, splashscreen, installer branding |
 | 4 — Details | ✅ Done | WHOIS popup (registrar, dates, nameservers), port-43 fallback for non-RDAP ccTLDs (.de, .tr) |
 | 5 — Testing | ✅ Done | Vitest unit tests, Rust unit tests, Playwright smoke tests, sanitizer edge cases |
-| 6 — Caching & Reliability | 🔜 Next | Bootstrap cache expiration, request dedup, retry/backoff, timeout management |
-| 7 — Domain Intelligence | ⬜ Planned | Local history, saved sessions, export CSV/JSON, domain watchlists, expiration tracking |
-| 8 — Advanced | ⬜ Planned | WHOIS timeline, DNS health, registrar intelligence, notifications |
+| 6 — Caching & Reliability | ✅ Done | Bootstrap disk cache (24h TTL), request dedup, retry/backoff, 30s batch timeout |
+| 7 — Domain Intelligence | ⬜ Planned | Local query history, saved sessions, export CSV/JSON, domain watchlists, expiry tracking |
+| 8 — Favorites & Monitoring | ⬜ Planned | Star/bookmark domains, auto-check scheduling, expiry alerts, change detection |
+| 9 — Background Service | ⬜ Planned | System tray, background checks, native OS notifications (expiry, availability changes) |
+| 10 — Settings Panel | ⬜ Planned | Settings modal: cache management, notification prefs, monitoring intervals, About |
+| 11 — Advanced DNS | ⬜ Planned | DNS record display (NS/MX/SOA/A), DNS health, registrar intelligence, parked domain detection |
 
 ## Contributing
 
