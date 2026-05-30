@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Thema wisselen"
   },
+  "titlebar": {
+    "minimize": "Minimaliseren",
+    "maximize": "Maximaliseren",
+    "restore": "Herstellen",
+    "close": "Sluiten"
+  },
   "footer": {
     "scaleLabel": "UI-schaal",
     "decrease": "Verkleinen",

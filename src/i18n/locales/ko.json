@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "테마 전환"
   },
+  "titlebar": {
+    "minimize": "최소화",
+    "maximize": "최대화",
+    "restore": "복원",
+    "close": "닫기"
+  },
   "footer": {
     "scaleLabel": "UI 크기",
     "decrease": "축소",

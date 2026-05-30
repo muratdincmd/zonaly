@@ -321,6 +321,7 @@ function KeyboardShortcuts() {
 
 function AppShell() {
   const { activeId } = useTabs();
+  const { t } = useTranslation();
   useScale();
 
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -350,8 +351,8 @@ function AppShell() {
               type="button"
               className="panel-icon-btn"
               onClick={openHistory}
-              title="History"
-              aria-label="History"
+              title={t("history.panelTitle")}
+              aria-label={t("history.panelTitle")}
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.3"/>
@@ -362,8 +363,8 @@ function AppShell() {
               type="button"
               className="panel-icon-btn"
               onClick={openWatchlist}
-              title="Watchlist"
-              aria-label="Watchlist"
+              title={t("watchlist.panelTitle")}
+              aria-label={t("watchlist.panelTitle")}
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path d="M3 1.5h8a.5.5 0 01.5.5v11l-4.5-2.5L2.5 13V2a.5.5 0 01.5-.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>

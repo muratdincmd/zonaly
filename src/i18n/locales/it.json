@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Cambia tema"
   },
+  "titlebar": {
+    "minimize": "Minimizza",
+    "maximize": "Massimizza",
+    "restore": "Ripristina",
+    "close": "Chiudi"
+  },
   "footer": {
     "scaleLabel": "Scala interfaccia",
     "decrease": "Riduci scala",

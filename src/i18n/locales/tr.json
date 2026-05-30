@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Temayı değiştir"
   },
+  "titlebar": {
+    "minimize": "Küçült",
+    "maximize": "Büyüt",
+    "restore": "Geri yükle",
+    "close": "Kapat"
+  },
   "footer": {
     "scaleLabel": "Arayüz ölçeği",
     "decrease": "Küçült",

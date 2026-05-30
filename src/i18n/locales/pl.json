@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Przełącz motyw"
   },
+  "titlebar": {
+    "minimize": "Minimalizuj",
+    "maximize": "Maksymalizuj",
+    "restore": "Przywróć",
+    "close": "Zamknij"
+  },
   "footer": {
     "scaleLabel": "Skala interfejsu",
     "decrease": "Zmniejsz skalę",

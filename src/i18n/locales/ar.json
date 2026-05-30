@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "تبديل المظهر"
   },
+  "titlebar": {
+    "minimize": "تصغير",
+    "maximize": "تكبير",
+    "restore": "استعادة",
+    "close": "إغلاق"
+  },
   "footer": {
     "scaleLabel": "مقياس الواجهة",
     "decrease": "تصغير",

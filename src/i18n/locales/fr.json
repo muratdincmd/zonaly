@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Changer le thème"
   },
+  "titlebar": {
+    "minimize": "Réduire",
+    "maximize": "Agrandir",
+    "restore": "Restaurer",
+    "close": "Fermer"
+  },
   "footer": {
     "scaleLabel": "Échelle de l'interface",
     "decrease": "Réduire l'échelle",

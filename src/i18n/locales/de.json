@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Design umschalten"
   },
+  "titlebar": {
+    "minimize": "Minimieren",
+    "maximize": "Maximieren",
+    "restore": "Wiederherstellen",
+    "close": "Schließen"
+  },
   "footer": {
     "scaleLabel": "UI-Skalierung",
     "decrease": "Verkleinern",

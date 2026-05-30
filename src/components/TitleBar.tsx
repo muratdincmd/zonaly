@@ -1,5 +1,6 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { AppLogo } from "./AppLogo";
 import { LanguageSelector } from "./LanguageSelector";
 import { TabBar } from "./TabBar";
@@ -47,6 +48,7 @@ interface TitleBarProps {
 
 export function TitleBar({ onOpenHistory, onOpenWatchlist }: TitleBarProps) {
   const win = getCurrentWindow();
+  const { t } = useTranslation();
   const [maximized, setMaximized] = useState(false);
 
   useEffect(() => {
@@ -83,8 +85,8 @@ export function TitleBar({ onOpenHistory, onOpenWatchlist }: TitleBarProps) {
           <button
             className="titlebar-btn titlebar-btn--icon"
             onClick={onOpenHistory}
-            aria-label="History"
-            title="History"
+            aria-label={t("history.panelTitle")}
+            title={t("history.panelTitle")}
             tabIndex={-1}
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
@@ -97,8 +99,8 @@ export function TitleBar({ onOpenHistory, onOpenWatchlist }: TitleBarProps) {
           <button
             className="titlebar-btn titlebar-btn--icon"
             onClick={onOpenWatchlist}
-            aria-label="Watchlist"
-            title="Watchlist"
+            aria-label={t("watchlist.panelTitle")}
+            title={t("watchlist.panelTitle")}
             tabIndex={-1}
           >
             <svg width="12" height="13" viewBox="0 0 12 13" fill="none" aria-hidden="true">
@@ -114,7 +116,7 @@ export function TitleBar({ onOpenHistory, onOpenWatchlist }: TitleBarProps) {
           <button
             className="titlebar-btn titlebar-btn--minimize"
             onClick={handleMinimize}
-            aria-label="Minimize"
+            aria-label={t("titlebar.minimize")}
             tabIndex={-1}
           >
             <IconMinimize />
@@ -122,7 +124,7 @@ export function TitleBar({ onOpenHistory, onOpenWatchlist }: TitleBarProps) {
           <button
             className="titlebar-btn titlebar-btn--maximize"
             onClick={handleMaximize}
-            aria-label={maximized ? "Restore" : "Maximize"}
+            aria-label={maximized ? t("titlebar.restore") : t("titlebar.maximize")}
             tabIndex={-1}
           >
             {maximized ? <IconRestore /> : <IconMaximize />}
@@ -130,7 +132,7 @@ export function TitleBar({ onOpenHistory, onOpenWatchlist }: TitleBarProps) {
           <button
             className="titlebar-btn titlebar-btn--close"
             onClick={handleClose}
-            aria-label="Close"
+            aria-label={t("titlebar.close")}
             tabIndex={-1}
           >
             <IconClose />
