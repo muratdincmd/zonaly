@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
 
 import type { DomainDetails, DomainResult } from "../types/domain";
+import type { WatchlistEntry } from "../types/storage";
 
 interface ExportCallbacks {
   onSuccess: (label: string) => void;
@@ -23,6 +24,8 @@ type FetchState =
 export function DomainDetailsModal({ domain, onClose, exportCallbacks }: Props) {
   const { t } = useTranslation();
   const [state, setState] = useState<FetchState>({ kind: "loading" });
+  const [watchlistId, setWatchlistId] = useState<number | null>(null);
+  const [watchlistToggling, setWatchlistToggling] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -44,6 +47,38 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks }: Props) 
       });
     return () => { cancelled = true; };
   }, [domain.name, domain.tld]);
+
+  // Check if this domain is already in the watchlist
+  useEffect(() => {
+    invoke<WatchlistEntry[]>("get_watchlist")
+      .then((entries) => {
+        const found = entries.find(
+          (e) => e.domain === domain.name && e.tld === domain.tld
+        );
+        setWatchlistId(found ? found.id : null);
+      })
+      .catch(() => {});
+  }, [domain.name, domain.tld]);
+
+  const handleWatchlistToggle = async () => {
+    setWatchlistToggling(true);
+    try {
+      if (watchlistId !== null) {
+        await invoke("remove_from_watchlist", { id: watchlistId });
+        setWatchlistId(null);
+      } else {
+        const entry = await invoke<WatchlistEntry>("add_to_watchlist", {
+          domain: domain.name,
+          tld: domain.tld,
+        });
+        setWatchlistId(entry.id);
+      }
+    } catch (e) {
+      console.error("watchlist toggle failed", e);
+    } finally {
+      setWatchlistToggling(false);
+    }
+  };
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -103,7 +138,7 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks }: Props) 
           )}
         </div>
 
-        {/* Export footer — only shown when details are loaded */}
+        {/* Footer — export on left, watchlist icon on right */}
         {state.kind === "ok" && (
           <div className="modal-footer">
             <span className="results-toolbar-label">{t("export.button")}</span>
@@ -120,6 +155,35 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks }: Props) 
               onClick={() => void handleExport(state.details, "json")}
             >
               {t("export.json")}
+            </button>
+
+            {/* Spacer */}
+            <span style={{ flex: 1 }} />
+
+            {/* Watchlist icon-only button — right side */}
+            <button
+              type="button"
+              className={`modal-watchlist-btn${watchlistId !== null ? " modal-watchlist-btn--active" : ""}`}
+              onClick={() => void handleWatchlistToggle()}
+              disabled={watchlistToggling}
+              aria-label={watchlistId !== null ? t("watchlist.remove") : t("watchlist.add")}
+              title={watchlistId !== null ? t("watchlist.remove") : t("watchlist.add")}
+            >
+              <svg width="13" height="14" viewBox="0 0 13 14" fill="none" aria-hidden="true">
+                {watchlistId !== null ? (
+                  <path
+                    d="M2 1.5h9a.5.5 0 01.5.5v10.5l-5-2.8-5 2.8V2a.5.5 0 01.5-.5z"
+                    fill="currentColor" stroke="currentColor" strokeWidth="1.1"
+                    strokeLinecap="round" strokeLinejoin="round"
+                  />
+                ) : (
+                  <path
+                    d="M2 1.5h9a.5.5 0 01.5.5v10.5l-5-2.8-5 2.8V2a.5.5 0 01.5-.5z"
+                    stroke="currentColor" strokeWidth="1.1"
+                    strokeLinecap="round" strokeLinejoin="round"
+                  />
+                )}
+              </svg>
             </button>
           </div>
         )}

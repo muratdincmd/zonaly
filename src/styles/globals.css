@@ -1469,6 +1469,45 @@ button {
   flex-shrink: 0;
 }
 
+.modal-watchlist-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.modal-watchlist-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--accent);
+}
+
+.modal-watchlist-btn--active {
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.modal-watchlist-btn--active:hover:not(:disabled) {
+  border-color: var(--taken);
+  background: color-mix(in srgb, var(--taken) 8%, transparent);
+  color: var(--taken);
+}
+
+.modal-watchlist-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .modal-body {
   padding: 1.1rem 1.25rem 1.25rem;
   overflow-y: auto;
@@ -1690,11 +1729,17 @@ button {
   opacity: 0.55;
 }
 
-.row-watchlist-btn:hover,
+.row-watchlist-btn:hover:not(.row-watchlist-btn--active),
 .row-watchlist-btn--active {
   opacity: 1 !important;
   background: color-mix(in srgb, var(--accent) 10%, transparent);
   color: var(--accent);
+}
+
+/* Active + hover → red (kaldır sinyali) */
+.row-watchlist-btn--active:hover {
+  background: color-mix(in srgb, var(--taken) 10%, transparent);
+  color: var(--taken);
 }
 
 /* ── Results toolbar (export buttons) ───────────────────────────────────── */
