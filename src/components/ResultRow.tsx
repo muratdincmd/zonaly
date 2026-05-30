@@ -79,11 +79,6 @@ export function ResultRow({ result, onClick, watchedIds, onWatchlistChange }: Pr
         <span className="domain-name">{result.name}</span>
         <span className="domain-tld">.{result.tld}</span>
       </span>
-      {kind === "available" && (
-        <span className="result-badge result-badge-available">
-          {t("results.availableBadge")}
-        </span>
-      )}
       {kind === "error" && (
         <span className="error-msg">{translateError(result.status.message, t)}</span>
       )}
@@ -112,6 +107,11 @@ export function ResultRow({ result, onClick, watchedIds, onWatchlistChange }: Pr
             )}
           </svg>
         </button>
+      )}
+      {kind === "available" && (
+        <span className="result-badge result-badge-available">
+          {t("results.availableBadge")}
+        </span>
       )}
       {kind === "taken" && (
         <button
