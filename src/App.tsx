@@ -270,6 +270,7 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
           domain={detailsFor}
           onClose={() => setDetailsFor(null)}
           exportCallbacks={exportCallbacks}
+          onWatchlistChange={loadWatchlist}
         />
       )}
     </>

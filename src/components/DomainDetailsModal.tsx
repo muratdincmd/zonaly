@@ -14,6 +14,7 @@ interface Props {
   domain: DomainResult;
   onClose: () => void;
   exportCallbacks?: ExportCallbacks;
+  onWatchlistChange?: () => void;
 }
 
 type FetchState =
@@ -21,7 +22,7 @@ type FetchState =
   | { kind: "ok"; details: DomainDetails }
   | { kind: "error"; message: string };
 
-export function DomainDetailsModal({ domain, onClose, exportCallbacks }: Props) {
+export function DomainDetailsModal({ domain, onClose, exportCallbacks, onWatchlistChange }: Props) {
   const { t } = useTranslation();
   const [state, setState] = useState<FetchState>({ kind: "loading" });
   const [watchlistId, setWatchlistId] = useState<number | null>(null);
@@ -73,6 +74,7 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks }: Props) 
         });
         setWatchlistId(entry.id);
       }
+      onWatchlistChange?.();
     } catch (e) {
       console.error("watchlist toggle failed", e);
     } finally {
