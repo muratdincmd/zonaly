@@ -180,6 +180,22 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
 
   const canSave = parseInput(tab.inputText).length > 0;
 
+  const exportCallbacks = {
+    onSuccess: (label: string) => {
+      showToast(t("export.success", { label }), {
+        variant: "info" as const,
+        duration: 5000,
+        onClickAction: () => { void invoke("open_downloads_folder"); },
+      });
+    },
+    onError: (reason: string) => {
+      showToast(`${t("export.error")}: ${reason}`, {
+        variant: "error" as const,
+        duration: 4000,
+      });
+    },
+  };
+
   return (
     <>
       <main className="app-main">
@@ -242,23 +258,7 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
             onRowClick={setDetailsFor}
             watchedIds={watchedIds}
             onWatchlistChange={loadWatchlist}
-            exportCallbacks={{
-              onSuccess: (label) => {
-                showToast(t("export.success", { label }), {
-                  variant: "info",
-                  duration: 5000,
-                  onClickAction: () => {
-                    void invoke("open_downloads_folder");
-                  },
-                });
-              },
-              onError: (reason) => {
-                showToast(`${t("export.error")}: ${reason}`, {
-                  variant: "error",
-                  duration: 4000,
-                });
-              },
-            }}
+            exportCallbacks={exportCallbacks}
           />
         </div>
       </main>
@@ -269,21 +269,7 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
         <DomainDetailsModal
           domain={detailsFor}
           onClose={() => setDetailsFor(null)}
-          exportCallbacks={{
-            onSuccess: (label) => {
-              showToast(t("export.success", { label }), {
-                variant: "info",
-                duration: 5000,
-                onClickAction: () => { void invoke("open_downloads_folder"); },
-              });
-            },
-            onError: (reason) => {
-              showToast(`${t("export.error")}: ${reason}`, {
-                variant: "error",
-                duration: 4000,
-              });
-            },
-          }}
+          exportCallbacks={exportCallbacks}
         />
       )}
     </>
