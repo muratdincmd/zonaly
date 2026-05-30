@@ -4,9 +4,15 @@ import { invoke } from "@tauri-apps/api/core";
 
 import type { DomainDetails, DomainResult } from "../types/domain";
 
+interface ExportCallbacks {
+  onSuccess: (filename: string) => void;
+  onError: (reason: string) => void;
+}
+
 interface Props {
   domain: DomainResult;
   onClose: () => void;
+  exportCallbacks?: ExportCallbacks;
 }
 
 type FetchState =
@@ -14,7 +20,7 @@ type FetchState =
   | { kind: "ok"; details: DomainDetails }
   | { kind: "error"; message: string };
 
-export function DomainDetailsModal({ domain, onClose }: Props) {
+export function DomainDetailsModal({ domain, onClose, exportCallbacks }: Props) {
   const { t } = useTranslation();
   const [state, setState] = useState<FetchState>({ kind: "loading" });
 
@@ -96,9 +102,69 @@ export function DomainDetailsModal({ domain, onClose }: Props) {
             <DetailsContent details={state.details} />
           )}
         </div>
+
+        {/* Export footer — only shown when details are loaded */}
+        {state.kind === "ok" && (
+          <div className="modal-footer">
+            <span className="results-toolbar-label">{t("export.button")}</span>
+            <button
+              type="button"
+              className="export-btn"
+              onClick={() => void handleExport(state.details, "csv")}
+            >
+              {t("export.csv")}
+            </button>
+            <button
+              type="button"
+              className="export-btn"
+              onClick={() => void handleExport(state.details, "json")}
+            >
+              {t("export.json")}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
+
+  async function handleExport(details: DomainDetails, format: "csv" | "json") {
+    const filename = `${details.name}.${details.tld}.${format}`;
+    const rows = [{
+      name: details.name,
+      tld: details.tld,
+      status: "taken",
+      registrar: details.registrar ?? "",
+      registered: details.registered ?? "",
+      expires: details.expires ?? "",
+      updated: details.updated ?? "",
+      nameservers: details.nameservers.join("; "),
+      statuses: details.statuses.join("; "),
+    }];
+
+    try {
+      let content: string;
+      if (format === "json") {
+        content = JSON.stringify(rows, null, 2);
+      } else {
+        const headers = Object.keys(rows[0]).join(",");
+        const line = Object.values(rows[0])
+          .map((v) => (String(v).includes(",") || String(v).includes('"') ? `"${String(v).replace(/"/g, '""')}"` : String(v)))
+          .join(",");
+        content = `${headers}\n${line}\n`;
+      }
+
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+      exportCallbacks?.onSuccess(filename);
+    } catch (e) {
+      exportCallbacks?.onError(String(e));
+    }
+  }
 }
 
 // ── Source badge ──────────────────────────────────────────────────────────────
