@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
+import type { DomainResult } from "../types/domain";
 import type { WatchlistEntry } from "../types/storage";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   onWatchlistChange?: () => void;
+  /** Called after check-now completes — opens the domain details modal */
+  onOpenDetails?: (result: DomainResult) => void;
 }
 
 function formatTimestamp(ts: string | null, locale: string): string {
@@ -32,7 +35,7 @@ function StatusBadge({ status }: { status: string | null }) {
   return <span className={cls}>{status}</span>;
 }
 
-export function WatchlistPanel({ open, onClose, onWatchlistChange }: Props) {
+export function WatchlistPanel({ open, onClose, onWatchlistChange, onOpenDetails }: Props) {
   const { t, i18n } = useTranslation();
   const [watchlist, setWatchlist] = useState<WatchlistEntry[]>([]);
   const [checking, setChecking] = useState<Set<number>>(new Set());
@@ -71,19 +74,25 @@ export function WatchlistPanel({ open, onClose, onWatchlistChange }: Props) {
   const handleCheckNow = async (entry: WatchlistEntry) => {
     setChecking((prev) => new Set(prev).add(entry.id));
     try {
-      // Use the existing check_domains command for a single domain
       const { listen } = await import("@tauri-apps/api/event");
       const { invoke: inv } = await import("@tauri-apps/api/core");
 
-      let status = "error";
-      const unlisten = await listen<{ status: { kind: string } }>("domain-result", (event) => {
-        const kind = event.payload.status.kind;
-        status = kind === "available" ? "available" : kind === "taken" ? "taken" : "error";
+      let lastResult: DomainResult | null = null;
+
+      const unlisten = await listen<DomainResult>("domain-result", (event) => {
+        lastResult = event.payload;
       });
 
       const completeUnlisten = await listen("domain-results-complete", async () => {
         completeUnlisten();
         unlisten();
+
+        const status = lastResult
+          ? lastResult.status.kind === "taken" ? "taken"
+          : lastResult.status.kind === "available" ? "available"
+          : "error"
+          : "error";
+
         await inv("update_watchlist_entry", { id: entry.id, status });
         loadWatchlist();
         setChecking((prev) => {
@@ -91,6 +100,8 @@ export function WatchlistPanel({ open, onClose, onWatchlistChange }: Props) {
           next.delete(entry.id);
           return next;
         });
+
+        // lastResult available for row click handler below
       });
 
       await inv("check_domains", {
@@ -142,8 +153,26 @@ export function WatchlistPanel({ open, onClose, onWatchlistChange }: Props) {
             {watchlist.length === 0 ? (
               <p className="side-panel-empty">{t("watchlist.empty")}</p>
             ) : (
-              watchlist.map((entry) => (
-                <div key={entry.id} className="side-panel-item side-panel-item--watchlist">
+              watchlist.map((entry) => {
+                const isTaken = entry.lastStatus === "taken";
+                const handleRowClick = () => {
+                  if (!isTaken || !onOpenDetails) return;
+                  onOpenDetails({
+                    name: entry.domain,
+                    tld: entry.tld,
+                    status: { kind: "taken" },
+                    source: undefined,
+                  });
+                };
+                return (
+                <div
+                  key={entry.id}
+                  className={`side-panel-item side-panel-item--watchlist${isTaken && onOpenDetails ? " side-panel-item--clickable" : ""}`}
+                  onClick={handleRowClick}
+                  role={isTaken && onOpenDetails ? "button" : undefined}
+                  tabIndex={isTaken && onOpenDetails ? 0 : undefined}
+                  onKeyDown={isTaken && onOpenDetails ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleRowClick(); } } : undefined}
+                >
                   <div className="side-panel-item-main">
                     <span className="side-panel-item-title">
                       <span className="domain-name">{entry.domain}</span>
@@ -160,7 +189,7 @@ export function WatchlistPanel({ open, onClose, onWatchlistChange }: Props) {
                   <div className="side-panel-item-actions">
                     <button
                       className="side-panel-item-action"
-                      onClick={() => void handleCheckNow(entry)}
+                      onClick={(e) => { e.stopPropagation(); void handleCheckNow(entry); }}
                       disabled={checking.has(entry.id)}
                       aria-label={t("watchlist.checkNow")}
                       title={t("watchlist.checkNow")}
@@ -177,7 +206,7 @@ export function WatchlistPanel({ open, onClose, onWatchlistChange }: Props) {
                     </button>
                     <button
                       className="side-panel-item-delete"
-                      onClick={() => void handleRemove(entry.id)}
+                      onClick={(e) => { e.stopPropagation(); void handleRemove(entry.id); }}
                       aria-label={t("watchlist.remove")}
                       title={t("watchlist.remove")}
                     >
@@ -188,7 +217,7 @@ export function WatchlistPanel({ open, onClose, onWatchlistChange }: Props) {
                     </button>
                   </div>
                 </div>
-              ))
+              );})
             )}
           </div>
         </div>

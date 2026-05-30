@@ -51,9 +51,10 @@ interface TabPanelProps {
   restoreRef: React.MutableRefObject<((entry: HistoryEntry) => void) | null>;
   loadSessionRef: React.MutableRefObject<((session: SavedSession) => void) | null>;
   reloadWatchlistRef: React.RefObject<(() => void) | null>;
+  openDetailsRef: React.RefObject<((result: DomainResult) => void) | null>;
 }
 
-function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessionRef, reloadWatchlistRef }: TabPanelProps) {
+function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessionRef, reloadWatchlistRef, openDetailsRef }: TabPanelProps) {
   const { t } = useTranslation();
   const { tabs, dispatch } = useTabs();
   const tab = tabs.find((t) => t.id === tabId)!;
@@ -75,6 +76,8 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
 
   // Expose loadWatchlist so AppShell can trigger it from WatchlistPanel
   reloadWatchlistRef.current = loadWatchlist;
+  // Expose setDetailsFor so AppShell can open the modal from WatchlistPanel
+  openDetailsRef.current = setDetailsFor;
 
   // Register callbacks so AppShell can restore/load into the active tab
   const handleRestoreHistory = useCallback((entry: HistoryEntry) => {
@@ -336,6 +339,7 @@ function AppShell() {
   const restoreRef = useRef<((entry: HistoryEntry) => void) | null>(null);
   const loadSessionRef = useRef<((session: SavedSession) => void) | null>(null);
   const reloadWatchlistRef = useRef<(() => void) | null>(null);
+  const openDetailsRef = useRef<((result: DomainResult) => void) | null>(null);
 
   const openHistory = useCallback(() => { setHistoryOpen(true); setWatchlistOpen(false); }, []);
   const openWatchlist = useCallback(() => { setWatchlistOpen(true); setHistoryOpen(false); }, []);
@@ -391,6 +395,7 @@ function AppShell() {
         restoreRef={restoreRef}
         loadSessionRef={loadSessionRef}
         reloadWatchlistRef={reloadWatchlistRef}
+        openDetailsRef={openDetailsRef}
       />
 
       {/* Panels — rendered at AppShell level so they overlay everything */}
@@ -404,6 +409,7 @@ function AppShell() {
         open={watchlistOpen}
         onClose={() => setWatchlistOpen(false)}
         onWatchlistChange={() => reloadWatchlistRef.current?.()}
+        onOpenDetails={(result) => openDetailsRef.current?.(result)}
       />
 
       <AppFooter />
