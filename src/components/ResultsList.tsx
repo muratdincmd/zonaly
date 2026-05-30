@@ -6,11 +6,17 @@ import type { ExportResult } from "../types/storage";
 
 import { ResultRow } from "./ResultRow";
 
+interface ExportCallbacks {
+  onSuccess: (filename: string) => void;
+  onError: (reason: string) => void;
+}
+
 interface Props {
   results: DomainResult[];
   onRowClick?: (result: DomainResult) => void;
   watchedIds?: Map<string, number>;
   onWatchlistChange?: () => void;
+  exportCallbacks?: ExportCallbacks;
 }
 
 function triggerDownload(content: string, filename: string) {
@@ -23,7 +29,7 @@ function triggerDownload(content: string, filename: string) {
   URL.revokeObjectURL(url);
 }
 
-export function ResultsList({ results, onRowClick, watchedIds, onWatchlistChange }: Props) {
+export function ResultsList({ results, onRowClick, watchedIds, onWatchlistChange, exportCallbacks }: Props) {
   const { t } = useTranslation();
 
   if (results.length === 0) {
@@ -40,15 +46,18 @@ export function ResultsList({ results, onRowClick, watchedIds, onWatchlistChange
       tld: r.tld,
       status: r.status.kind,
     }));
+    const ext = format === "csv" ? "csv" : "json";
+    const filename = `zonaly-results.${ext}`;
     try {
       const content = await invoke<string>("export_results", {
         results: exportData,
         format,
       });
-      const ext = format === "csv" ? "csv" : "json";
-      triggerDownload(content, `zonaly-results.${ext}`);
+      triggerDownload(content, filename);
+      exportCallbacks?.onSuccess(filename);
     } catch (e) {
       console.error("export failed", e);
+      exportCallbacks?.onError(String(e));
     }
   };
 

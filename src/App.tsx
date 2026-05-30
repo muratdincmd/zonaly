@@ -242,6 +242,23 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
             onRowClick={setDetailsFor}
             watchedIds={watchedIds}
             onWatchlistChange={loadWatchlist}
+            exportCallbacks={{
+              onSuccess: (filename) => {
+                showToast(t("export.success", { filename }), {
+                  variant: "info",
+                  duration: 5000,
+                  onClickAction: () => {
+                    void invoke("open_downloads_folder");
+                  },
+                });
+              },
+              onError: (reason) => {
+                showToast(`${t("export.error")}: ${reason}`, {
+                  variant: "error",
+                  duration: 4000,
+                });
+              },
+            }}
           />
         </div>
       </main>

@@ -33,6 +33,31 @@ pub fn close_splashscreen(app: AppHandle) {
 // ── Open URL ──────────────────────────────────────────────────────────────────
 
 #[tauri::command]
+pub fn open_downloads_folder() {
+    // Open the system default Downloads directory in the file manager.
+    // Falls back silently if the path can't be determined.
+    let downloads = dirs_next();
+    if let Some(path) = downloads {
+        let path_str = path.to_string_lossy().to_string();
+        #[cfg(target_os = "windows")]
+        let _ = std::process::Command::new("explorer").arg(&path_str).spawn();
+        #[cfg(target_os = "macos")]
+        let _ = std::process::Command::new("open").arg(&path_str).spawn();
+        #[cfg(target_os = "linux")]
+        let _ = std::process::Command::new("xdg-open").arg(&path_str).spawn();
+    }
+}
+
+fn dirs_next() -> Option<std::path::PathBuf> {
+    // Resolve the user's Downloads directory without an extra crate.
+    let home = std::env::var("HOME")
+        .or_else(|_| std::env::var("USERPROFILE"))
+        .ok()?;
+    let downloads = std::path::PathBuf::from(home).join("Downloads");
+    if downloads.exists() { Some(downloads) } else { None }
+}
+
+#[tauri::command]
 pub fn open_url(url: String) -> Result<(), String> {
     if !url.starts_with("https://") && !url.starts_with("http://") {
         return Err("Only http/https URLs are allowed".into());

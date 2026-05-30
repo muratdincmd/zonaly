@@ -87,7 +87,9 @@
   "export": {
     "button": "Dışa aktar:",
     "csv": "CSV",
-    "json": "JSON"
+    "json": "JSON",
+    "success": "{{filename}} dışa aktarıldı",
+    "error": "Dışa aktarma başarısız"
   },
   "details": {
     "loading": "Alan adı detayları yükleniyor…",

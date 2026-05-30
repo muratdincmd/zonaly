@@ -136,6 +136,8 @@
   "export": {
     "button": "Exportar:",
     "csv": "CSV",
-    "json": "JSON"
+    "json": "JSON",
+    "success": "{{filename}} exportado",
+    "error": "Error al exportar"
   }
 }

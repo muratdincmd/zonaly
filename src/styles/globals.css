@@ -1222,11 +1222,37 @@ button {
   animation: toast-out 320ms cubic-bezier(0.4, 0, 0.8, 0.6) forwards;
 }
 
+/* Error variant */
+.toast--error {
+  border-color: color-mix(in srgb, var(--taken) 40%, transparent);
+  background: color-mix(in srgb, var(--taken) 8%, var(--bg-elevated));
+}
+
+.toast--error .toast-icon {
+  color: var(--taken);
+}
+
+/* Clickable variant — show pointer and subtle hover */
+.toast--clickable {
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.toast--clickable:hover {
+  background: color-mix(in srgb, var(--text) 5%, var(--bg-elevated));
+}
+
 .toast-icon {
   width: 17px;
   height: 17px;
-  color: #f59e0b;
+  color: var(--available);
   flex-shrink: 0;
+}
+
+.toast-arrow {
+  flex-shrink: 0;
+  opacity: 0.55;
+  color: var(--text-muted);
 }
 
 /* Enter: drops in from above + gentle scale-up */

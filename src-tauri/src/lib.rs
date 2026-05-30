@@ -15,6 +15,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::check_domains,
             commands::open_url,
+            commands::open_downloads_folder,
             commands::close_splashscreen,
             commands::fetch_domain_details,
             commands::get_history,

@@ -130,6 +130,8 @@
   "export": {
     "button": "Экспорт:",
     "csv": "CSV",
-    "json": "JSON"
+    "json": "JSON",
+    "success": "{{filename}} экспортирован",
+    "error": "Ошибка экспорта"
   }
 }

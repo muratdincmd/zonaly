@@ -130,6 +130,8 @@
   "export": {
     "button": "导出：",
     "csv": "CSV",
-    "json": "JSON"
+    "json": "JSON",
+    "success": "{{filename}} 已导出",
+    "error": "导出失败"
   }
 }

@@ -87,7 +87,9 @@
   "export": {
     "button": "Export:",
     "csv": "CSV",
-    "json": "JSON"
+    "json": "JSON",
+    "success": "{{filename}} exported",
+    "error": "Export failed"
   },
   "details": {
     "loading": "Loading domain details…",
