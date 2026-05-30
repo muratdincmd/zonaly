@@ -50,9 +50,10 @@ interface TabPanelProps {
   // Called from AppShell when a history entry or session is loaded
   restoreRef: React.MutableRefObject<((entry: HistoryEntry) => void) | null>;
   loadSessionRef: React.MutableRefObject<((session: SavedSession) => void) | null>;
+  reloadWatchlistRef: React.RefObject<(() => void) | null>;
 }
 
-function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessionRef }: TabPanelProps) {
+function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessionRef, reloadWatchlistRef }: TabPanelProps) {
   const { t } = useTranslation();
   const { tabs, dispatch } = useTabs();
   const tab = tabs.find((t) => t.id === tabId)!;
@@ -71,6 +72,9 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
   }, []);
 
   useEffect(() => { loadWatchlist(); }, [loadWatchlist]);
+
+  // Expose loadWatchlist so AppShell can trigger it from WatchlistPanel
+  reloadWatchlistRef.current = loadWatchlist;
 
   // Register callbacks so AppShell can restore/load into the active tab
   const handleRestoreHistory = useCallback((entry: HistoryEntry) => {
@@ -331,6 +335,7 @@ function AppShell() {
   // Refs to active tab's restore/load handlers
   const restoreRef = useRef<((entry: HistoryEntry) => void) | null>(null);
   const loadSessionRef = useRef<((session: SavedSession) => void) | null>(null);
+  const reloadWatchlistRef = useRef<(() => void) | null>(null);
 
   const openHistory = useCallback(() => { setHistoryOpen(true); setWatchlistOpen(false); }, []);
   const openWatchlist = useCallback(() => { setWatchlistOpen(true); setHistoryOpen(false); }, []);
@@ -385,6 +390,7 @@ function AppShell() {
         onOpenWatchlist={openWatchlist}
         restoreRef={restoreRef}
         loadSessionRef={loadSessionRef}
+        reloadWatchlistRef={reloadWatchlistRef}
       />
 
       {/* Panels — rendered at AppShell level so they overlay everything */}
@@ -397,6 +403,7 @@ function AppShell() {
       <WatchlistPanel
         open={watchlistOpen}
         onClose={() => setWatchlistOpen(false)}
+        onWatchlistChange={() => reloadWatchlistRef.current?.()}
       />
 
       <AppFooter />

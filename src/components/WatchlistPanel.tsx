@@ -6,6 +6,7 @@ import type { WatchlistEntry } from "../types/storage";
 interface Props {
   open: boolean;
   onClose: () => void;
+  onWatchlistChange?: () => void;
 }
 
 function formatTimestamp(ts: string | null, locale: string): string {
@@ -31,7 +32,7 @@ function StatusBadge({ status }: { status: string | null }) {
   return <span className={cls}>{status}</span>;
 }
 
-export function WatchlistPanel({ open, onClose }: Props) {
+export function WatchlistPanel({ open, onClose, onWatchlistChange }: Props) {
   const { t, i18n } = useTranslation();
   const [watchlist, setWatchlist] = useState<WatchlistEntry[]>([]);
   const [checking, setChecking] = useState<Set<number>>(new Set());
@@ -64,6 +65,7 @@ export function WatchlistPanel({ open, onClose }: Props) {
   const handleRemove = async (id: number) => {
     await invoke("remove_from_watchlist", { id });
     loadWatchlist();
+    onWatchlistChange?.();
   };
 
   const handleCheckNow = async (entry: WatchlistEntry) => {
