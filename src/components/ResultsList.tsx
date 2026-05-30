@@ -7,7 +7,7 @@ import type { ExportResult } from "../types/storage";
 import { ResultRow } from "./ResultRow";
 
 interface ExportCallbacks {
-  onSuccess: (filename: string) => void;
+  onSuccess: (label: string) => void;
   onError: (reason: string) => void;
 }
 
@@ -46,15 +46,22 @@ export function ResultsList({ results, onRowClick, watchedIds, onWatchlistChange
       tld: r.tld,
       status: r.status.kind,
     }));
-    const ext = format === "csv" ? "csv" : "json";
-    const filename = `zonaly-results.${ext}`;
+    const filename = `zonaly-results.${format}`;
+
+    // Build label: unique domain names, max 3 shown + overflow count
+    const uniqueNames = [...new Set(results.map((r) => r.name))];
+    const MAX = 3;
+    const shown = uniqueNames.slice(0, MAX).join(", ");
+    const overflow = uniqueNames.length > MAX ? ` +${uniqueNames.length - MAX}` : "";
+    const label = `${shown}${overflow}.${format}`;
+
     try {
       const content = await invoke<string>("export_results", {
         results: exportData,
         format,
       });
       triggerDownload(content, filename);
-      exportCallbacks?.onSuccess(filename);
+      exportCallbacks?.onSuccess(label);
     } catch (e) {
       console.error("export failed", e);
       exportCallbacks?.onError(String(e));

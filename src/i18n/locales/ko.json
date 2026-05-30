@@ -131,7 +131,7 @@
     "button": "내보내기:",
     "csv": "CSV",
     "json": "JSON",
-    "success": "{{filename}} 내보내기 완료",
+    "success": "{{label}} 내보내기 완료",
     "error": "내보내기 실패"
   }
 }

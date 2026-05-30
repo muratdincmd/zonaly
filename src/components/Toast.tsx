@@ -45,7 +45,15 @@ export function Toast({ toast, onDismiss }: Props) {
           </>
         )}
       </svg>
-      <span>{toast.message}</span>
+      <span
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: toast.message.replace(
+            /(\.(csv|json))/gi,
+            '<strong class="toast-format">$1</strong>'
+          ),
+        }}
+      />
       {toast.onClickAction && (
         <svg
           width="12" height="12" viewBox="0 0 12 12" fill="none"

@@ -131,7 +131,7 @@
     "button": "导出：",
     "csv": "CSV",
     "json": "JSON",
-    "success": "{{filename}} 已导出",
+    "success": "{{label}} 已导出",
     "error": "导出失败"
   }
 }

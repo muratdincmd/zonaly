@@ -131,7 +131,7 @@
     "button": "エクスポート：",
     "csv": "CSV",
     "json": "JSON",
-    "success": "{{filename}} をエクスポートしました",
+    "success": "{{label}} をエクスポートしました",
     "error": "エクスポート失敗"
   }
 }

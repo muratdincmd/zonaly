@@ -131,7 +131,7 @@
     "button": "تصدير:",
     "csv": "CSV",
     "json": "JSON",
-    "success": "تم تصدير {{filename}}",
+    "success": "تم تصدير {{label}}",
     "error": "فشل التصدير"
   }
 }

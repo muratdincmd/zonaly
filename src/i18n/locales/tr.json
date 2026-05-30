@@ -88,7 +88,7 @@
     "button": "Dışa aktar:",
     "csv": "CSV",
     "json": "JSON",
-    "success": "{{filename}} dışa aktarıldı",
+    "success": "{{label}} dışa aktarıldı",
     "error": "Dışa aktarma başarısız"
   },
   "details": {

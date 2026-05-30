@@ -1255,6 +1255,11 @@ button {
   color: var(--text-muted);
 }
 
+.toast-format {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 /* Enter: drops in from above + gentle scale-up */
 @keyframes toast-in {
   from {

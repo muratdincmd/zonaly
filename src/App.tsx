@@ -243,8 +243,8 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
             watchedIds={watchedIds}
             onWatchlistChange={loadWatchlist}
             exportCallbacks={{
-              onSuccess: (filename) => {
-                showToast(t("export.success", { filename }), {
+              onSuccess: (label) => {
+                showToast(t("export.success", { label }), {
                   variant: "info",
                   duration: 5000,
                   onClickAction: () => {
@@ -270,8 +270,8 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
           domain={detailsFor}
           onClose={() => setDetailsFor(null)}
           exportCallbacks={{
-            onSuccess: (filename) => {
-              showToast(t("export.success", { filename }), {
+            onSuccess: (label) => {
+              showToast(t("export.success", { label }), {
                 variant: "info",
                 duration: 5000,
                 onClickAction: () => { void invoke("open_downloads_folder"); },

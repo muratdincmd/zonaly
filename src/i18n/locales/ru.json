@@ -131,7 +131,7 @@
     "button": "Экспорт:",
     "csv": "CSV",
     "json": "JSON",
-    "success": "{{filename}} экспортирован",
+    "success": "{{label}} экспортирован",
     "error": "Ошибка экспорта"
   }
 }

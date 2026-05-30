@@ -88,7 +88,7 @@
     "button": "Exportieren:",
     "csv": "CSV",
     "json": "JSON",
-    "success": "{{filename}} exportiert",
+    "success": "{{label}} exportiert",
     "error": "Export fehlgeschlagen"
   },
   "details": {

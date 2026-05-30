@@ -5,7 +5,7 @@ import { invoke } from "@tauri-apps/api/core";
 import type { DomainDetails, DomainResult } from "../types/domain";
 
 interface ExportCallbacks {
-  onSuccess: (filename: string) => void;
+  onSuccess: (label: string) => void;
   onError: (reason: string) => void;
 }
 
@@ -128,7 +128,9 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks }: Props) 
   );
 
   async function handleExport(details: DomainDetails, format: "csv" | "json") {
-    const filename = `${details.name}.${details.tld}.${format}`;
+    // Proposed filename — browser may append (1), (2) etc. if it already exists.
+    // We show this as the label; user sees e.g. "abdiss-com.CSV"
+    const filename = `${details.name}-${details.tld}.${format}`;
     const rows = [{
       name: details.name,
       tld: details.tld,

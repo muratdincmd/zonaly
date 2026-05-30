@@ -131,7 +131,7 @@
     "button": "Eksportuj:",
     "csv": "CSV",
     "json": "JSON",
-    "success": "{{filename}} wyeksportowany",
+    "success": "{{label}} wyeksportowany",
     "error": "Eksport nie powiódł się"
   }
 }
