@@ -34,10 +34,7 @@ pub fn close_splashscreen(app: AppHandle) {
 
 #[tauri::command]
 pub fn open_downloads_folder() {
-    // Open the system default Downloads directory in the file manager.
-    // Falls back silently if the path can't be determined.
-    let downloads = dirs_next();
-    if let Some(path) = downloads {
+    if let Some(path) = dirs_next() {
         let path_str = path.to_string_lossy().to_string();
         #[cfg(target_os = "windows")]
         let _ = std::process::Command::new("explorer").arg(&path_str).spawn();
@@ -49,7 +46,6 @@ pub fn open_downloads_folder() {
 }
 
 fn dirs_next() -> Option<std::path::PathBuf> {
-    // Resolve the user's Downloads directory without an extra crate.
     let home = std::env::var("HOME")
         .or_else(|_| std::env::var("USERPROFILE"))
         .ok()?;
@@ -459,7 +455,6 @@ fn add_seconds_to_iso(iso: &str, seconds: i64) -> String {
     unix_secs_to_rfc3339(base.saturating_add(seconds as u64))
 }
 
-/// Parse a simple ISO 8601 UTC string (YYYY-MM-DDTHH:MM:SSZ) to unix seconds.
 fn iso_to_unix_secs(iso: &str) -> Option<u64> {
     let s = iso.trim_end_matches('Z');
     let parts: Vec<&str> = s.splitn(2, 'T').collect();
@@ -468,21 +463,18 @@ fn iso_to_unix_secs(iso: &str) -> Option<u64> {
     let time: Vec<u64> = parts[1].split(':').filter_map(|p| p.parse().ok()).collect();
     if date.len() < 3 || time.len() < 3 { return None; }
     let (y, mo, d, h, mi, sc) = (date[0], date[1], date[2], time[0], time[1], time[2]);
-    // Days since Unix epoch via days_from_ymd
     let days = ymd_to_days(y, mo, d)?;
     Some(days * 86400 + h * 3600 + mi * 60 + sc)
 }
 
 fn ymd_to_days(y: u64, m: u64, d: u64) -> Option<u64> {
     if y < 1970 { return None; }
-    // Gregorian days since 1970-01-01
     let (y, m) = if m <= 2 { (y - 1, m + 9) } else { (y, m - 3) };
     let era = y / 400;
     let yoe = y % 400;
     let doy = (153 * m + 2) / 5 + d - 1;
     let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
     let days = era * 146097 + doe;
-    // subtract days up to 1970-01-01 (which is day 719468 in this system)
     Some(days.saturating_sub(719468))
 }
 

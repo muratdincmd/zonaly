@@ -48,7 +48,6 @@ export function ResultsList({ results, onRowClick, watchedIds, onWatchlistChange
     }));
     const filename = `zonaly-results.${format}`;
 
-    // Build label: unique domain names, max 3 shown + overflow count
     const uniqueNames = [...new Set(results.map((r) => r.name))];
     const MAX = 3;
     const shown = uniqueNames.slice(0, MAX).join(", ");

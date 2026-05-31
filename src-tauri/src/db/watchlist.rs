@@ -43,6 +43,7 @@ pub struct WatchlistStats {
 }
 
 pub fn create_table(conn: &Connection) -> Result<()> {
+    // Create tables (idempotent).
     conn.execute_batch(
         "CREATE TABLE IF NOT EXISTS watchlist (
             id                   INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -62,16 +63,6 @@ pub fn create_table(conn: &Connection) -> Result<()> {
             notes                TEXT,
             UNIQUE(domain, tld)
         );
-        -- Add new columns to existing installs (silently ignored if they exist)
-        ALTER TABLE watchlist ADD COLUMN last_registrar       TEXT;
-        ALTER TABLE watchlist ADD COLUMN last_expiry_date     TEXT;
-        ALTER TABLE watchlist ADD COLUMN check_interval_hours INTEGER NOT NULL DEFAULT 24;
-        ALTER TABLE watchlist ADD COLUMN next_check_at        TEXT;
-        ALTER TABLE watchlist ADD COLUMN alert_on_available   INTEGER NOT NULL DEFAULT 1;
-        ALTER TABLE watchlist ADD COLUMN alert_on_expiry      INTEGER NOT NULL DEFAULT 1;
-        ALTER TABLE watchlist ADD COLUMN alert_on_change      INTEGER NOT NULL DEFAULT 1;
-        ALTER TABLE watchlist ADD COLUMN expiry_alert_days    INTEGER NOT NULL DEFAULT 30;
-        ALTER TABLE watchlist ADD COLUMN notes                TEXT;
         CREATE TABLE IF NOT EXISTS watchlist_alerts (
             id           INTEGER PRIMARY KEY AUTOINCREMENT,
             watchlist_id INTEGER NOT NULL REFERENCES watchlist(id) ON DELETE CASCADE,
@@ -80,7 +71,32 @@ pub fn create_table(conn: &Connection) -> Result<()> {
             created_at   TEXT    NOT NULL,
             read_at      TEXT
         );",
-    )
+    )?;
+
+    // Migrate pre-v0.8 installs that only had the original 6 columns.
+    // SQLite has no ALTER TABLE ADD COLUMN IF NOT EXISTS, so we ignore
+    // "duplicate column name" errors (error code 1) on each statement.
+    let migrations = [
+        "ALTER TABLE watchlist ADD COLUMN last_registrar       TEXT",
+        "ALTER TABLE watchlist ADD COLUMN last_expiry_date     TEXT",
+        "ALTER TABLE watchlist ADD COLUMN check_interval_hours INTEGER NOT NULL DEFAULT 24",
+        "ALTER TABLE watchlist ADD COLUMN next_check_at        TEXT",
+        "ALTER TABLE watchlist ADD COLUMN alert_on_available   INTEGER NOT NULL DEFAULT 1",
+        "ALTER TABLE watchlist ADD COLUMN alert_on_expiry      INTEGER NOT NULL DEFAULT 1",
+        "ALTER TABLE watchlist ADD COLUMN alert_on_change      INTEGER NOT NULL DEFAULT 1",
+        "ALTER TABLE watchlist ADD COLUMN expiry_alert_days    INTEGER NOT NULL DEFAULT 30",
+        "ALTER TABLE watchlist ADD COLUMN notes                TEXT",
+    ];
+    for sql in &migrations {
+        if let Err(e) = conn.execute_batch(sql) {
+            // Code 1 = "duplicate column name" — column already exists, skip.
+            if !e.to_string().contains("duplicate column name") {
+                return Err(e);
+            }
+        }
+    }
+
+    Ok(())
 }
 
 /// Add domain+tld; returns existing entry if already present.

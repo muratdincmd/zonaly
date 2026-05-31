@@ -89,27 +89,12 @@
     "add": "Add to watchlist",
     "remove": "Remove from watchlist",
     "checkNow": "Check now",
-    "lastChecked": "Last checked:"
-  },
-  "export": {
-    "button": "Export:",
-    "csv": "CSV",
-    "json": "JSON",
-    "success": "{{label}} exported",
-    "error": "Export failed"
-  },
-  "favorites": {
-    "panelTitle": "Favorites",
-    "empty": "No favorites yet. Star any domain from search results to start monitoring.",
-    "add": "Add to favorites",
-    "remove": "Remove from favorites",
-    "removeConfirm": "Remove from favorites?",
-    "count": "{{count}} favorite",
-    "count_other": "{{count}} favorites",
+    "lastChecked": "Last checked:",
     "checkAllDue": "Check All Due",
-    "checkNow": "Check now",
     "settings": "Monitoring Settings",
     "checkInterval": "Check interval",
+    "interval1h": "Every hour",
+    "interval3h": "Every 3 hours",
     "interval6h": "Every 6 hours",
     "interval12h": "Every 12 hours",
     "interval24h": "Every 24 hours",
@@ -127,15 +112,21 @@
     "alertTypeAvailable": "Now Available",
     "alertTypeExpiry": "Expiring Soon",
     "alertTypeChange": "Status Changed",
-    "lastChecked": "Last checked",
     "nextCheck": "Next check",
     "neverChecked": "Never checked",
     "overdue": "Overdue",
-    "addedToFavorites": "Added to favorites",
     "dueForCheck": "{{count}} due for check",
     "noAlerts": "No unread alerts",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "monitoringActive": "Monitoring active"
+  },
+  "export": {
+    "button": "Export:",
+    "csv": "CSV",
+    "json": "JSON",
+    "success": "{{label}} exported",
+    "error": "Export failed"
   },
   "details": {
     "loading": "Loading domain details…",

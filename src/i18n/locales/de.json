@@ -89,27 +89,12 @@
     "add": "Zur Beobachtungsliste hinzufügen",
     "remove": "Aus Beobachtungsliste entfernen",
     "checkNow": "Jetzt prüfen",
-    "lastChecked": "Zuletzt geprüft:"
-  },
-  "export": {
-    "button": "Exportieren:",
-    "csv": "CSV",
-    "json": "JSON",
-    "success": "{{label}} exportiert",
-    "error": "Export fehlgeschlagen"
-  },
-  "favorites": {
-    "panelTitle": "Favoriten",
-    "empty": "Noch keine Favoriten. Markiere eine Domain mit einem Stern, um die Überwachung zu starten.",
-    "add": "Zu Favoriten hinzufügen",
-    "remove": "Aus Favoriten entfernen",
-    "removeConfirm": "Aus Favoriten entfernen?",
-    "count": "{{count}} Favorit",
-    "count_other": "{{count}} Favoriten",
+    "lastChecked": "Zuletzt geprüft:",
     "checkAllDue": "Alle fälligen prüfen",
-    "checkNow": "Jetzt prüfen",
     "settings": "Überwachungseinstellungen",
     "checkInterval": "Prüfintervall",
+    "interval1h": "Stündlich",
+    "interval3h": "Alle 3 Stunden",
     "interval6h": "Alle 6 Stunden",
     "interval12h": "Alle 12 Stunden",
     "interval24h": "Alle 24 Stunden",
@@ -127,15 +112,21 @@
     "alertTypeAvailable": "Jetzt verfügbar",
     "alertTypeExpiry": "Läuft bald ab",
     "alertTypeChange": "Status geändert",
-    "lastChecked": "Zuletzt geprüft",
     "nextCheck": "Nächste Prüfung",
     "neverChecked": "Noch nie geprüft",
     "overdue": "Überfällig",
-    "addedToFavorites": "Zu Favoriten hinzugefügt",
     "dueForCheck": "{{count}} fällig zur Prüfung",
     "noAlerts": "Keine ungelesenen Benachrichtigungen",
     "save": "Speichern",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "monitoringActive": "Überwachung aktiv"
+  },
+  "export": {
+    "button": "Exportieren:",
+    "csv": "CSV",
+    "json": "JSON",
+    "success": "{{label}} exportiert",
+    "error": "Export fehlgeschlagen"
   },
   "details": {
     "loading": "Domain-Details werden geladen…",

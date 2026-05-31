@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
+import { WatchlistSettingsModal } from "./WatchlistSettingsModal";
 
 import type { DomainDetails, DomainResult } from "../types/domain";
 import type { WatchlistEntry } from "../types/storage";
@@ -27,6 +28,8 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks, onWatchli
   const [state, setState] = useState<FetchState>({ kind: "loading" });
   const [watchlistId, setWatchlistId] = useState<number | null>(null);
   const [watchlistToggling, setWatchlistToggling] = useState(false);
+  const [watchlistEntry, setWatchlistEntry] = useState<WatchlistEntry | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -49,7 +52,6 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks, onWatchli
     return () => { cancelled = true; };
   }, [domain.name, domain.tld]);
 
-  // Check if this domain is already in the watchlist
   useEffect(() => {
     invoke<WatchlistEntry[]>("get_watchlist")
       .then((entries) => {
@@ -57,6 +59,7 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks, onWatchli
           (e) => e.domain === domain.name && e.tld === domain.tld
         );
         setWatchlistId(found ? found.id : null);
+        setWatchlistEntry(found ?? null);
       })
       .catch(() => {});
   }, [domain.name, domain.tld]);
@@ -73,6 +76,7 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks, onWatchli
           tld: domain.tld,
         });
         setWatchlistId(entry.id);
+        setWatchlistEntry(entry);
       }
       onWatchlistChange?.();
     } catch (e) {
@@ -91,6 +95,7 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks, onWatchli
   }, [onClose]);
 
   return (
+    <>
     <div
       className="modal-backdrop"
       onClick={onClose}
@@ -187,15 +192,37 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks, onWatchli
                 )}
               </svg>
             </button>
+
+            {/* Monitoring settings — only shown when in watchlist */}
+            {watchlistId !== null && watchlistEntry && (
+              <button
+                type="button"
+                className="modal-watchlist-btn"
+                onClick={() => setSettingsOpen(true)}
+                aria-label={t("watchlist.settings")}
+                title={t("watchlist.settings")}
+              >
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                  <circle cx="6.5" cy="6.5" r="2.1" stroke="currentColor" strokeWidth="1.2"/>
+                  <path d="M6.5 1v1.6M6.5 10.4V12M1 6.5h1.6M10.4 6.5H12M2.8 2.8l1.1 1.2M9.1 9.1l1.1 1.1M10.2 2.8L9.1 3.9M3.9 9.1L2.8 10.2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                </svg>
+              </button>
+            )}
           </div>
         )}
       </div>
     </div>
+    {settingsOpen && watchlistEntry && (
+      <WatchlistSettingsModal
+        entry={watchlistEntry}
+        onClose={() => setSettingsOpen(false)}
+        onSaved={(updated) => { setWatchlistEntry(updated); setSettingsOpen(false); }}
+      />
+    )}
+    </>
   );
 
   async function handleExport(details: DomainDetails, format: "csv" | "json") {
-    // Proposed filename — browser may append (1), (2) etc. if it already exists.
-    // We show this as the label; user sees e.g. "abdiss-com.CSV"
     const filename = `${details.name}-${details.tld}.${format}`;
     const rows = [{
       name: details.name,

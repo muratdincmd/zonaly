@@ -1,4 +1,4 @@
-@import "./theme.css";
+﻿@import "./theme.css";
 
 * {
   box-sizing: border-box;
@@ -7,7 +7,7 @@
 html {
   margin: 0;
   padding: 0;
-  /* html is the scroll owner — scrollbar renders at the far right window edge */
+  /* html is the scroll owner â€” scrollbar renders at the far right window edge */
   overflow-y: auto;
   overflow-x: hidden;
   scroll-behavior: smooth;
@@ -51,16 +51,16 @@ button {
   font-family: inherit;
 }
 
-/* ── Tab bar ─────────────────────────────────────────────────────────────────
+/* â”€â”€ Tab bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Visual target:
-   [Z Zonaly]  [Tab1][Tab2][Tab3][+]        [TR][toggle][— □ ×]
-               └── connected strip, no gaps ──┘
+   [Z Zonaly]  [Tab1][Tab2][Tab3][+]        [TR][toggle][â€” â–¡ Ã—]
+               â””â”€â”€ connected strip, no gaps â”€â”€â”˜
    - All tabs same height, same border, zero gap between them
    - Shared adjacent borders collapse (negative margin trick)
    - First tab: top-left 6px radius only
    - Middle/last content tabs: 0 radius
    - + button: top-right 6px radius only, styled like a tab
-   ─────────────────────────────────────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .tabbar {
   display: flex;
@@ -82,7 +82,7 @@ button {
   height: 100%;
 }
 
-/* ── Base tab pill ── */
+/* â”€â”€ Base tab pill â”€â”€ */
 .tab-pill {
   display: flex;
   align-items: center;
@@ -111,7 +111,7 @@ button {
     max-width 180ms ease;
 }
 
-/* Wrapper div around each TabPill — must participate in flex layout */
+/* Wrapper div around each TabPill â€” must participate in flex layout */
 .tabbar-strip > div {
   flex: 1 1 0;
   min-width: 20px;
@@ -132,7 +132,7 @@ button {
   z-index: 1;
 }
 
-/* Left accent bar — per-tab colour indicator */
+/* Left accent bar â€” per-tab colour indicator */
 .tab-pill::before {
   content: "";
   flex-shrink: 0;
@@ -149,7 +149,7 @@ button {
   opacity: 1;
 }
 
-/* Bottom hover line — brand purple, same for all tabs */
+/* Bottom hover line â€” brand purple, same for all tabs */
 .tab-pill::after {
   content: "";
   position: absolute;
@@ -230,7 +230,7 @@ button {
   color: var(--text);
 }
 
-/* ── + add-tab button — styled like a tab, top-right radius only ── */
+/* â”€â”€ + add-tab button â€” styled like a tab, top-right radius only â”€â”€ */
 .tabbar-add {
   flex-shrink: 0;
   width: 30px;
@@ -264,7 +264,7 @@ button {
   cursor: not-allowed;
 }
 
-/* ── Context menu ── */
+/* â”€â”€ Context menu â”€â”€ */
 .tab-context-menu {
   position: fixed;
   z-index: 2000;
@@ -309,7 +309,7 @@ button {
   margin: 0.2rem 0.4rem;
 }
 
-/* ── Custom title bar (Windows only — rendered by TitleBar.tsx) ───────────── */
+/* â”€â”€ Custom title bar (Windows only â€” rendered by TitleBar.tsx) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .titlebar {
   display: flex;
@@ -341,7 +341,7 @@ button {
 .titlebar .app-logo-icon { width: 22px; height: 22px; }
 .titlebar .app-logo-wordmark { font-size: 1rem; }
 
-/* TAB BAR IS HERE — centre area stretches to fill remaining space */
+/* TAB BAR IS HERE â€” centre area stretches to fill remaining space */
 .titlebar-centre {
   flex: 1;
   min-width: 0;
@@ -359,7 +359,7 @@ button {
   -webkit-app-region: no-drag;
 }
 
-/* ── Window control buttons ── */
+/* â”€â”€ Window control buttons â”€â”€ */
 .titlebar-win-btns {
   display: flex;
   align-items: center;
@@ -391,12 +391,12 @@ button {
   color: #fff;
 }
 
-/* ── When the custom title bar is present, push content down 36px ── */
+/* â”€â”€ When the custom title bar is present, push content down 36px â”€â”€ */
 .app--custom-titlebar {
   padding-top: 36px;
 }
 
-/* ── Layout ───────────────────────────────────────────────────────────────── */
+/* â”€â”€ Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .app {
   display: flex;
@@ -424,7 +424,7 @@ button {
 }
 
 
-/* ── Logo ────────────────────────────────────────────────────────────────── */
+/* â”€â”€ Logo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .app-logo {
   display: flex;
@@ -457,7 +457,7 @@ button {
   color: var(--accent);
 }
 
-/* ── Header controls (lang selector + theme toggle) ─────────────────────── */
+/* â”€â”€ Header controls (lang selector + theme toggle) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .header-controls {
   display: flex;
@@ -465,7 +465,7 @@ button {
   gap: 0.5rem;
 }
 
-/* ── Language selector ───────────────────────────────────────────────────── */
+/* â”€â”€ Language selector â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .lang-selector {
   position: relative;
@@ -581,7 +581,7 @@ button {
   line-height: 1;
 }
 
-/* ── Theme toggle switch ─────────────────────────────────────────────────── */
+/* â”€â”€ Theme toggle switch â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .theme-switch {
   position: relative;
@@ -651,14 +651,14 @@ button {
   transform: scale(1) rotate(0deg);
 }
 
-/* ── Main content ────────────────────────────────────────────────────────── */
+/* â”€â”€ Main content â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
-/* No overflow here — html is the scroll owner */
+/* No overflow here â€” html is the scroll owner */
 .app-main {
   flex: 1;
 }
 
-/* Scaled content wrapper — only this div transforms */
+/* Scaled content wrapper â€” only this div transforms */
 .app-main-inner {
   display: flex;
   flex-direction: column;
@@ -670,7 +670,7 @@ button {
   margin: 0 auto;
 }
 
-/* ── Footer — position:fixed pins it to viewport bottom regardless of scroll */
+/* â”€â”€ Footer â€” position:fixed pins it to viewport bottom regardless of scroll */
 
 .app-footer {
   position: fixed;
@@ -776,7 +776,7 @@ button {
   font-variant-numeric: tabular-nums;
 }
 
-/* ── Domain input ────────────────────────────────────────────────────────── */
+/* â”€â”€ Domain input â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .domain-input {
   display: flex;
@@ -813,7 +813,7 @@ button {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
-/* ── Extension picker ────────────────────────────────────────────────────── */
+/* â”€â”€ Extension picker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .ext-picker {
   display: flex;
@@ -912,7 +912,7 @@ button {
   transform: rotate(180deg);
 }
 
-/* Collapsible body — grid trick: 0fr→1fr animates row height */
+/* Collapsible body â€” grid trick: 0frâ†’1fr animates row height */
 .cat-body {
   display: grid;
   grid-template-rows: 0fr;
@@ -981,7 +981,7 @@ button {
   height: 12px;
 }
 
-/* ── Check button ────────────────────────────────────────────────────────── */
+/* â”€â”€ Check button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .check-btn {
   width: 100%;
@@ -1016,7 +1016,7 @@ button {
   cursor: not-allowed;
 }
 
-/* ── Results ─────────────────────────────────────────────────────────────── */
+/* â”€â”€ Results â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .empty {
   color: var(--text-muted);
@@ -1192,7 +1192,7 @@ button {
   white-space: nowrap;
 }
 
-/* ── Toast notification ──────────────────────────────────────────────────── */
+/* â”€â”€ Toast notification â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .toast {
   position: fixed;
@@ -1232,7 +1232,7 @@ button {
   color: var(--taken);
 }
 
-/* Clickable variant — show pointer and subtle hover */
+/* Clickable variant â€” show pointer and subtle hover */
 .toast--clickable {
   cursor: pointer;
   transition: background 120ms ease, border-color 120ms ease;
@@ -1284,7 +1284,7 @@ button {
   }
 }
 
-/* ── RTL support (Arabic) ────────────────────────────────────────────────── */
+/* â”€â”€ RTL support (Arabic) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 :root[dir="rtl"] .app-header,
 :root[dir="rtl"] .footer-inner,
@@ -1314,7 +1314,7 @@ button {
   margin-right: auto;
 }
 
-/* ── Domain details modal ────────────────────────────────────────────────── */
+/* â”€â”€ Domain details modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .modal-backdrop {
   position: fixed;
@@ -1658,7 +1658,7 @@ button {
   to   { opacity: 1; transform: translateY(0)    scale(1);    }
 }
 
-/* ── Check row (check button + icon buttons) ─────────────────────────────── */
+/* â”€â”€ Check row (check button + icon buttons) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .check-row {
   display: flex;
@@ -1705,7 +1705,7 @@ button {
   cursor: not-allowed;
 }
 
-/* ── Watchlist bookmark on result rows ───────────────────────────────────── */
+/* â”€â”€ Watchlist bookmark on result rows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .row-watchlist-btn {
   flex-shrink: 0;
@@ -1736,13 +1736,13 @@ button {
   color: var(--accent);
 }
 
-/* Active + hover → red (kaldır sinyali) */
+/* Active + hover â†’ red (kaldÄ±r sinyali) */
 .row-watchlist-btn--active:hover {
   background: color-mix(in srgb, var(--taken) 10%, transparent);
   color: var(--taken);
 }
 
-/* ── Results toolbar (export buttons) ───────────────────────────────────── */
+/* â”€â”€ Results toolbar (export buttons) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .results-toolbar {
   display: flex;
@@ -1784,7 +1784,7 @@ button {
   color: var(--text);
 }
 
-/* ── Side panels (history / watchlist) ──────────────────────────────────── */
+/* â”€â”€ Side panels (history / watchlist) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .side-panel-backdrop {
   position: fixed;
@@ -1814,7 +1814,7 @@ button {
   outline: none;
 }
 
-/* On Windows the custom title bar is 36px tall — offset panels so they
+/* On Windows the custom title bar is 36px tall â€” offset panels so they
    don't overlap the title bar chrome */
 .app--custom-titlebar .side-panel {
   top: 36px;
@@ -2105,7 +2105,7 @@ button {
   animation: spin 0.8s linear infinite;
 }
 
-/* ── TitleBar icon buttons ────────────────────────────────────────────────── */
+/* â”€â”€ TitleBar icon buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 .titlebar-btn--icon {
   color: var(--text-muted);
@@ -2115,3 +2115,496 @@ button {
   color: var(--text);
   background: color-mix(in srgb, var(--text) 8%, transparent);
 }
+
+/* Notification badge on titlebar watchlist button */
+.titlebar-btn--watchlist {
+  position: relative;
+}
+
+/* Notification badge on title bar watchlist button */
+.titlebar-badge {
+  position: absolute;
+  top: 5px;
+  right: 4px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: var(--taken);
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* == Watchlist bookmark: always visible when active ==========================
+   When a domain is in the watchlist (--active), the icon stays fully visible
+   so the user always knows it's being monitored, even without hovering.      */
+
+.row-watchlist-btn--active {
+  opacity: 1 !important;
+}
+
+/* == Watchlist alert badge on TitleBar + header ==============================*/
+
+.titlebar-btn--watchlist { position: relative; }
+
+.titlebar-badge {
+  position: absolute;
+  top: 5px;
+  right: 4px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: var(--taken);
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.panel-icon-btn--badge { position: relative; }
+.panel-icon-btn--badge .titlebar-badge { top: 3px; right: 2px; }
+
+/* == Watchlist panel: header with actions ====================================*/
+
+.side-panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.side-panel-header .side-panel-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.side-panel-action-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Small green dot indicating auto-monitoring is active for an entry */
+.wl-monitoring-dot {
+  font-size: 0.45rem;
+  color: var(--available);
+  margin-left: 0.3rem;
+  vertical-align: middle;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+.fav-due-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* == Alert banner inside watchlist panel =====================================*/
+
+.wl-alerts-section {
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--taken) 5%, var(--bg-elevated));
+}
+
+.wl-alerts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  user-select: none;
+  gap: 0.5rem;
+}
+
+.wl-alerts-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--taken);
+  flex: 1;
+  min-width: 0;
+}
+
+.wl-alerts-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.wl-mark-all-btn {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--taken) 35%, transparent);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--taken);
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.wl-mark-all-btn:hover {
+  background: color-mix(in srgb, var(--taken) 10%, transparent);
+}
+
+.wl-chevron {
+  color: var(--text-muted);
+  transition: transform 200ms ease;
+  flex-shrink: 0;
+}
+
+.wl-chevron--open { transform: rotate(180deg); }
+
+.wl-alerts-list {
+  padding: 0 0.75rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.wl-alert-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 7px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 0.78rem;
+}
+
+.wl-alert-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.wl-alert-icon--available {
+  background: color-mix(in srgb, var(--available) 15%, transparent);
+  color: var(--available);
+}
+
+.wl-alert-icon--expiry {
+  background: color-mix(in srgb, #f59e0b 15%, transparent);
+  color: #f59e0b;
+}
+
+.wl-alert-icon--change {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent);
+}
+
+.wl-alert-message {
+  flex: 1;
+  min-width: 0;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wl-alert-dismiss {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.wl-alert-dismiss:hover {
+  background: color-mix(in srgb, var(--taken) 12%, transparent);
+  color: var(--taken);
+}
+
+/* == Watchlist item: next-check label + notes ================================*/
+
+.wl-next-check {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-style: italic;
+}
+
+.wl-next-check--overdue {
+  color: var(--taken);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.wl-item-notes {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* == Panel footer =============================================================*/
+
+.side-panel-footer {
+  flex-shrink: 0;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.side-panel-footer-text {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* == Watchlist Settings Modal =================================================*/
+
+.modal {
+  width: 100%;
+  max-width: 460px;
+  max-height: calc(100vh - 4rem);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modal-card-in 220ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  outline: none;
+}
+
+.modal-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.modal-domain-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "Cascadia Code", Consolas, ui-monospace, monospace;
+}
+
+.modal-subtitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.wl-settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1rem 1.25rem;
+  overflow-y: auto;
+}
+
+.wl-settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wl-settings-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.wl-interval-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.wl-interval-btn {
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.wl-interval-btn:hover {
+  border-color: var(--border-focus);
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg));
+}
+
+.wl-interval-btn--active {
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.wl-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+  flex-wrap: wrap;
+}
+
+.wl-checkbox-row input[type="checkbox"] {
+  margin: 0;
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Number input: hide native up/down spinners, style cleanly */
+.wl-days-input {
+  width: 56px;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--bg-input);
+  color: var(--text);
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+  appearance: textfield;
+  -moz-appearance: textfield;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.wl-days-input::-webkit-inner-spin-button,
+.wl-days-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.wl-days-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.wl-days-input:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.wl-notes-textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-input);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.84rem;
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.wl-notes-textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.wl-settings-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* Primary / secondary buttons shared across modals */
+.btn-primary {
+  padding: 0.45rem 1.1rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), box-shadow var(--transition);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-secondary {
+  padding: 0.45rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--border-focus);
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  color: var(--text);
+}
+
+.btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
