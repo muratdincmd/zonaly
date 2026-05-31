@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+﻿use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -6,7 +6,7 @@ use tauri::{AppHandle, Emitter, Manager, State};
 use tokio::sync::Mutex;
 use tokio::task::JoinSet;
 
-use crate::db::{self, Database, FavoriteAlert, FavoriteEntry, FavoriteStats, HistoryEntry, SavedSession, WatchlistEntry};
+use crate::db::{self, Database, HistoryEntry, SavedSession, WatchlistAlert, WatchlistEntry, WatchlistStats};
 use crate::rdap::RdapClient;
 use crate::types::{DomainDetails, DomainQuery, DomainResult, DomainStatus, ExportResult};
 
@@ -265,58 +265,14 @@ pub fn update_watchlist_entry(
     db::watchlist::update(&conn, id, &chrono_now(), &status).map_err(|e| e.to_string())
 }
 
-// ── Export ────────────────────────────────────────────────────────────────────
-
 #[tauri::command]
-pub fn export_results(results: Vec<ExportResult>, format: String) -> Result<String, String> {
-    match format.as_str() {
-        "json" => serde_json::to_string_pretty(&results).map_err(|e| e.to_string()),
-        "csv" => {
-            let mut out = String::from("domain,tld,status\n");
-            for r in &results {
-                out.push_str(&format!("{},{},{}\n",
-                    csv_escape(&r.name), csv_escape(&r.tld), csv_escape(&r.status)));
-            }
-            Ok(out)
-        }
-        _ => Err(format!("Unknown export format: {format}")),
-    }
-}
-
-// ── Favorites commands ────────────────────────────────────────────────────────
-
-#[tauri::command]
-pub fn add_favorite(
-    state: State<'_, Arc<Database>>,
-    domain: String,
-    tld: String,
-    notes: Option<String>,
-) -> Result<FavoriteEntry, String> {
+pub fn get_watchlist_stats(state: State<'_, Arc<Database>>) -> Result<WatchlistStats, String> {
     let conn = state.conn.lock().unwrap();
-    db::favorites::add(&conn, &domain, &tld, notes.as_deref(), &chrono_now())
-        .map_err(|e| e.to_string())
+    db::watchlist::get_stats(&conn, &chrono_now()).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
-pub fn remove_favorite(state: State<'_, Arc<Database>>, id: i64) -> Result<(), String> {
-    let conn = state.conn.lock().unwrap();
-    db::favorites::remove(&conn, id).map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-pub fn get_favorites(state: State<'_, Arc<Database>>) -> Result<Vec<FavoriteEntry>, String> {
-    let conn = state.conn.lock().unwrap();
-    db::favorites::get_all(&conn).map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-pub fn get_favorite_stats(state: State<'_, Arc<Database>>) -> Result<FavoriteStats, String> {
-    let conn = state.conn.lock().unwrap();
-    db::favorites::get_stats(&conn).map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-pub fn update_favorite_settings(
+pub fn update_watchlist_settings(
     state: State<'_, Arc<Database>>,
     id: i64,
     check_interval_hours: i64,
@@ -325,56 +281,43 @@ pub fn update_favorite_settings(
     alert_on_change: bool,
     expiry_alert_days: i64,
     notes: Option<String>,
-) -> Result<FavoriteEntry, String> {
+) -> Result<WatchlistEntry, String> {
     let conn = state.conn.lock().unwrap();
-    db::favorites::update_settings(
-        &conn,
-        id,
-        check_interval_hours,
-        alert_on_available,
-        alert_on_expiry,
-        alert_on_change,
-        expiry_alert_days,
-        notes.as_deref(),
-    )
-    .map_err(|e| e.to_string())
+    db::watchlist::update_settings(
+        &conn, id, check_interval_hours,
+        alert_on_available, alert_on_expiry, alert_on_change,
+        expiry_alert_days, notes.as_deref(),
+    ).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
-pub async fn check_favorite_now(
+pub async fn check_watchlist_entry_now(
     app: AppHandle,
     db_state: State<'_, Arc<Database>>,
     rdap_state: State<'_, Arc<RdapClient>>,
     id: i64,
-) -> Result<FavoriteEntry, String> {
-    let (domain, tld, prev_status, prev_registrar, alert_on_available, alert_on_change,
-         alert_on_expiry, expiry_alert_days) = {
+) -> Result<WatchlistEntry, String> {
+    let entry = {
         let conn = db_state.conn.lock().unwrap();
-        let all = db::favorites::get_all(&conn).map_err(|e| e.to_string())?;
-        let entry = all.into_iter().find(|e| e.id == id)
-            .ok_or_else(|| "Favorite not found".to_string())?;
-        (
-            entry.domain.clone(), entry.tld.clone(),
-            entry.last_status.clone(), entry.last_registrar.clone(),
-            entry.alert_on_available, entry.alert_on_change,
-            entry.alert_on_expiry, entry.expiry_alert_days,
-        )
+        db::watchlist::get_all(&conn)
+            .map_err(|e| e.to_string())?
+            .into_iter().find(|e| e.id == id)
+            .ok_or_else(|| "Watchlist entry not found".to_string())?
     };
 
     let client = rdap_state.inner().clone();
-    let query = crate::types::DomainQuery { name: domain.clone(), tld: tld.clone() };
+    let query = DomainQuery { name: entry.domain.clone(), tld: entry.tld.clone() };
     let _permit = client.semaphore.clone().acquire_owned().await.ok();
     let result = client.check(&query).await;
 
     let new_status = match &result.status {
-        crate::types::DomainStatus::Available => "available",
-        crate::types::DomainStatus::Taken => "taken",
-        crate::types::DomainStatus::Error { .. } => "error",
+        DomainStatus::Available => "available",
+        DomainStatus::Taken => "taken",
+        DomainStatus::Error { .. } => "error",
     };
 
-    // Fetch details if taken (to get registrar + expiry)
     let (new_registrar, new_expiry) = if new_status == "taken" {
-        match client.fetch_details(&domain, &tld).await {
+        match client.fetch_details(&entry.domain, &entry.tld).await {
             Ok(details) => (details.registrar, details.expires),
             Err(_) => (None, None),
         }
@@ -383,122 +326,96 @@ pub async fn check_favorite_now(
     };
 
     let now = chrono_now();
-    let next_check_at = {
-        let (h, interval_secs) = {
-            let conn = db_state.conn.lock().unwrap();
-            let all = db::favorites::get_all(&conn).map_err(|e| e.to_string())?;
-            let entry = all.into_iter().find(|e| e.id == id).unwrap();
-            (entry.check_interval_hours, entry.check_interval_hours * 3600)
-        };
-        let _ = h;
-        add_seconds_to_iso(&now, interval_secs)
-    };
+    let next_check_at = add_seconds_to_iso(&now, entry.check_interval_hours * 3600);
 
     {
         let conn = db_state.conn.lock().unwrap();
-        db::favorites::update_check_result(
+        db::watchlist::update_full(
             &conn, id, &now, new_status,
             new_registrar.as_deref(), new_expiry.as_deref(), &next_check_at,
         ).map_err(|e| e.to_string())?;
 
-        // Generate alerts
-        if alert_on_available && new_status == "available"
-            && prev_status.as_deref() != Some("available")
+        if entry.alert_on_available
+            && new_status == "available"
+            && entry.last_status.as_deref() != Some("available")
         {
-            let msg = format!("{domain}.{tld} is now available!");
-            let _ = db::favorites::insert_alert(&conn, id, "available", &msg, &now);
+            let msg = format!("{}.{} is now available!", entry.domain, entry.tld);
+            let _ = db::watchlist::insert_alert(&conn, id, "available", &msg, &now);
         }
-        if alert_on_change {
-            let status_changed = prev_status.as_deref().map_or(false, |p| p != new_status);
-            let registrar_changed = prev_registrar != new_registrar
-                && prev_registrar.is_some()
-                && new_registrar.is_some();
+        if entry.alert_on_change {
+            let status_changed = entry.last_status.as_deref().map_or(false, |p| p != new_status);
+            let registrar_changed = entry.last_registrar != new_registrar
+                && entry.last_registrar.is_some() && new_registrar.is_some();
             if status_changed || registrar_changed {
-                let msg = format!("{domain}.{tld} changed: status={new_status}");
-                let _ = db::favorites::insert_alert(&conn, id, "status_change", &msg, &now);
+                let msg = format!("{}.{} changed: status={new_status}", entry.domain, entry.tld);
+                let _ = db::watchlist::insert_alert(&conn, id, "status_change", &msg, &now);
             }
         }
-        if alert_on_expiry {
+        if entry.alert_on_expiry {
             if let Some(ref expiry) = new_expiry {
                 let days_left = days_until_iso(expiry);
-                if days_left >= 0 && days_left <= expiry_alert_days
-                    && !db::favorites::expiry_alert_exists(&conn, id).unwrap_or(false)
+                if days_left >= 0 && days_left <= entry.expiry_alert_days
+                    && !db::watchlist::expiry_alert_exists(&conn, id).unwrap_or(false)
                 {
-                    let msg = format!("{domain}.{tld} expires in {days_left} day(s)");
-                    let _ = db::favorites::insert_alert(&conn, id, "expiry", &msg, &now);
+                    let msg = format!("{}.{} expires in {days_left} day(s)", entry.domain, entry.tld);
+                    let _ = db::watchlist::insert_alert(&conn, id, "expiry", &msg, &now);
                 }
             }
         }
     }
 
-    // Emit event so frontend can refresh stats
-    let _ = app.emit("favorites-updated", ());
+    let _ = app.emit("watchlist-updated", ());
 
     let conn = db_state.conn.lock().unwrap();
-    let all = db::favorites::get_all(&conn).map_err(|e| e.to_string())?;
-    all.into_iter().find(|e| e.id == id)
-        .ok_or_else(|| "Favorite not found after update".to_string())
+    db::watchlist::get_all(&conn)
+        .map_err(|e| e.to_string())?
+        .into_iter().find(|e| e.id == id)
+        .ok_or_else(|| "Entry not found after update".to_string())
 }
 
 #[tauri::command]
-pub async fn check_due_favorites(
+pub async fn check_due_watchlist(
     app: AppHandle,
     db_state: State<'_, Arc<Database>>,
     rdap_state: State<'_, Arc<RdapClient>>,
-) -> Result<Vec<FavoriteEntry>, String> {
+) -> Result<Vec<WatchlistEntry>, String> {
     let now = chrono_now();
     let due = {
         let conn = db_state.conn.lock().unwrap();
-        db::favorites::get_due(&conn, &now).map_err(|e| e.to_string())?
+        db::watchlist::get_due(&conn, &now).map_err(|e| e.to_string())?
     };
-
     let mut updated = Vec::new();
     for entry in due {
-        match check_favorite_now(
-            app.clone(),
-            db_state.clone(),
-            rdap_state.clone(),
-            entry.id,
+        match check_watchlist_entry_now(
+            app.clone(), db_state.clone(), rdap_state.clone(), entry.id,
         ).await {
             Ok(e) => updated.push(e),
-            Err(e) => eprintln!("[zonaly] check_due_favorites error for id={}: {e}", entry.id),
+            Err(e) => eprintln!("[zonaly] check_due_watchlist error id={}: {e}", entry.id),
         }
     }
     Ok(updated)
 }
 
 #[tauri::command]
-pub fn get_favorite_alerts(
+pub fn get_watchlist_alerts(
     state: State<'_, Arc<Database>>,
     unread_only: bool,
-) -> Result<Vec<FavoriteAlert>, String> {
+) -> Result<Vec<WatchlistAlert>, String> {
     let conn = state.conn.lock().unwrap();
-    db::favorites::get_alerts(&conn, unread_only).map_err(|e| e.to_string())
+    db::watchlist::get_alerts(&conn, unread_only).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
-pub fn mark_alert_read(state: State<'_, Arc<Database>>, alert_id: i64) -> Result<(), String> {
+pub fn mark_watchlist_alert_read(state: State<'_, Arc<Database>>, alert_id: i64) -> Result<(), String> {
     let conn = state.conn.lock().unwrap();
-    db::favorites::mark_alert_read(&conn, alert_id, &chrono_now()).map_err(|e| e.to_string())
+    db::watchlist::mark_alert_read(&conn, alert_id, &chrono_now()).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
-pub fn mark_all_alerts_read(state: State<'_, Arc<Database>>) -> Result<(), String> {
+pub fn mark_all_watchlist_alerts_read(state: State<'_, Arc<Database>>) -> Result<(), String> {
     let conn = state.conn.lock().unwrap();
-    db::favorites::mark_all_alerts_read(&conn, &chrono_now()).map_err(|e| e.to_string())
+    db::watchlist::mark_all_alerts_read(&conn, &chrono_now()).map_err(|e| e.to_string())
 }
-
-#[tauri::command]
-pub fn is_favorited(
-    state: State<'_, Arc<Database>>,
-    domain: String,
-    tld: String,
-) -> Result<bool, String> {
-    let conn = state.conn.lock().unwrap();
-    db::favorites::is_favorited(&conn, &domain, &tld).map_err(|e| e.to_string())
-}
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
 
 fn chrono_now() -> String {
     use std::time::{SystemTime, UNIX_EPOCH};
@@ -579,9 +496,22 @@ fn days_until_iso(iso: &str) -> i64 {
     }
 }
 
-/// Public re-export of chrono_now for use in db::favorites::get_stats.
-pub fn chrono_now_pub() -> String {
-    chrono_now()
+// ── Export ────────────────────────────────────────────────────────────────────
+
+#[tauri::command]
+pub fn export_results(results: Vec<ExportResult>, format: String) -> Result<String, String> {
+    match format.as_str() {
+        "json" => serde_json::to_string_pretty(&results).map_err(|e| e.to_string()),
+        "csv" => {
+            let mut out = String::from("domain,tld,status\n");
+            for r in &results {
+                out.push_str(&format!("{},{},{}\n",
+                    csv_escape(&r.name), csv_escape(&r.tld), csv_escape(&r.status)));
+            }
+            Ok(out)
+        }
+        _ => Err(format!("Unknown export format: {format}")),
+    }
 }
 
 fn csv_escape(s: &str) -> String {

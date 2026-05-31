@@ -29,46 +29,32 @@ pub fn run() {
             commands::remove_from_watchlist,
             commands::get_watchlist,
             commands::update_watchlist_entry,
+            commands::get_watchlist_stats,
+            commands::update_watchlist_settings,
+            commands::check_watchlist_entry_now,
+            commands::check_due_watchlist,
+            commands::get_watchlist_alerts,
+            commands::mark_watchlist_alert_read,
+            commands::mark_all_watchlist_alerts_read,
             commands::export_results,
-            commands::add_favorite,
-            commands::remove_favorite,
-            commands::get_favorites,
-            commands::get_favorite_stats,
-            commands::update_favorite_settings,
-            commands::check_favorite_now,
-            commands::check_due_favorites,
-            commands::get_favorite_alerts,
-            commands::mark_alert_read,
-            commands::mark_all_alerts_read,
-            commands::is_favorited,
         ])
         .setup(|app| {
-            // Resolve the per-app data directory for the RDAP bootstrap disk cache
-            // and the SQLite database.
             let data_dir = app.path().app_data_dir().ok();
             if let Some(ref dir) = data_dir {
                 let _ = std::fs::create_dir_all(dir);
             }
 
-            // Register RdapClient as shared state with cache support.
             app.manage(Arc::new(RdapClient::new(data_dir.clone())));
 
-            // Open the SQLite database and register it as shared state.
             let db_path = data_dir
                 .map(|d| d.join("zonaly.db"))
                 .unwrap_or_else(|| std::path::PathBuf::from("zonaly.db"));
 
             match Database::open(db_path) {
-                Ok(db) => {
-                    app.manage(Arc::new(db));
-                }
-                Err(e) => {
-                    eprintln!("Failed to open database: {e}");
-                }
+                Ok(db) => { app.manage(Arc::new(db)); }
+                Err(e) => { eprintln!("Failed to open database: {e}"); }
             }
 
-            // Remove native decorations on Windows so the custom React
-            // title bar takes over. macOS and Linux keep native chrome.
             #[cfg(target_os = "windows")]
             {
                 if let Some(win) = app.get_webview_window("main") {
