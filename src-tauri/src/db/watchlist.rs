@@ -66,7 +66,7 @@ fn find_by_domain_tld(conn: &Connection, domain: &str, tld: &str) -> Result<Opti
          FROM watchlist WHERE domain = ?1 AND tld = ?2",
     )?;
     let mut rows = stmt.query_map(params![domain, tld], row_to_entry)?;
-    Ok(rows.next().transpose()?)
+    rows.next().transpose()
 }
 
 pub fn remove(conn: &Connection, id: i64) -> Result<()> {
