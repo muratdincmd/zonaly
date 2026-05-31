@@ -44,9 +44,10 @@ function IconClose() {
 interface TitleBarProps {
   onOpenHistory?: () => void;
   onOpenWatchlist?: () => void;
+  watchlistUnread?: number;
 }
 
-export function TitleBar({ onOpenHistory, onOpenWatchlist }: TitleBarProps) {
+export function TitleBar({ onOpenHistory, onOpenWatchlist, watchlistUnread = 0 }: TitleBarProps) {
   const win = getCurrentWindow();
   const { t } = useTranslation();
   const [maximized, setMaximized] = useState(false);
@@ -97,7 +98,7 @@ export function TitleBar({ onOpenHistory, onOpenWatchlist }: TitleBarProps) {
         )}
         {onOpenWatchlist && (
           <button
-            className="titlebar-btn titlebar-btn--icon"
+            className="titlebar-btn titlebar-btn--icon titlebar-btn--watchlist"
             onClick={onOpenWatchlist}
             aria-label={t("watchlist.panelTitle")}
             title={t("watchlist.panelTitle")}
@@ -106,6 +107,9 @@ export function TitleBar({ onOpenHistory, onOpenWatchlist }: TitleBarProps) {
             <svg width="12" height="13" viewBox="0 0 12 13" fill="none" aria-hidden="true">
               <path d="M2 1h8a.5.5 0 01.5.5v10l-4.5-2.5L1.5 11.5V1.5A.5.5 0 012 1z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
+            {watchlistUnread > 0 && (
+              <span className="titlebar-badge">{watchlistUnread > 9 ? "9+" : watchlistUnread}</span>
+            )}
           </button>
         )}
 

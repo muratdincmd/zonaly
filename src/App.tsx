@@ -20,6 +20,7 @@ import { TitleBar } from "./components/TitleBar";
 import { Toast } from "./components/Toast";
 import { WatchlistPanel } from "./components/WatchlistPanel";
 import { TabsProvider, useTabs } from "./context/TabsContext";
+import { useMonitoring } from "./hooks/useMonitoring";
 import { useScale } from "./hooks/useScale";
 import { useToast } from "./hooks/useToast";
 import type { DomainQuery, DomainResult } from "./types/domain";
@@ -47,7 +48,6 @@ interface TabPanelProps {
   tabId: string;
   onOpenHistory: () => void;
   onOpenWatchlist: () => void;
-  // Called from AppShell when a history entry or session is loaded
   restoreRef: React.MutableRefObject<((entry: HistoryEntry) => void) | null>;
   loadSessionRef: React.MutableRefObject<((session: SavedSession) => void) | null>;
   reloadWatchlistRef: React.RefObject<(() => void) | null>;
@@ -74,12 +74,9 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
 
   useEffect(() => { loadWatchlist(); }, [loadWatchlist]);
 
-  // Expose loadWatchlist so AppShell can trigger it from WatchlistPanel
   reloadWatchlistRef.current = loadWatchlist;
-  // Expose setDetailsFor so AppShell can open the modal from WatchlistPanel
   openDetailsRef.current = setDetailsFor;
 
-  // Register callbacks so AppShell can restore/load into the active tab
   const handleRestoreHistory = useCallback((entry: HistoryEntry) => {
     dispatch({ type: "UPDATE_INPUT", id: tabId, value: entry.domains.join("\n") });
     dispatch({ type: "BULK_TOGGLE_TLD", id: tabId, tlds: TLDS_ALL, select: false });
@@ -92,11 +89,9 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
     dispatch({ type: "BULK_TOGGLE_TLD", id: tabId, tlds: session.tldList, select: true });
   }, [tabId, dispatch]);
 
-  // Register callbacks on every render (stable because useCallback)
   restoreRef.current = handleRestoreHistory;
   loadSessionRef.current = handleLoadSession;
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (restoreRef.current === handleRestoreHistory) restoreRef.current = null;
@@ -104,7 +99,6 @@ function TabPanel({ tabId, onOpenHistory, onOpenWatchlist, restoreRef, loadSessi
     };
   }, [handleRestoreHistory, handleLoadSession, restoreRef, loadSessionRef]);
 
-  // Track the active check so we can cancel listeners on unmount
   const checkRef = useRef<{ cancel: () => void } | null>(null);
   useEffect(() => { return () => { checkRef.current?.cancel(); }; }, []);
 
@@ -334,8 +328,15 @@ function AppShell() {
 
   const [historyOpen, setHistoryOpen] = useState(false);
   const [watchlistOpen, setWatchlistOpen] = useState(false);
+  const [watchlistUnread, setWatchlistUnread] = useState(0);
 
-  // Refs to active tab's restore/load handlers
+  useMonitoring(() => {
+    // Re-fetch unread count without opening the panel
+    invoke<{ unreadAlerts: number }>("get_watchlist_stats")
+      .then((s) => setWatchlistUnread(s.unreadAlerts))
+      .catch(console.error);
+  });
+
   const restoreRef = useRef<((entry: HistoryEntry) => void) | null>(null);
   const loadSessionRef = useRef<((session: SavedSession) => void) | null>(null);
   const reloadWatchlistRef = useRef<(() => void) | null>(null);
@@ -352,6 +353,7 @@ function AppShell() {
         <TitleBar
           onOpenHistory={openHistory}
           onOpenWatchlist={openWatchlist}
+          watchlistUnread={watchlistUnread}
         />
       ) : (
         <header className="app-header">
@@ -371,7 +373,7 @@ function AppShell() {
             </button>
             <button
               type="button"
-              className="panel-icon-btn"
+              className={`panel-icon-btn${watchlistUnread > 0 ? " panel-icon-btn--badge" : ""}`}
               onClick={openWatchlist}
               title={t("watchlist.panelTitle")}
               aria-label={t("watchlist.panelTitle")}
@@ -379,6 +381,9 @@ function AppShell() {
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path d="M3 1.5h8a.5.5 0 01.5.5v11l-4.5-2.5L2.5 13V2a.5.5 0 01.5-.5z" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
+              {watchlistUnread > 0 && (
+                <span className="titlebar-badge">{watchlistUnread > 9 ? "9+" : watchlistUnread}</span>
+              )}
             </button>
             <LanguageSelector />
             <ThemeToggle />
@@ -410,6 +415,7 @@ function AppShell() {
         onClose={() => setWatchlistOpen(false)}
         onWatchlistChange={() => reloadWatchlistRef.current?.()}
         onOpenDetails={(result) => openDetailsRef.current?.(result)}
+        onUnreadChange={setWatchlistUnread}
       />
 
       <AppFooter />

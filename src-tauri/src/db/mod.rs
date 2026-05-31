@@ -9,7 +9,7 @@ use rusqlite::Connection;
 
 pub use history::HistoryEntry;
 pub use sessions::SavedSession;
-pub use watchlist::WatchlistEntry;
+pub use watchlist::{WatchlistAlert, WatchlistEntry, WatchlistSettings, WatchlistStats};
 
 pub struct Database {
     pub conn: Mutex<Connection>,
@@ -24,8 +24,7 @@ impl Database {
             e.to_string()
         })?;
 
-        // Enable WAL for better concurrent read/write performance.
-        conn.execute_batch("PRAGMA journal_mode=WAL;")
+        conn.execute_batch("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;")
             .map_err(|e| e.to_string())?;
 
         history::create_table(&conn).map_err(|e| e.to_string())?;

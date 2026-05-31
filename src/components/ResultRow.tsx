@@ -87,6 +87,7 @@ export function ResultRow({ result, onClick, watchedIds, onWatchlistChange }: Pr
         <button
           type="button"
           className={`row-watchlist-btn${isWatched ? " row-watchlist-btn--active" : ""}`}
+          style={isWatched ? { opacity: 1 } : undefined}
           onClick={handleWatchlistToggle}
           disabled={toggling}
           aria-label={isWatched ? t("watchlist.remove") : t("watchlist.add")}

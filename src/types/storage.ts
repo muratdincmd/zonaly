@@ -23,6 +23,30 @@ export interface WatchlistEntry {
   addedAt: string;
   lastCheckedAt: string | null;
   lastStatus: string | null;
+  lastRegistrar: string | null;
+  lastExpiryDate: string | null;
+  checkIntervalHours: number;
+  nextCheckAt: string | null;
+  alertOnAvailable: boolean;
+  alertOnExpiry: boolean;
+  alertOnChange: boolean;
+  expiryAlertDays: number;
+  notes: string | null;
+}
+
+export interface WatchlistAlert {
+  id: number;
+  watchlistId: number;
+  alertType: string;
+  message: string;
+  createdAt: string;
+  readAt: string | null;
+}
+
+export interface WatchlistStats {
+  total: number;
+  unreadAlerts: number;
+  dueForCheck: number;
 }
 
 export interface ExportResult {

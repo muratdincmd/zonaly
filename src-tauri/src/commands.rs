@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+﻿use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -6,7 +6,7 @@ use tauri::{AppHandle, Emitter, Manager, State};
 use tokio::sync::Mutex;
 use tokio::task::JoinSet;
 
-use crate::db::{self, Database, HistoryEntry, SavedSession, WatchlistEntry};
+use crate::db::{self, Database, HistoryEntry, SavedSession, WatchlistAlert, WatchlistEntry, WatchlistSettings, WatchlistStats};
 use crate::rdap::RdapClient;
 use crate::types::{DomainDetails, DomainQuery, DomainResult, DomainStatus, ExportResult};
 
@@ -34,10 +34,7 @@ pub fn close_splashscreen(app: AppHandle) {
 
 #[tauri::command]
 pub fn open_downloads_folder() {
-    // Open the system default Downloads directory in the file manager.
-    // Falls back silently if the path can't be determined.
-    let downloads = dirs_next();
-    if let Some(path) = downloads {
+    if let Some(path) = dirs_next() {
         let path_str = path.to_string_lossy().to_string();
         #[cfg(target_os = "windows")]
         let _ = std::process::Command::new("explorer").arg(&path_str).spawn();
@@ -49,7 +46,6 @@ pub fn open_downloads_folder() {
 }
 
 fn dirs_next() -> Option<std::path::PathBuf> {
-    // Resolve the user's Downloads directory without an extra crate.
     let home = std::env::var("HOME")
         .or_else(|_| std::env::var("USERPROFILE"))
         .ok()?;
@@ -265,25 +261,148 @@ pub fn update_watchlist_entry(
     db::watchlist::update(&conn, id, &chrono_now(), &status).map_err(|e| e.to_string())
 }
 
-// ── Export ────────────────────────────────────────────────────────────────────
-
 #[tauri::command]
-pub fn export_results(results: Vec<ExportResult>, format: String) -> Result<String, String> {
-    match format.as_str() {
-        "json" => serde_json::to_string_pretty(&results).map_err(|e| e.to_string()),
-        "csv" => {
-            let mut out = String::from("domain,tld,status\n");
-            for r in &results {
-                out.push_str(&format!("{},{},{}\n",
-                    csv_escape(&r.name), csv_escape(&r.tld), csv_escape(&r.status)));
-            }
-            Ok(out)
-        }
-        _ => Err(format!("Unknown export format: {format}")),
-    }
+pub fn get_watchlist_stats(state: State<'_, Arc<Database>>) -> Result<WatchlistStats, String> {
+    let conn = state.conn.lock().unwrap();
+    db::watchlist::get_stats(&conn, &chrono_now()).map_err(|e| e.to_string())
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+#[tauri::command]
+pub fn update_watchlist_settings(
+    state: State<'_, Arc<Database>>,
+    id: i64,
+    settings: WatchlistSettings,
+) -> Result<WatchlistEntry, String> {
+    let conn = state.conn.lock().unwrap();
+    db::watchlist::update_settings(&conn, id, &settings).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn check_watchlist_entry_now(
+    app: AppHandle,
+    db_state: State<'_, Arc<Database>>,
+    rdap_state: State<'_, Arc<RdapClient>>,
+    id: i64,
+) -> Result<WatchlistEntry, String> {
+    let entry = {
+        let conn = db_state.conn.lock().unwrap();
+        db::watchlist::get_all(&conn)
+            .map_err(|e| e.to_string())?
+            .into_iter().find(|e| e.id == id)
+            .ok_or_else(|| "Watchlist entry not found".to_string())?
+    };
+
+    let client = rdap_state.inner().clone();
+    let query = DomainQuery { name: entry.domain.clone(), tld: entry.tld.clone() };
+    let _permit = client.semaphore.clone().acquire_owned().await.ok();
+    let result = client.check(&query).await;
+
+    let new_status = match &result.status {
+        DomainStatus::Available => "available",
+        DomainStatus::Taken => "taken",
+        DomainStatus::Error { .. } => "error",
+    };
+
+    let (new_registrar, new_expiry) = if new_status == "taken" {
+        match client.fetch_details(&entry.domain, &entry.tld).await {
+            Ok(details) => (details.registrar, details.expires),
+            Err(_) => (None, None),
+        }
+    } else {
+        (None, None)
+    };
+
+    let now = chrono_now();
+    let next_check_at = add_seconds_to_iso(&now, entry.check_interval_hours * 3600);
+
+    {
+        let conn = db_state.conn.lock().unwrap();
+        db::watchlist::update_full(
+            &conn, id, &now, new_status,
+            new_registrar.as_deref(), new_expiry.as_deref(), &next_check_at,
+        ).map_err(|e| e.to_string())?;
+
+        if entry.alert_on_available
+            && new_status == "available"
+            && entry.last_status.as_deref() != Some("available")
+        {
+            let msg = format!("{}.{} is now available!", entry.domain, entry.tld);
+            let _ = db::watchlist::insert_alert(&conn, id, "available", &msg, &now);
+        }
+        if entry.alert_on_change {
+            let status_changed = entry.last_status.as_deref().is_some_and(|p| p != new_status);
+            let registrar_changed = entry.last_registrar != new_registrar
+                && entry.last_registrar.is_some() && new_registrar.is_some();
+            if status_changed || registrar_changed {
+                let msg = format!("{}.{} changed: status={new_status}", entry.domain, entry.tld);
+                let _ = db::watchlist::insert_alert(&conn, id, "status_change", &msg, &now);
+            }
+        }
+        if entry.alert_on_expiry {
+            if let Some(ref expiry) = new_expiry {
+                let days_left = days_until_iso(expiry);
+                if days_left >= 0 && days_left <= entry.expiry_alert_days
+                    && !db::watchlist::expiry_alert_exists(&conn, id).unwrap_or(false)
+                {
+                    let msg = format!("{}.{} expires in {days_left} day(s)", entry.domain, entry.tld);
+                    let _ = db::watchlist::insert_alert(&conn, id, "expiry", &msg, &now);
+                }
+            }
+        }
+    }
+
+    let _ = app.emit("watchlist-updated", ());
+
+    let conn = db_state.conn.lock().unwrap();
+    db::watchlist::get_all(&conn)
+        .map_err(|e| e.to_string())?
+        .into_iter().find(|e| e.id == id)
+        .ok_or_else(|| "Entry not found after update".to_string())
+}
+
+#[tauri::command]
+pub async fn check_due_watchlist(
+    app: AppHandle,
+    db_state: State<'_, Arc<Database>>,
+    rdap_state: State<'_, Arc<RdapClient>>,
+) -> Result<Vec<WatchlistEntry>, String> {
+    let now = chrono_now();
+    let due = {
+        let conn = db_state.conn.lock().unwrap();
+        db::watchlist::get_due(&conn, &now).map_err(|e| e.to_string())?
+    };
+    let mut updated = Vec::new();
+    for entry in due {
+        match check_watchlist_entry_now(
+            app.clone(), db_state.clone(), rdap_state.clone(), entry.id,
+        ).await {
+            Ok(e) => updated.push(e),
+            Err(e) => eprintln!("[zonaly] check_due_watchlist error id={}: {e}", entry.id),
+        }
+    }
+    Ok(updated)
+}
+
+#[tauri::command]
+pub fn get_watchlist_alerts(
+    state: State<'_, Arc<Database>>,
+    unread_only: bool,
+) -> Result<Vec<WatchlistAlert>, String> {
+    let conn = state.conn.lock().unwrap();
+    db::watchlist::get_alerts(&conn, unread_only).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn mark_watchlist_alert_read(state: State<'_, Arc<Database>>, alert_id: i64) -> Result<(), String> {
+    let conn = state.conn.lock().unwrap();
+    db::watchlist::mark_alert_read(&conn, alert_id, &chrono_now()).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub fn mark_all_watchlist_alerts_read(state: State<'_, Arc<Database>>) -> Result<(), String> {
+    let conn = state.conn.lock().unwrap();
+    db::watchlist::mark_all_alerts_read(&conn, &chrono_now()).map_err(|e| e.to_string())
+}
 
 fn chrono_now() -> String {
     use std::time::{SystemTime, UNIX_EPOCH};
@@ -315,6 +434,67 @@ fn days_to_ymd(days: u64) -> (u64, u64, u64) {
     let m = if mp < 10 { mp + 3 } else { mp - 9 };
     let y = if m <= 2 { y + 1 } else { y };
     (y, m, d)
+}
+
+/// Add `seconds` to an ISO 8601 UTC string, returns a new ISO string.
+fn add_seconds_to_iso(iso: &str, seconds: i64) -> String {
+    use std::time::{SystemTime, UNIX_EPOCH};
+    // Parse the iso string back to unix secs
+    let base = iso_to_unix_secs(iso).unwrap_or_else(|| {
+        SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs()
+    });
+    unix_secs_to_rfc3339(base.saturating_add(seconds as u64))
+}
+
+fn iso_to_unix_secs(iso: &str) -> Option<u64> {
+    let s = iso.trim_end_matches('Z');
+    let parts: Vec<&str> = s.splitn(2, 'T').collect();
+    if parts.len() != 2 { return None; }
+    let date: Vec<u64> = parts[0].split('-').filter_map(|p| p.parse().ok()).collect();
+    let time: Vec<u64> = parts[1].split(':').filter_map(|p| p.parse().ok()).collect();
+    if date.len() < 3 || time.len() < 3 { return None; }
+    let (y, mo, d, h, mi, sc) = (date[0], date[1], date[2], time[0], time[1], time[2]);
+    let days = ymd_to_days(y, mo, d)?;
+    Some(days * 86400 + h * 3600 + mi * 60 + sc)
+}
+
+fn ymd_to_days(y: u64, m: u64, d: u64) -> Option<u64> {
+    if y < 1970 { return None; }
+    let (y, m) = if m <= 2 { (y - 1, m + 9) } else { (y, m - 3) };
+    let era = y / 400;
+    let yoe = y % 400;
+    let doy = (153 * m + 2) / 5 + d - 1;
+    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+    let days = era * 146097 + doe;
+    Some(days.saturating_sub(719468))
+}
+
+/// Returns days until an ISO date from now (negative if past).
+fn days_until_iso(iso: &str) -> i64 {
+    use std::time::{SystemTime, UNIX_EPOCH};
+    let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
+    match iso_to_unix_secs(iso) {
+        Some(target) => (target as i64 - now as i64) / 86400,
+        None => i64::MIN,
+    }
+}
+
+// ── Export ────────────────────────────────────────────────────────────────────
+
+#[tauri::command]
+pub fn export_results(results: Vec<ExportResult>, format: String) -> Result<String, String> {
+    match format.as_str() {
+        "json" => serde_json::to_string_pretty(&results).map_err(|e| e.to_string()),
+        "csv" => {
+            let mut out = String::from("domain,tld,status\n");
+            for r in &results {
+                out.push_str(&format!("{},{},{}\n",
+                    csv_escape(&r.name), csv_escape(&r.tld), csv_escape(&r.status)));
+            }
+            Ok(out)
+        }
+        _ => Err(format!("Unknown export format: {format}")),
+    }
 }
 
 fn csv_escape(s: &str) -> String {
