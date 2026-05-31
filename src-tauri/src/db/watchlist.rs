@@ -42,6 +42,17 @@ pub struct WatchlistStats {
     pub due_for_check: usize,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct WatchlistSettings {
+    pub check_interval_hours: i64,
+    pub alert_on_available: bool,
+    pub alert_on_expiry: bool,
+    pub alert_on_change: bool,
+    pub expiry_alert_days: i64,
+    pub notes: Option<String>,
+}
+
 pub fn create_table(conn: &Connection) -> Result<()> {
     // Create tables (idempotent).
     conn.execute_batch(
@@ -165,13 +176,12 @@ pub fn get_stats(conn: &Connection, now: &str) -> Result<WatchlistStats> {
 pub fn update_settings(
     conn: &Connection,
     id: i64,
-    check_interval_hours: i64,
-    alert_on_available: bool,
-    alert_on_expiry: bool,
-    alert_on_change: bool,
-    expiry_alert_days: i64,
-    notes: Option<&str>,
+    s: &WatchlistSettings,
 ) -> Result<WatchlistEntry> {
+    let (check_interval_hours, alert_on_available, alert_on_expiry, alert_on_change,
+         expiry_alert_days) = (s.check_interval_hours, s.alert_on_available,
+         s.alert_on_expiry, s.alert_on_change, s.expiry_alert_days);
+    let notes = s.notes.as_deref();
     conn.execute(
         "UPDATE watchlist SET
             check_interval_hours = ?1,
@@ -415,7 +425,14 @@ mod tests {
     fn update_settings_persisted() {
         let conn = setup();
         let e = add(&conn, "foo", "io", "2026-01-01T00:00:00Z").unwrap();
-        let updated = update_settings(&conn, e.id, 6, false, true, false, 14, Some("my note")).unwrap();
+        let updated = update_settings(&conn, e.id, &WatchlistSettings {
+            check_interval_hours: 6,
+            alert_on_available: false,
+            alert_on_expiry: true,
+            alert_on_change: false,
+            expiry_alert_days: 14,
+            notes: Some("my note".to_string()),
+        }).unwrap();
         assert_eq!(updated.check_interval_hours, 6);
         assert!(!updated.alert_on_available);
         assert!(updated.alert_on_expiry);

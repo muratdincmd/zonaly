@@ -6,7 +6,7 @@ use tauri::{AppHandle, Emitter, Manager, State};
 use tokio::sync::Mutex;
 use tokio::task::JoinSet;
 
-use crate::db::{self, Database, HistoryEntry, SavedSession, WatchlistAlert, WatchlistEntry, WatchlistStats};
+use crate::db::{self, Database, HistoryEntry, SavedSession, WatchlistAlert, WatchlistEntry, WatchlistSettings, WatchlistStats};
 use crate::rdap::RdapClient;
 use crate::types::{DomainDetails, DomainQuery, DomainResult, DomainStatus, ExportResult};
 
@@ -271,19 +271,10 @@ pub fn get_watchlist_stats(state: State<'_, Arc<Database>>) -> Result<WatchlistS
 pub fn update_watchlist_settings(
     state: State<'_, Arc<Database>>,
     id: i64,
-    check_interval_hours: i64,
-    alert_on_available: bool,
-    alert_on_expiry: bool,
-    alert_on_change: bool,
-    expiry_alert_days: i64,
-    notes: Option<String>,
+    settings: WatchlistSettings,
 ) -> Result<WatchlistEntry, String> {
     let conn = state.conn.lock().unwrap();
-    db::watchlist::update_settings(
-        &conn, id, check_interval_hours,
-        alert_on_available, alert_on_expiry, alert_on_change,
-        expiry_alert_days, notes.as_deref(),
-    ).map_err(|e| e.to_string())
+    db::watchlist::update_settings(&conn, id, &settings).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -339,7 +330,7 @@ pub async fn check_watchlist_entry_now(
             let _ = db::watchlist::insert_alert(&conn, id, "available", &msg, &now);
         }
         if entry.alert_on_change {
-            let status_changed = entry.last_status.as_deref().map_or(false, |p| p != new_status);
+            let status_changed = entry.last_status.as_deref().is_some_and(|p| p != new_status);
             let registrar_changed = entry.last_registrar != new_registrar
                 && entry.last_registrar.is_some() && new_registrar.is_some();
             if status_changed || registrar_changed {

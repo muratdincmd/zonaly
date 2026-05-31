@@ -9,7 +9,7 @@ use rusqlite::Connection;
 
 pub use history::HistoryEntry;
 pub use sessions::SavedSession;
-pub use watchlist::{WatchlistAlert, WatchlistEntry, WatchlistStats};
+pub use watchlist::{WatchlistAlert, WatchlistEntry, WatchlistSettings, WatchlistStats};
 
 pub struct Database {
     pub conn: Mutex<Connection>,

@@ -36,12 +36,14 @@ export function WatchlistSettingsModal({ entry, onClose, onSaved }: Props) {
     try {
       const updated = await invoke<WatchlistEntry>("update_watchlist_settings", {
         id: entry.id,
-        checkIntervalHours: intervalHours,
-        alertOnAvailable: alertAvailable,
-        alertOnExpiry: alertExpiry,
-        alertOnChange: alertChange,
-        expiryAlertDays: expiryDays,
-        notes: notes.trim() || null,
+        settings: {
+          checkIntervalHours: intervalHours,
+          alertOnAvailable: alertAvailable,
+          alertOnExpiry: alertExpiry,
+          alertOnChange: alertChange,
+          expiryAlertDays: expiryDays,
+          notes: notes.trim() || null,
+        },
       });
       onSaved(updated);
       onClose();
