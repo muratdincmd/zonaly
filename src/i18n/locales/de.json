@@ -73,7 +73,8 @@
   "sessions": {
     "tabSaved": "Gespeichert",
     "empty": "Noch keine gespeicherten Sitzungen.",
-    "save": "Aktuelle Sitzung speichern",
+    "save": "Sitzung speichern",
+    "saveTooltip": "Aktuelle Domainliste und TLD-Auswahl für spätere Verwendung speichern",
     "saved": "Sitzung gespeichert",
     "rename": "Umbenennen",
     "delete": "Sitzung löschen",

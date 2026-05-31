@@ -6,7 +6,7 @@ use tauri::{AppHandle, Emitter, Manager, State};
 use tokio::sync::Mutex;
 use tokio::task::JoinSet;
 
-use crate::db::{Database, HistoryEntry, SavedSession, WatchlistEntry};
+use crate::db::{self, Database, HistoryEntry, SavedSession, WatchlistEntry};
 use crate::rdap::RdapClient;
 use crate::types::{DomainDetails, DomainQuery, DomainResult, DomainStatus, ExportResult};
 
@@ -166,8 +166,9 @@ pub async fn check_domains(
 
         if available + taken + errors > 0 {
             if let Some(db) = app.try_state::<Arc<Database>>() {
-                db.history.lock().unwrap().add(
-                    &chrono_now(), &unique_names, &unique_tlds, available, taken, errors,
+                let conn = db.conn.lock().unwrap();
+                let _ = db::history::add(
+                    &conn, &chrono_now(), &unique_names, &unique_tlds, available, taken, errors,
                 );
             }
         }
@@ -183,19 +184,20 @@ pub async fn check_domains(
 
 #[tauri::command]
 pub fn get_history(state: State<'_, Arc<Database>>) -> Result<Vec<HistoryEntry>, String> {
-    Ok(state.history.lock().unwrap().get_all())
+    let conn = state.conn.lock().unwrap();
+    db::history::get_all(&conn).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 pub fn delete_history_entry(state: State<'_, Arc<Database>>, id: i64) -> Result<(), String> {
-    state.history.lock().unwrap().delete(id);
-    Ok(())
+    let conn = state.conn.lock().unwrap();
+    db::history::delete(&conn, id).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 pub fn clear_history(state: State<'_, Arc<Database>>) -> Result<(), String> {
-    state.history.lock().unwrap().clear();
-    Ok(())
+    let conn = state.conn.lock().unwrap();
+    db::history::clear(&conn).map_err(|e| e.to_string())
 }
 
 // ── Session commands ──────────────────────────────────────────────────────────
@@ -207,25 +209,26 @@ pub fn save_session(
     domains: Vec<String>,
     tlds: Vec<String>,
 ) -> Result<SavedSession, String> {
-    let session = state.sessions.lock().unwrap().save(&name, &domains, &tlds, &chrono_now());
-    Ok(session)
+    let conn = state.conn.lock().unwrap();
+    db::sessions::save(&conn, &name, &domains, &tlds, &chrono_now()).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 pub fn get_sessions(state: State<'_, Arc<Database>>) -> Result<Vec<SavedSession>, String> {
-    Ok(state.sessions.lock().unwrap().get_all())
+    let conn = state.conn.lock().unwrap();
+    db::sessions::get_all(&conn).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 pub fn delete_session(state: State<'_, Arc<Database>>, id: i64) -> Result<(), String> {
-    state.sessions.lock().unwrap().delete(id);
-    Ok(())
+    let conn = state.conn.lock().unwrap();
+    db::sessions::delete(&conn, id).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 pub fn rename_session(state: State<'_, Arc<Database>>, id: i64, name: String) -> Result<(), String> {
-    state.sessions.lock().unwrap().rename(id, &name);
-    Ok(())
+    let conn = state.conn.lock().unwrap();
+    db::sessions::rename(&conn, id, &name).map_err(|e| e.to_string())
 }
 
 // ── Watchlist commands ────────────────────────────────────────────────────────
@@ -236,19 +239,20 @@ pub fn add_to_watchlist(
     domain: String,
     tld: String,
 ) -> Result<WatchlistEntry, String> {
-    let entry = state.watchlist.lock().unwrap().add(&domain, &tld, &chrono_now());
-    Ok(entry)
+    let conn = state.conn.lock().unwrap();
+    db::watchlist::add(&conn, &domain, &tld, &chrono_now()).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 pub fn remove_from_watchlist(state: State<'_, Arc<Database>>, id: i64) -> Result<(), String> {
-    state.watchlist.lock().unwrap().remove(id);
-    Ok(())
+    let conn = state.conn.lock().unwrap();
+    db::watchlist::remove(&conn, id).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 pub fn get_watchlist(state: State<'_, Arc<Database>>) -> Result<Vec<WatchlistEntry>, String> {
-    Ok(state.watchlist.lock().unwrap().get_all())
+    let conn = state.conn.lock().unwrap();
+    db::watchlist::get_all(&conn).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -257,8 +261,8 @@ pub fn update_watchlist_entry(
     id: i64,
     status: String,
 ) -> Result<(), String> {
-    state.watchlist.lock().unwrap().update(id, &chrono_now(), &status);
-    Ok(())
+    let conn = state.conn.lock().unwrap();
+    db::watchlist::update(&conn, id, &chrono_now(), &status).map_err(|e| e.to_string())
 }
 
 // ── Export ────────────────────────────────────────────────────────────────────

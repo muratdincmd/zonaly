@@ -73,7 +73,8 @@
   "sessions": {
     "tabSaved": "Kaydedilenler",
     "empty": "Henüz kaydedilmiş oturum yok.",
-    "save": "Mevcut oturumu kaydet",
+    "save": "Oturumu kaydet",
+    "saveTooltip": "Mevcut alan adı listenizi ve TLD seçiminizi daha sonra kullanmak üzere kaydedin",
     "saved": "Oturum kaydedildi",
     "rename": "Yeniden Adlandır",
     "delete": "Oturumu sil",

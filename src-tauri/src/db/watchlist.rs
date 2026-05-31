@@ -1,6 +1,7 @@
+use rusqlite::{Connection, Result, params};
 use serde::{Deserialize, Serialize};
 
-const MAX_WATCHLIST: usize = 200;
+const MAX_WATCHLIST: i64 = 200;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -13,95 +14,143 @@ pub struct WatchlistEntry {
     pub last_status: Option<String>,
 }
 
-/// In-memory watchlist store (not persisted between restarts).
-pub struct WatchlistStore {
-    entries: Vec<WatchlistEntry>,
-    next_id: i64,
+pub fn create_table(conn: &Connection) -> Result<()> {
+    conn.execute_batch(
+        "CREATE TABLE IF NOT EXISTS watchlist (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            domain          TEXT NOT NULL,
+            tld             TEXT NOT NULL,
+            added_at        TEXT NOT NULL,
+            last_checked_at TEXT,
+            last_status     TEXT,
+            UNIQUE(domain, tld)
+        );",
+    )
 }
 
-impl WatchlistStore {
-    pub fn new() -> Self {
-        Self { entries: Vec::new(), next_id: 1 }
+/// Add domain+tld; ignores duplicates and returns the existing or new entry.
+pub fn add(conn: &Connection, domain: &str, tld: &str, added_at: &str) -> Result<WatchlistEntry> {
+    // Return existing if already present.
+    if let Some(existing) = find_by_domain_tld(conn, domain, tld)? {
+        return Ok(existing);
     }
 
-    /// Add domain+tld; ignores duplicates and returns the existing or new entry.
-    pub fn add(&mut self, domain: &str, tld: &str, added_at: &str) -> WatchlistEntry {
-        // Return existing if already present
-        if let Some(existing) = self.entries.iter().find(|e| e.domain == domain && e.tld == tld) {
-            return existing.clone();
-        }
-        let entry = WatchlistEntry {
-            id: self.next_id,
-            domain: domain.to_string(),
-            tld: tld.to_string(),
-            added_at: added_at.to_string(),
-            last_checked_at: None,
-            last_status: None,
-        };
-        self.next_id += 1;
-        self.entries.push(entry.clone());
-        while self.entries.len() > MAX_WATCHLIST {
-            self.entries.remove(0);
-        }
-        entry
-    }
+    conn.execute(
+        "INSERT INTO watchlist (domain, tld, added_at) VALUES (?1, ?2, ?3)",
+        params![domain, tld, added_at],
+    )?;
 
-    pub fn remove(&mut self, id: i64) {
-        self.entries.retain(|e| e.id != id);
-    }
+    let id = conn.last_insert_rowid();
 
-    pub fn get_all(&self) -> Vec<WatchlistEntry> {
-        self.entries.iter().rev().cloned().collect()
-    }
+    // Prune oldest rows beyond MAX_WATCHLIST.
+    conn.execute(
+        "DELETE FROM watchlist WHERE id NOT IN (
+            SELECT id FROM watchlist ORDER BY id DESC LIMIT ?1
+         )",
+        params![MAX_WATCHLIST],
+    )?;
 
-    pub fn update(&mut self, id: i64, last_checked_at: &str, last_status: &str) {
-        if let Some(e) = self.entries.iter_mut().find(|e| e.id == id) {
-            e.last_checked_at = Some(last_checked_at.to_string());
-            e.last_status = Some(last_status.to_string());
-        }
-    }
+    Ok(WatchlistEntry {
+        id,
+        domain: domain.to_string(),
+        tld: tld.to_string(),
+        added_at: added_at.to_string(),
+        last_checked_at: None,
+        last_status: None,
+    })
+}
+
+fn find_by_domain_tld(conn: &Connection, domain: &str, tld: &str) -> Result<Option<WatchlistEntry>> {
+    let mut stmt = conn.prepare(
+        "SELECT id, domain, tld, added_at, last_checked_at, last_status
+         FROM watchlist WHERE domain = ?1 AND tld = ?2",
+    )?;
+    let mut rows = stmt.query_map(params![domain, tld], row_to_entry)?;
+    Ok(rows.next().transpose()?)
+}
+
+pub fn remove(conn: &Connection, id: i64) -> Result<()> {
+    conn.execute("DELETE FROM watchlist WHERE id = ?1", params![id])?;
+    Ok(())
+}
+
+pub fn get_all(conn: &Connection) -> Result<Vec<WatchlistEntry>> {
+    let mut stmt = conn.prepare(
+        "SELECT id, domain, tld, added_at, last_checked_at, last_status
+         FROM watchlist ORDER BY id DESC",
+    )?;
+    let rows = stmt.query_map([], row_to_entry)?;
+    rows.collect()
+}
+
+pub fn update(conn: &Connection, id: i64, last_checked_at: &str, last_status: &str) -> Result<()> {
+    conn.execute(
+        "UPDATE watchlist SET last_checked_at = ?1, last_status = ?2 WHERE id = ?3",
+        params![last_checked_at, last_status, id],
+    )?;
+    Ok(())
+}
+
+fn row_to_entry(row: &rusqlite::Row) -> rusqlite::Result<WatchlistEntry> {
+    Ok(WatchlistEntry {
+        id: row.get(0)?,
+        domain: row.get(1)?,
+        tld: row.get(2)?,
+        added_at: row.get(3)?,
+        last_checked_at: row.get(4)?,
+        last_status: row.get(5)?,
+    })
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rusqlite::Connection;
+
+    fn setup() -> Connection {
+        let conn = Connection::open_in_memory().unwrap();
+        create_table(&conn).unwrap();
+        conn
+    }
 
     #[test]
     fn add_and_get() {
-        let mut store = WatchlistStore::new();
-        let e = store.add("example", "com", "2026-01-01T00:00:00Z");
+        let conn = setup();
+        let e = add(&conn, "example", "com", "2026-01-01T00:00:00Z").unwrap();
         assert_eq!(e.domain, "example");
-        assert_eq!(store.get_all().len(), 1);
+        assert_eq!(get_all(&conn).unwrap().len(), 1);
     }
 
     #[test]
     fn duplicate_ignored() {
-        let mut store = WatchlistStore::new();
-        store.add("example", "com", "2026-01-01T00:00:00Z");
-        store.add("example", "com", "2026-01-02T00:00:00Z");
-        assert_eq!(store.get_all().len(), 1);
+        let conn = setup();
+        add(&conn, "example", "com", "2026-01-01T00:00:00Z").unwrap();
+        add(&conn, "example", "com", "2026-01-02T00:00:00Z").unwrap();
+        assert_eq!(get_all(&conn).unwrap().len(), 1);
     }
 
     #[test]
     fn remove_entry() {
-        let mut store = WatchlistStore::new();
-        let e = store.add("test", "net", "2026-01-01T00:00:00Z");
-        store.remove(e.id);
-        assert!(store.get_all().is_empty());
+        let conn = setup();
+        let e = add(&conn, "test", "net", "2026-01-01T00:00:00Z").unwrap();
+        remove(&conn, e.id).unwrap();
+        assert!(get_all(&conn).unwrap().is_empty());
     }
 
     #[test]
     fn update_status() {
-        let mut store = WatchlistStore::new();
-        let e = store.add("foo", "io", "2026-01-01T00:00:00Z");
-        store.update(e.id, "2026-01-02T00:00:00Z", "available");
-        assert_eq!(store.get_all()[0].last_status.as_deref(), Some("available"));
+        let conn = setup();
+        let e = add(&conn, "foo", "io", "2026-01-01T00:00:00Z").unwrap();
+        update(&conn, e.id, "2026-01-02T00:00:00Z", "available").unwrap();
+        assert_eq!(get_all(&conn).unwrap()[0].last_status.as_deref(), Some("available"));
     }
 
     #[test]
     fn enforces_max_200() {
-        let mut store = WatchlistStore::new();
-        for i in 0..205usize { store.add(&format!("d{i}"), "com", "t"); }
-        assert!(store.get_all().len() <= 200);
+        let conn = setup();
+        for i in 0..205usize {
+            add(&conn, &format!("d{i}"), "com", "t").unwrap();
+        }
+        assert!(get_all(&conn).unwrap().len() <= 200);
     }
 }

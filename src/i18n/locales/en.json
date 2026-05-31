@@ -73,7 +73,8 @@
   "sessions": {
     "tabSaved": "Saved",
     "empty": "No saved sessions yet.",
-    "save": "Save current session",
+    "save": "Save session",
+    "saveTooltip": "Save your current domain list and TLD selection to reuse later",
     "saved": "Session saved",
     "rename": "Rename",
     "delete": "Delete session",
