@@ -22,26 +22,43 @@ Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Querie
 
 ## Features
 
+### Input & search
 - **Smart input sanitization** — paste full URLs (`https://example.com/page`) and the app strips protocols, `www.`, TLD suffixes, and paths automatically
 - **Categorized TLD picker** — 5 collapsible categories (Popular, Country Codes, Business & Professional, Creative & Design, Tech & Startups), select-all per category, selected/available count
-- **Parallel RDAP queries** — all name × TLD combinations checked concurrently (up to 10 at a time), with automatic retry on transient errors
-- **Streaming results** — Available / Taken / Error groups appear as results arrive, preserving your input order
+- **Multi-tab support** — up to 20 independent tabs, each with fully isolated domain input, TLD selection, and results; keyboard shortcuts `Ctrl+T` / `Ctrl+W` / `Ctrl+Tab` / `Ctrl+1–9`
+
+### Results & details
+- **Parallel RDAP queries** — all name × TLD combinations checked concurrently (up to 10 at a time), results stream in as they arrive
+- **Streaming results** — Available / Taken / Error groups appear in real time, preserving your input order
 - **Resilient & offline-friendly** — RDAP server list is cached locally for 24 hours; if the network is unavailable the app uses the cached list and retries failed queries up to twice before showing an error
 - **Modern results UI** — colored left-border accent per status, "Available" badge, custom thin scrollbar
-- **14 languages** — EN, TR, DE, ES, FR, IT, PT, RU, ZH, JA, KO, AR, NL, PL; auto-detected from system locale
+- **Domain details modal** — click any Taken domain to open a modal showing registrar, registration / expiry / last-updated dates, nameservers, EPP status codes, expiry countdown, and domain age
+- **WHOIS fallback** — `.de` and `.tr` (and other ccTLDs without RDAP) are checked via port-43 WHOIS automatically; source badge (RDAP / WHOIS) shown in the details modal
+- **External link** — open the registrar lookup page for any taken domain directly from the results
+
+### History, sessions & watchlist
+- **Query history** — every search is saved automatically to SQLite; restore any past search (domains + TLD selection) with one click from the History panel; up to 100 entries (FIFO)
+- **Saved sessions** — save the current domain list + TLD selection as a named session; rename inline with a double-click; up to 50 sessions stored
+- **Watchlist** — bookmark any available or taken domain from the results; a dedicated Watchlist panel shows last-checked status and lets you re-check on demand; up to 200 entries
+- **Export results** — download results as CSV or JSON after any query; opens the Downloads folder automatically
+
+### Reliability
+- **Bootstrap disk cache** — RDAP server list cached locally for 24 hours; offline launches use the cached list without any network call
+- **Retry with backoff** — failed RDAP queries retried up to 2× (500 ms / 1 500 ms delays); rate-limited responses (HTTP 429) wait 3 s before retry
+- **Request deduplication** — duplicate domain+TLD queries within a batch share one network request
+- **30 s batch timeout** — unfinished queries are cancelled and surfaced as errors after 30 seconds
+
+### Interface & UX
+- **14 languages** — EN, TR, DE, ES, FR, IT, PT, RU, ZH, JA, KO, AR, NL, PL; auto-detected from system locale, persisted across sessions
 - **RTL support** — full right-to-left layout when Arabic is selected
-- **Animated theme toggle** — sliding switch with sun/moon icon inside the thumb
+- **Light / dark theme** — system preference auto-detected, manual override persisted
+- **Animated theme toggle** — sliding pill switch with sun/moon icon inside the thumb
 - **Fixed header & footer** — header always visible at top, footer always at bottom
 - **UI scale control** — resize the content area from 70% to 150% via footer +/− buttons, persisted across sessions
 - **Custom app icon** — indigo Z lettermark with globe arc overlays
-- **Custom title bar (Windows)** — branded frameless title bar with logo, tab bar, and window controls; native chrome on macOS/Linux
-- **Multi-tab support** — up to 20 independent tabs, each with isolated input, TLD selection and results; keyboard shortcuts (Ctrl+T/W/Tab/1–9)
+- **Custom title bar (Windows)** — branded frameless title bar with logo, tab bar, language selector, theme toggle, and window controls; native chrome on macOS/Linux
 - **Splashscreen** — transparent animated splash while the app loads, eliminating flash of unstyled content
-- **Installer branding** — custom NSIS banner/sidebar (Windows) and DMG background (macOS); icon cache auto-refreshed after install
-- **Query history** — every search is saved automatically; restore past searches with one click from the History panel
-- **Saved sessions** — name and save a domain list + TLD selection to reuse later
-- **Watchlist** — bookmark any domain from results to track it; check status on demand from the Watchlist panel
-- **Export results** — download results as CSV or JSON after any query
+- **Installer branding** — custom NSIS banner/sidebar (Windows) and DMG background (macOS); icon cache auto-refreshed after install on Windows
 
 ---
 
@@ -83,7 +100,8 @@ No additional runtime or dependencies needed — the installer is self-contained
 2. Select TLD extensions from the categorized picker, or use "Select all" per category
 3. Click **Check availability**
 4. Results stream in and are split into **Available** (green) and **Taken** (red) groups
-5. Click any Taken domain to see WHOIS details *(coming in Phase 3)*
+5. Click any **Taken** domain to open the details modal (registrar, dates, nameservers, expiry countdown)
+6. Bookmark domains to your **Watchlist**, or save the whole search as a **Session** for later
 
 ## Supported languages
 
@@ -116,39 +134,75 @@ Language is auto-detected from your system locale and saved across sessions. Swi
 User input
   └─► sanitize (strip protocol / www / TLD / path)
         └─► parse names × selected TLDs → Vec<DomainQuery>
-              └─► invoke("check_domains")          [Tauri command]
+              └─► invoke("check_domains")               [Tauri command]
                     └─► tokio::task per pair, semaphore(10)
-                          └─► IANA RDAP bootstrap → GET {base}/domain/{name}.{tld}
-                                ├─ HTTP 200 → Taken    ─► emit("domain-result")
-                                ├─ HTTP 404 → Available ► emit("domain-result")
-                                └─ error   → Error    ─► emit("domain-result")
+                          └─► IANA RDAP bootstrap (disk-cached 24h)
+                                └─► GET {base}/domain/{name}.{tld}
+                                      ├─ HTTP 200 → Taken    ──► emit("domain-result")
+                                      ├─ HTTP 404 → Available ──► emit("domain-result")
+                                      ├─ 429 / 5xx → retry×2 with backoff
+                                      └─ no RDAP  → port-43 WHOIS fallback
+                    └─► auto-save to SQLite history on completion
               ◄── listen("domain-result") → accumulate into ordered Map
+
+Panel features (invoke on demand):
+  History panel  ──► get_history / delete_history_entry / clear_history
+  Sessions tab   ──► save_session / get_sessions / delete_session / rename_session
+  Watchlist panel ─► add_to_watchlist / remove_from_watchlist / get_watchlist / update_watchlist_entry
+  Export toolbar ──► export_results → Blob download (CSV or JSON)
+  Details modal  ──► fetch_domain_details → RDAP / WHOIS registrar + dates + nameservers
 ```
 
-**Why RDAP over WHOIS?** RDAP is a structured, standardized HTTPS/JSON protocol — availability is a clean HTTP status code (200 = taken, 404 = available) instead of brittle, registry-specific WHOIS text parsing.
-
-[RDAP](https://about.rdap.org/) is an HTTPS/JSON protocol — no text parsing needed for availability checks. The app fetches the [IANA RDAP bootstrap](https://data.iana.org/rdap/dns.json) on first run to discover the correct server per TLD. Coverage is broad for gTLDs (`.com`, `.net`, `.org`, `.io`, `.app`, `.dev`, `.ai` …) and most ccTLDs; ccTLDs without RDAP support are shown as disabled in the picker with a tooltip.
+**Why RDAP over WHOIS?** RDAP is a structured, standardized HTTPS/JSON protocol — availability is a clean HTTP status code (200 = taken, 404 = available) instead of brittle, registry-specific text parsing. The app fetches the [IANA RDAP bootstrap](https://data.iana.org/rdap/dns.json) on first run to discover the correct server per TLD; ccTLDs without RDAP fall back to port-43 WHOIS automatically.
 
 ## Project structure
 
 ```
 zonaly/
-├── scripts/                     # icon generation (icon.svg + generate-icons.mjs)
-├── src/                         # React + TypeScript frontend
-│   ├── App.tsx                  # single-page layout + state
-│   ├── components/              # AppLogo, AppFooter, DomainInput, ExtensionPicker,
-│   │                            # LanguageSelector, ResultsList, ResultRow,
-│   │                            # ThemeToggle, Toast
-│   ├── hooks/                   # useDomainCheck, useScale, useToast
-│   ├── i18n/locales/            # 14 language JSON files
-│   ├── theme/ThemeProvider.tsx  # system detect + manual override
-│   ├── types/domain.ts          # TypeScript mirrors of Rust serde types
-│   └── utils/sanitizeDomains.ts # URL → bare domain name sanitizer
-└── src-tauri/                   # Rust backend
+├── scripts/                        # icon + installer asset generation
+├── src/                            # React + TypeScript frontend
+│   ├── App.tsx                     # single-page layout + all top-level state
+│   ├── components/
+│   │   ├── AppLogo.tsx             # Z lettermark + wordmark
+│   │   ├── AppFooter.tsx           # version, GitHub link, scale control
+│   │   ├── DomainInput.tsx         # textarea with sanitization
+│   │   ├── ExtensionPicker.tsx     # categorized TLD checkboxes
+│   │   ├── HistoryPanel.tsx        # History + Saved sessions slide-in panel
+│   │   ├── WatchlistPanel.tsx      # Watchlist slide-in panel
+│   │   ├── DomainDetailsModal.tsx  # registrar / dates / nameservers modal
+│   │   ├── ResultsList.tsx         # available / taken / error groups + export toolbar
+│   │   ├── ResultRow.tsx           # single result row with watchlist + external link
+│   │   ├── TabBar.tsx              # multi-tab bar (Windows title bar)
+│   │   ├── TitleBar.tsx            # custom frameless title bar (Windows)
+│   │   ├── ThemeToggle.tsx         # animated sun/moon toggle
+│   │   ├── LanguageSelector.tsx    # 3-column language grid
+│   │   └── Toast.tsx               # auto-dismissing notification
+│   ├── context/TabsContext.tsx     # per-tab state via useReducer
+│   ├── hooks/
+│   │   ├── useDomainCheck.ts       # invoke + listen wrappers
+│   │   ├── useScale.ts             # UI zoom persistence
+│   │   └── useToast.ts             # toast state management
+│   ├── i18n/locales/               # 14 language JSON files
+│   ├── theme/ThemeProvider.tsx     # system detect + manual override
+│   ├── types/
+│   │   ├── domain.ts               # DomainQuery / DomainResult / DomainStatus
+│   │   └── storage.ts              # HistoryEntry / SavedSession / WatchlistEntry
+│   └── utils/sanitizeDomains.ts   # URL → bare domain name sanitizer
+└── src-tauri/                      # Rust backend
     └── src/
-        ├── commands.rs          # check_domains + open_url Tauri commands
-        ├── types.rs             # DomainQuery / DomainResult / DomainStatus
-        └── rdap/                # IANA bootstrap cache + per-domain HTTP client
+        ├── commands.rs             # all Tauri commands (check_domains, history, sessions, watchlist, export …)
+        ├── types.rs                # DomainQuery / DomainResult / DomainStatus / DomainDetails
+        ├── db/                     # SQLite persistence (rusqlite bundled)
+        │   ├── mod.rs              # Database struct, WAL setup, schema init
+        │   ├── history.rs          # history table CRUD
+        │   ├── sessions.rs         # sessions table CRUD
+        │   └── watchlist.rs        # watchlist table CRUD
+        └── rdap/                   # RDAP + WHOIS backend
+            ├── mod.rs              # RdapClient: semaphore, dedup, bootstrap cache
+            ├── bootstrap.rs        # IANA bootstrap fetch + 24h disk cache
+            ├── client.rs           # per-domain HTTP query + retry/backoff
+            ├── details.rs          # RDAP domain details parser
+            └── whois.rs            # port-43 WHOIS fallback (.de, .tr, generic)
 ```
 
 ## Prerequisites
@@ -175,7 +229,7 @@ npm run tauri dev        # hot-reload for both Rust and React
 
 ```bash
 npm run typecheck        # tsc --noEmit
-npm test                 # Vitest unit tests (run once)
+npm test                 # Vitest unit tests (70 tests, run once)
 npm run test:watch       # Vitest in watch mode
 npm run test:coverage    # Vitest + lcov coverage report
 npm run tauri build      # production bundle → src-tauri/target/release/bundle/
@@ -183,7 +237,7 @@ npm run tauri build      # production bundle → src-tauri/target/release/bundle
 # From src-tauri/
 cargo check
 cargo clippy
-cargo test               # Rust unit tests
+cargo test               # 54 Rust unit tests
 cargo fmt
 
 # Regenerate app icons after editing scripts/icon.svg
@@ -198,11 +252,11 @@ node scripts/generate-icons.mjs
 | 2 — Core | ✅ Done | Input → parallel RDAP queries → streaming results |
 | 2.x — UX | ✅ Done | Categorized TLD picker, sanitization, 14 languages, RTL, footer |
 | 3 — Shell | ✅ Done | Custom title bar, multi-tab support, splashscreen, installer branding |
-| 4 — Details | ✅ Done | WHOIS popup (registrar, dates, nameservers), port-43 fallback for non-RDAP ccTLDs (.de, .tr) |
-| 5 — Testing | ✅ Done | Vitest unit tests, Rust unit tests, Playwright smoke tests, sanitizer edge cases |
+| 4 — Details | ✅ Done | Domain details modal (registrar, dates, nameservers, expiry countdown), port-43 WHOIS fallback (.de, .tr) |
+| 5 — Testing | ✅ Done | 70 Vitest frontend tests, 54 Rust unit tests, sanitizer edge cases |
 | 6 — Caching & Reliability | ✅ Done | Bootstrap disk cache (24h TTL), request dedup, retry/backoff, 30s batch timeout |
-| 7 — Domain Intelligence | 🔜 Next | Local query history, saved sessions, export CSV/JSON, domain watchlists, expiry tracking |
-| 8 — Favorites & Monitoring | ⬜ Planned | Star/bookmark domains, auto-check scheduling, expiry alerts, change detection |
+| 7 — Domain Intelligence | ✅ Done | Local query history, saved sessions, export CSV/JSON, domain watchlist, SQLite persistence |
+| 8 — Favorites & Monitoring | 🔜 Next | Star/bookmark domains, auto-check scheduling, expiry alerts, change detection |
 | 9 — Background Service | ⬜ Planned | System tray, background checks, native OS notifications (expiry, availability changes) |
 | 10 — Settings Panel | ⬜ Planned | Settings modal: cache management, notification prefs, monitoring intervals, About |
 | 11 — Advanced DNS | ⬜ Planned | DNS record display (NS/MX/SOA/A), DNS health, registrar intelligence, parked domain detection |

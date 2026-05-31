@@ -6,7 +6,7 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [Unreleased] — Phase 7
+## [0.7.0] — 2026-05-31
 
 ### Added
 
@@ -24,28 +24,11 @@ Versions follow [Semantic Versioning](https://semver.org/).
 - **CSV / JSON export.** When results are visible an Export toolbar appears at
   the bottom of the results. Content is generated in Rust and downloaded via
   `URL.createObjectURL` — no extra plugin required.
+- **SQLite persistence.** History, sessions, and watchlist data are now stored
+  in a SQLite database (`zonaly.db`) in the Tauri app-data directory via
+  `rusqlite` (bundled). Data survives app restarts.
 - **History & Watchlist icon buttons** in the Windows custom title bar and the
   native macOS/Linux header.
-- **12 new Tauri commands** for CRUD on history, sessions, watchlist, and export.
-- **Rust unit tests** for Phase 7 additions — 54 Rust tests total.
-- **i18n.** `history.*`, `sessions.*`, `watchlist.*`, `export.*` keys added to
-  all 14 supported locale files.
-
-### Notes
-
-- Storage is currently in-memory (resets on app restart). The `rusqlite` bundled
-  feature requires a C toolchain to compile SQLite natively; on Windows inside
-  OneDrive this triggers Application Control policy and blocks build scripts.
-  SQLite persistence will be re-introduced once the build environment is stable.
-- `.cargo/config.toml` (gitignored) sets `target-dir` outside OneDrive to fix
-  the build-script blocking issue locally.
-
----
-
-## [Unreleased] — Phase 6
-
-### Added
-
 - **Bootstrap disk cache.** IANA RDAP bootstrap JSON is now cached to the
   Tauri app-data directory with a 24-hour TTL. Subsequent launches use the
   cached data instantly; on expiry the cache refreshes in-flight and falls
@@ -59,13 +42,22 @@ Versions follow [Semantic Versioning](https://semver.org/).
   second. Rate-limited responses (429) wait 3 s before retry. Successful
   responses (200, 404) and non-retriable client errors (4xx) are never retried.
 - **Per-request timeout tightened to 8 s** (down from 10 s). The reqwest
-  client timeout is now aligned with the documented value in CLAUDE.md.
+  client timeout is now aligned with the documented value.
 - **Overall batch timeout (30 s).** If the full set of domain checks has not
   completed within 30 seconds, remaining in-flight tasks are cancelled and each
   unfinished query is emitted as a timeout error to the frontend.
-- **Rust unit tests** for Phase 6 logic: HTTP classification (`classify_http`),
-  retry-decision helper, backoff constant ordering, bootstrap cache freshness /
-  expiry, and disk-cache JSON round-trip. Total Rust test count: 36.
+- **12 new Tauri commands** for CRUD on history, sessions, watchlist, and export.
+- **Rust unit tests** — 54 Rust tests total (Phase 6 + Phase 7 additions).
+- **i18n.** `history.*`, `sessions.*`, `watchlist.*`, `export.*` keys added to
+  all 14 supported locale files.
+
+### Fixed
+
+- **Bundle identifier** changed from `com.zonaly.app` to `com.zonaly.desktop`,
+  resolving the macOS warning about `.app` suffix conflicting with the
+  application bundle extension.
+- `.cargo/config.toml` (gitignored) sets `target-dir` outside OneDrive to fix
+  build-script blocking under Windows Application Control policy.
 
 ---
 
