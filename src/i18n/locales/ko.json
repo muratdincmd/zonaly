@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "테마 전환"
   },
+  "titlebar": {
+    "minimize": "최소화",
+    "maximize": "최대화",
+    "restore": "복원",
+    "close": "닫기"
+  },
   "footer": {
     "scaleLabel": "UI 크기",
     "decrease": "축소",
@@ -98,5 +104,40 @@
       "transferperiod": "이전 기간",
       "renewperiod": "갱신 기간"
     }
+  },
+  "history": {
+    "panelTitle": "기록 및 세션",
+    "tabHistory": "기록",
+    "empty": "검색 기록이 없습니다.",
+    "clearAll": "모두 지우기",
+    "delete": "항목 삭제",
+    "restore": "복원"
+  },
+  "sessions": {
+    "tabSaved": "저장됨",
+    "empty": "저장된 세션이 없습니다.",
+    "save": "현재 세션 저장",
+    "saved": "세션이 저장되었습니다",
+    "rename": "이름 바꾸기",
+    "delete": "세션 삭제",
+    "load": "세션 불러오기",
+    "domainCount": "{{count}}개 도메인",
+    "domainCount_other": "{{count}}개 도메인",
+    "doubleClickToRename": "두 번 클릭하여 이름 변경"
+  },
+  "watchlist": {
+    "panelTitle": "관심 목록",
+    "empty": "관심 목록이 비어 있습니다.",
+    "add": "관심 목록에 추가",
+    "remove": "관심 목록에서 제거",
+    "checkNow": "지금 확인",
+    "lastChecked": "마지막 확인:"
+  },
+  "export": {
+    "button": "내보내기:",
+    "csv": "CSV",
+    "json": "JSON",
+    "success": "{{label}} 내보내기 완료",
+    "error": "내보내기 실패"
   }
 }

@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Temayı değiştir"
   },
+  "titlebar": {
+    "minimize": "Küçült",
+    "maximize": "Büyüt",
+    "restore": "Geri yükle",
+    "close": "Kapat"
+  },
   "footer": {
     "scaleLabel": "Arayüz ölçeği",
     "decrease": "Küçült",
@@ -55,6 +61,42 @@
     "closeTabsToRight": "Sağdaki sekmeleri kapat",
     "duplicateTab": "Sekmeyi çoğalt",
     "maxTabsTooltip": "Maksimum 20 sekme sınırına ulaşıldı"
+  },
+  "history": {
+    "panelTitle": "Geçmiş & Oturumlar",
+    "tabHistory": "Geçmiş",
+    "empty": "Henüz arama geçmişi yok.",
+    "clearAll": "Tümünü Temizle",
+    "delete": "Kaydı sil",
+    "restore": "Geri Yükle"
+  },
+  "sessions": {
+    "tabSaved": "Kaydedilenler",
+    "empty": "Henüz kaydedilmiş oturum yok.",
+    "save": "Oturumu kaydet",
+    "saveTooltip": "Mevcut alan adı listenizi ve TLD seçiminizi daha sonra kullanmak üzere kaydedin",
+    "saved": "Oturum kaydedildi",
+    "rename": "Yeniden Adlandır",
+    "delete": "Oturumu sil",
+    "load": "Oturumu yükle",
+    "domainCount": "{{count}} alan adı",
+    "domainCount_other": "{{count}} alan adı",
+    "doubleClickToRename": "Yeniden adlandırmak için çift tıklayın"
+  },
+  "watchlist": {
+    "panelTitle": "İzleme Listesi",
+    "empty": "İzleme listesinde alan adı yok.",
+    "add": "İzleme listesine ekle",
+    "remove": "İzleme listesinden kaldır",
+    "checkNow": "Şimdi kontrol et",
+    "lastChecked": "Son kontrol:"
+  },
+  "export": {
+    "button": "Dışa aktar:",
+    "csv": "CSV",
+    "json": "JSON",
+    "success": "{{label}} dışa aktarıldı",
+    "error": "Dışa aktarma başarısız"
   },
   "details": {
     "loading": "Alan adı detayları yükleniyor…",

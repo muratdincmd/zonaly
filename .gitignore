@@ -12,6 +12,9 @@ dist-ssr/
 src-tauri/target/
 src-tauri/gen/
 
+# Local Cargo config (target-dir path is machine-specific)
+.cargo/
+
 # Vite / TypeScript caches
 *.local
 *.tsbuildinfo

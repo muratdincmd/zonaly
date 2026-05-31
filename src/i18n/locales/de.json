@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Design umschalten"
   },
+  "titlebar": {
+    "minimize": "Minimieren",
+    "maximize": "Maximieren",
+    "restore": "Wiederherstellen",
+    "close": "Schließen"
+  },
   "footer": {
     "scaleLabel": "UI-Skalierung",
     "decrease": "Verkleinern",
@@ -55,6 +61,42 @@
     "closeTabsToRight": "Tabs rechts schließen",
     "duplicateTab": "Tab duplizieren",
     "maxTabsTooltip": "Maximal 20 Tabs erreicht"
+  },
+  "history": {
+    "panelTitle": "Verlauf & Sitzungen",
+    "tabHistory": "Verlauf",
+    "empty": "Noch kein Suchverlauf.",
+    "clearAll": "Alle löschen",
+    "delete": "Eintrag löschen",
+    "restore": "Wiederherstellen"
+  },
+  "sessions": {
+    "tabSaved": "Gespeichert",
+    "empty": "Noch keine gespeicherten Sitzungen.",
+    "save": "Sitzung speichern",
+    "saveTooltip": "Aktuelle Domainliste und TLD-Auswahl für spätere Verwendung speichern",
+    "saved": "Sitzung gespeichert",
+    "rename": "Umbenennen",
+    "delete": "Sitzung löschen",
+    "load": "Sitzung laden",
+    "domainCount": "{{count}} Domain",
+    "domainCount_other": "{{count}} Domains",
+    "doubleClickToRename": "Doppelklick zum Umbenennen"
+  },
+  "watchlist": {
+    "panelTitle": "Beobachtungsliste",
+    "empty": "Keine Domains in der Beobachtungsliste.",
+    "add": "Zur Beobachtungsliste hinzufügen",
+    "remove": "Aus Beobachtungsliste entfernen",
+    "checkNow": "Jetzt prüfen",
+    "lastChecked": "Zuletzt geprüft:"
+  },
+  "export": {
+    "button": "Exportieren:",
+    "csv": "CSV",
+    "json": "JSON",
+    "success": "{{label}} exportiert",
+    "error": "Export fehlgeschlagen"
   },
   "details": {
     "loading": "Domain-Details werden geladen…",

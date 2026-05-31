@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Переключить тему"
   },
+  "titlebar": {
+    "minimize": "Свернуть",
+    "maximize": "Развернуть",
+    "restore": "Восстановить",
+    "close": "Закрыть"
+  },
   "footer": {
     "scaleLabel": "Масштаб интерфейса",
     "decrease": "Уменьшить масштаб",
@@ -98,5 +104,40 @@
       "transferperiod": "Период переноса",
       "renewperiod": "Период продления"
     }
+  },
+  "history": {
+    "panelTitle": "История и сессии",
+    "tabHistory": "История",
+    "empty": "История поиска пуста.",
+    "clearAll": "Очистить всё",
+    "delete": "Удалить запись",
+    "restore": "Восстановить"
+  },
+  "sessions": {
+    "tabSaved": "Сохранённые",
+    "empty": "Нет сохранённых сессий.",
+    "save": "Сохранить сессию",
+    "saved": "Сессия сохранена",
+    "rename": "Переименовать",
+    "delete": "Удалить сессию",
+    "load": "Загрузить сессию",
+    "domainCount": "{{count}} домен",
+    "domainCount_other": "{{count}} доменов",
+    "doubleClickToRename": "Двойной клик для переименования"
+  },
+  "watchlist": {
+    "panelTitle": "Список наблюдения",
+    "empty": "Список наблюдения пуст.",
+    "add": "Добавить в список",
+    "remove": "Удалить из списка",
+    "checkNow": "Проверить сейчас",
+    "lastChecked": "Последняя проверка:"
+  },
+  "export": {
+    "button": "Экспорт:",
+    "csv": "CSV",
+    "json": "JSON",
+    "success": "{{label}} экспортирован",
+    "error": "Ошибка экспорта"
   }
 }

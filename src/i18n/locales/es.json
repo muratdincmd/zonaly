@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Cambiar tema"
   },
+  "titlebar": {
+    "minimize": "Minimizar",
+    "maximize": "Maximizar",
+    "restore": "Restaurar",
+    "close": "Cerrar"
+  },
   "footer": {
     "scaleLabel": "Escala de interfaz",
     "decrease": "Reducir escala",
@@ -104,5 +110,40 @@
       "transferperiod": "Período de transferencia",
       "renewperiod": "Período de renovación"
     }
+  },
+  "history": {
+    "panelTitle": "Historial y sesiones",
+    "tabHistory": "Historial",
+    "empty": "Aún no hay historial de búsqueda.",
+    "clearAll": "Limpiar todo",
+    "delete": "Eliminar entrada",
+    "restore": "Restaurar"
+  },
+  "sessions": {
+    "tabSaved": "Guardadas",
+    "empty": "Aún no hay sesiones guardadas.",
+    "save": "Guardar sesión actual",
+    "saved": "Sesión guardada",
+    "rename": "Renombrar",
+    "delete": "Eliminar sesión",
+    "load": "Cargar sesión",
+    "domainCount": "{{count}} dominio",
+    "domainCount_other": "{{count}} dominios",
+    "doubleClickToRename": "Doble clic para renombrar"
+  },
+  "watchlist": {
+    "panelTitle": "Lista de seguimiento",
+    "empty": "No hay dominios en la lista.",
+    "add": "Agregar a la lista",
+    "remove": "Quitar de la lista",
+    "checkNow": "Comprobar ahora",
+    "lastChecked": "Última comprobación:"
+  },
+  "export": {
+    "button": "Exportar:",
+    "csv": "CSV",
+    "json": "JSON",
+    "success": "{{label}} exportado",
+    "error": "Error al exportar"
   }
 }

@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "تبديل المظهر"
   },
+  "titlebar": {
+    "minimize": "تصغير",
+    "maximize": "تكبير",
+    "restore": "استعادة",
+    "close": "إغلاق"
+  },
   "footer": {
     "scaleLabel": "مقياس الواجهة",
     "decrease": "تصغير",
@@ -98,5 +104,40 @@
       "transferperiod": "فترة النقل",
       "renewperiod": "فترة التجديد"
     }
+  },
+  "history": {
+    "panelTitle": "السجل والجلسات",
+    "tabHistory": "السجل",
+    "empty": "لا يوجد سجل بحث بعد.",
+    "clearAll": "مسح الكل",
+    "delete": "حذف السجل",
+    "restore": "استعادة"
+  },
+  "sessions": {
+    "tabSaved": "محفوظة",
+    "empty": "لا توجد جلسات محفوظة بعد.",
+    "save": "حفظ الجلسة الحالية",
+    "saved": "تم حفظ الجلسة",
+    "rename": "إعادة تسمية",
+    "delete": "حذف الجلسة",
+    "load": "تحميل الجلسة",
+    "domainCount": "{{count}} نطاق",
+    "domainCount_other": "{{count}} نطاقات",
+    "doubleClickToRename": "انقر نقراً مزدوجاً لإعادة التسمية"
+  },
+  "watchlist": {
+    "panelTitle": "قائمة المراقبة",
+    "empty": "لا توجد نطاقات في قائمة المراقبة.",
+    "add": "إضافة إلى قائمة المراقبة",
+    "remove": "إزالة من قائمة المراقبة",
+    "checkNow": "تحقق الآن",
+    "lastChecked": "آخر فحص:"
+  },
+  "export": {
+    "button": "تصدير:",
+    "csv": "CSV",
+    "json": "JSON",
+    "success": "تم تصدير {{label}}",
+    "error": "فشل التصدير"
   }
 }

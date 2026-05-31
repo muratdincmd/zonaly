@@ -1,5 +1,6 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { AppLogo } from "./AppLogo";
 import { LanguageSelector } from "./LanguageSelector";
 import { TabBar } from "./TabBar";
@@ -41,15 +42,16 @@ function IconClose() {
 }
 
 interface TitleBarProps {
-  // TAB BAR IS HERE — TabBar component renders in the centre slot
+  onOpenHistory?: () => void;
+  onOpenWatchlist?: () => void;
 }
 
-export function TitleBar(_props: TitleBarProps) {
+export function TitleBar({ onOpenHistory, onOpenWatchlist }: TitleBarProps) {
   const win = getCurrentWindow();
+  const { t } = useTranslation();
   const [maximized, setMaximized] = useState(false);
 
   useEffect(() => {
-    // Sync maximized state on mount and on window resize events
     let unlisten: (() => void) | undefined;
     void win.isMaximized().then(setMaximized);
     void win.onResized(() => {
@@ -67,7 +69,7 @@ export function TitleBar(_props: TitleBarProps) {
 
   return (
     <div className="titlebar" data-tauri-drag-region>
-      {/* Left: logo — not draggable so clicks on logo work */}
+      {/* Left: logo */}
       <div className="titlebar-left" onMouseDown={(e) => e.stopPropagation()}>
         <AppLogo />
       </div>
@@ -77,8 +79,36 @@ export function TitleBar(_props: TitleBarProps) {
         <TabBar />
       </div>
 
-      {/* Right: app controls + window buttons */}
+      {/* Right: panel buttons + app controls + window buttons */}
       <div className="titlebar-right" onMouseDown={(e) => e.stopPropagation()}>
+        {onOpenHistory && (
+          <button
+            className="titlebar-btn titlebar-btn--icon"
+            onClick={onOpenHistory}
+            aria-label={t("history.panelTitle")}
+            title={t("history.panelTitle")}
+            tabIndex={-1}
+          >
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.25"/>
+              <path d="M6.5 4v2.5l1.8 1.8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        )}
+        {onOpenWatchlist && (
+          <button
+            className="titlebar-btn titlebar-btn--icon"
+            onClick={onOpenWatchlist}
+            aria-label={t("watchlist.panelTitle")}
+            title={t("watchlist.panelTitle")}
+            tabIndex={-1}
+          >
+            <svg width="12" height="13" viewBox="0 0 12 13" fill="none" aria-hidden="true">
+              <path d="M2 1h8a.5.5 0 01.5.5v10l-4.5-2.5L1.5 11.5V1.5A.5.5 0 012 1z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        )}
+
         <LanguageSelector />
         <ThemeToggle />
 
@@ -86,7 +116,7 @@ export function TitleBar(_props: TitleBarProps) {
           <button
             className="titlebar-btn titlebar-btn--minimize"
             onClick={handleMinimize}
-            aria-label="Minimize"
+            aria-label={t("titlebar.minimize")}
             tabIndex={-1}
           >
             <IconMinimize />
@@ -94,7 +124,7 @@ export function TitleBar(_props: TitleBarProps) {
           <button
             className="titlebar-btn titlebar-btn--maximize"
             onClick={handleMaximize}
-            aria-label={maximized ? "Restore" : "Maximize"}
+            aria-label={maximized ? t("titlebar.restore") : t("titlebar.maximize")}
             tabIndex={-1}
           >
             {maximized ? <IconRestore /> : <IconMaximize />}
@@ -102,7 +132,7 @@ export function TitleBar(_props: TitleBarProps) {
           <button
             className="titlebar-btn titlebar-btn--close"
             onClick={handleClose}
-            aria-label="Close"
+            aria-label={t("titlebar.close")}
             tabIndex={-1}
           >
             <IconClose />

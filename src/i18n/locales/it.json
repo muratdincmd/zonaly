@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "Cambia tema"
   },
+  "titlebar": {
+    "minimize": "Minimizza",
+    "maximize": "Massimizza",
+    "restore": "Ripristina",
+    "close": "Chiudi"
+  },
   "footer": {
     "scaleLabel": "Scala interfaccia",
     "decrease": "Riduci scala",
@@ -98,5 +104,40 @@
       "transferperiod": "Periodo di trasferimento",
       "renewperiod": "Periodo di rinnovo"
     }
+  },
+  "history": {
+    "panelTitle": "Cronologia e sessioni",
+    "tabHistory": "Cronologia",
+    "empty": "Nessuna cronologia di ricerca.",
+    "clearAll": "Cancella tutto",
+    "delete": "Elimina voce",
+    "restore": "Ripristina"
+  },
+  "sessions": {
+    "tabSaved": "Salvate",
+    "empty": "Nessuna sessione salvata.",
+    "save": "Salva sessione corrente",
+    "saved": "Sessione salvata",
+    "rename": "Rinomina",
+    "delete": "Elimina sessione",
+    "load": "Carica sessione",
+    "domainCount": "{{count}} dominio",
+    "domainCount_other": "{{count}} domini",
+    "doubleClickToRename": "Doppio clic per rinominare"
+  },
+  "watchlist": {
+    "panelTitle": "Lista di monitoraggio",
+    "empty": "Nessun dominio nella lista.",
+    "add": "Aggiungi alla lista",
+    "remove": "Rimuovi dalla lista",
+    "checkNow": "Controlla ora",
+    "lastChecked": "Ultimo controllo:"
+  },
+  "export": {
+    "button": "Esporta:",
+    "csv": "CSV",
+    "json": "JSON",
+    "success": "{{label}} esportato",
+    "error": "Esportazione fallita"
   }
 }

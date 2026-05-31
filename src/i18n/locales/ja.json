@@ -42,6 +42,12 @@
   "theme": {
     "toggle": "テーマを切り替え"
   },
+  "titlebar": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "元に戻す",
+    "close": "閉じる"
+  },
   "footer": {
     "scaleLabel": "UI スケール",
     "decrease": "縮小",
@@ -98,5 +104,40 @@
       "transferperiod": "移管期間",
       "renewperiod": "更新期間"
     }
+  },
+  "history": {
+    "panelTitle": "履歴とセッション",
+    "tabHistory": "履歴",
+    "empty": "検索履歴はまだありません。",
+    "clearAll": "すべて削除",
+    "delete": "エントリを削除",
+    "restore": "復元"
+  },
+  "sessions": {
+    "tabSaved": "保存済み",
+    "empty": "保存済みセッションはまだありません。",
+    "save": "現在のセッションを保存",
+    "saved": "セッションを保存しました",
+    "rename": "名前を変更",
+    "delete": "セッションを削除",
+    "load": "セッションを読み込む",
+    "domainCount": "{{count}} ドメイン",
+    "domainCount_other": "{{count}} ドメイン",
+    "doubleClickToRename": "ダブルクリックで名前を変更"
+  },
+  "watchlist": {
+    "panelTitle": "ウォッチリスト",
+    "empty": "ウォッチリストにドメインがありません。",
+    "add": "ウォッチリストに追加",
+    "remove": "ウォッチリストから削除",
+    "checkNow": "今すぐ確認",
+    "lastChecked": "最終確認："
+  },
+  "export": {
+    "button": "エクスポート：",
+    "csv": "CSV",
+    "json": "JSON",
+    "success": "{{label}} をエクスポートしました",
+    "error": "エクスポート失敗"
   }
 }
