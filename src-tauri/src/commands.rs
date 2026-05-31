@@ -274,7 +274,7 @@ pub fn update_watchlist_settings(
     settings: WatchlistSettings,
 ) -> Result<WatchlistEntry, String> {
     let conn = state.conn.lock().unwrap();
-    db::watchlist::update_settings(&conn, id, &settings).map_err(|e| e.to_string())
+    db::watchlist::update_settings(&conn, id, &settings, &chrono_now()).map_err(|e| e.to_string())
 }
 
 #[tauri::command]

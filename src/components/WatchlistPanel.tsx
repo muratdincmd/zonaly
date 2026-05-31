@@ -13,29 +13,42 @@ interface Props {
   onUnreadChange?: (count: number) => void;
 }
 
-function relativeTime(ts: string | null, t: (k: string, o?: Record<string, unknown>) => string): string {
-  if (!ts) return "";
+type TFn = (k: string, o?: Record<string, unknown>) => string;
+
+function formatAbsDate(ts: string): string {
   try {
-    const diff = Date.now() - new Date(ts).getTime();
-    const mins = Math.floor(diff / 60000);
-    if (mins < 2)  return t("watchlist.time.just_now");
-    if (mins < 60) return t("watchlist.time.mins_ago", { count: mins });
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24)  return t("watchlist.time.hours_ago", { count: hrs });
-    return t("watchlist.time.days_ago", { count: Math.floor(hrs / 24) });
+    return new Date(ts).toLocaleDateString(undefined, { day: "numeric", month: "short" });
   } catch { return ts; }
 }
 
-function nextCheckLabel(ts: string | null, t: (k: string, o?: Record<string, unknown>) => string): string {
+function relativeTime(ts: string | null, t: TFn): string {
+  if (!ts) return "";
+  try {
+    const diff = Date.now() - new Date(ts).getTime();
+    const totalMins = Math.floor(diff / 60000);
+    if (totalMins < 1)  return t("watchlist.time.just_now");
+    if (totalMins < 60) return t("watchlist.time.mins_ago", { count: totalMins });
+    const hrs = Math.floor(totalMins / 60);
+    if (hrs < 24)  return t("watchlist.time.hours_ago", { count: hrs });
+    const days = Math.floor(hrs / 24);
+    if (days < 7)  return t("watchlist.time.days_ago", { count: days });
+    return formatAbsDate(ts);
+  } catch { return ts; }
+}
+
+function nextCheckLabel(ts: string | null, t: TFn): string {
   if (!ts) return t("watchlist.neverChecked");
   try {
     const diff = new Date(ts).getTime() - Date.now();
     if (diff <= 0) return t("watchlist.overdue");
-    const mins = Math.ceil(diff / 60000);
-    if (mins < 60)  return t("watchlist.time.in_mins", { count: mins });
-    const hrs = Math.ceil(diff / 3600000);
-    if (hrs < 24)   return t("watchlist.time.in_hours", { count: hrs });
-    return t("watchlist.time.in_days", { count: Math.ceil(diff / 86400000) });
+    const totalMins = Math.floor(diff / 60000);
+    if (totalMins < 1)  return t("watchlist.time.just_now");
+    if (totalMins < 60) return t("watchlist.time.in_mins", { count: totalMins });
+    const hrs = Math.floor(diff / 3600000);
+    if (hrs < 24)  return t("watchlist.time.in_hours", { count: hrs });
+    const days = Math.floor(diff / 86400000);
+    if (days < 7)  return t("watchlist.time.in_days", { count: days });
+    return formatAbsDate(ts);
   } catch { return ts; }
 }
 
