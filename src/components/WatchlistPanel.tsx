@@ -83,7 +83,15 @@ export function WatchlistPanel({ open, onClose, onWatchlistChange, onOpenDetails
   const [checking, setChecking] = useState<Set<number>>(new Set());
   const [checkingAll, setCheckingAll] = useState(false);
   const [settingsFor, setSettingsFor] = useState<WatchlistEntry | null>(null);
+  const [, setTick] = useState(0);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  // Re-render every minute so relative time labels stay current.
+  useEffect(() => {
+    if (!open) return;
+    const id = setInterval(() => setTick((n) => n + 1), 60_000);
+    return () => clearInterval(id);
+  }, [open]);
 
   const loadWatchlist = () => {
     invoke<WatchlistEntry[]>("get_watchlist")
