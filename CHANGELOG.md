@@ -6,6 +6,65 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- **Watchlist monitoring.** Each watchlist entry now has configurable monitoring
+  settings: check interval (1 h / 3 h / 6 h / 12 h / 24 h / 48 h / weekly),
+  alert types (available, change, expiry with configurable lead-time in days),
+  and a freeform notes field. Settings are opened via a gear icon on each
+  watchlist row or from the domain details modal.
+- **Automatic background polling.** On app launch (3 s delay) and every
+  15 minutes, all watchlist entries whose `next_check_at` has passed are
+  checked automatically via `check_due_watchlist`.
+- **Alert history.** Generated alerts are stored in a `watchlist_alerts` SQLite
+  table and surfaced in a collapsible alert banner at the top of the Watchlist
+  panel. Per-alert dismiss and a "Mark all read" action are available.
+- **Unread alert badge.** The Watchlist button in the title bar shows a badge
+  with the unread alert count when alerts are waiting.
+- **"Check All Due" button** in the Watchlist panel header runs all overdue
+  entries immediately; entries past their schedule are highlighted in the list.
+- **`WatchlistSettingsModal` component** — interval chips, alert checkboxes,
+  expiry-days input, notes textarea — accessible from both the Watchlist panel
+  and the domain details modal.
+- **`useMonitoring` hook** encapsulates the startup-delay + 15-minute polling
+  logic; fire-and-forget, does not block the UI.
+- **7 new Tauri commands:** `update_watchlist_settings`, `check_watchlist_entry_now`,
+  `check_due_watchlist`, `get_watchlist_stats`, `get_watchlist_alerts`,
+  `mark_watchlist_alert_read`, `mark_all_watchlist_alerts_read`.
+- **Watchlist DB schema expanded** with 9 new columns:
+  `last_registrar`, `last_expiry_date`, `check_interval_hours`, `next_check_at`,
+  `alert_on_available`, `alert_on_expiry`, `alert_on_change`,
+  `expiry_alert_days`, `notes`. Migration is backward-compatible with existing
+  v0.7.0 databases — columns added via individual `ALTER TABLE` with
+  duplicate-column errors suppressed.
+- **New `watchlist_alerts` table** stores generated alerts with type, message,
+  created-at, and read-at timestamps.
+- **`WatchlistSettings` struct** groups the 6 alert/interval fields to keep
+  Tauri command signatures within Clippy's `too_many_arguments` limit (7 args).
+- **4 new Rust unit tests** covering `update_settings`, `get_due`, alert
+  insert/read, and mark-read flows.
+- **`watchlist.*` i18n keys** for all monitoring UI added to all 14 locales:
+  interval labels, alert types, overdue state, settings labels, notes field.
+- **`cargo t` alias** (`.cargo/config.toml`) — runs `cargo test --lib`,
+  avoiding Windows Application Control blocking the `main.rs` test binary.
+
+### Changed
+
+- **WatchlistPanel** fully rewritten: collapsible alert banner with per-alert
+  dismiss, "Check All Due" button with overdue badge, per-row settings gear,
+  next-check label with overdue styling, monitoring indicator dot, panel footer
+  showing total / unread / due counts.
+- **DomainDetailsModal** shows a settings gear button when the domain is in the
+  watchlist, opening `WatchlistSettingsModal` inline.
+- **TitleBar** accepts a `watchlistUnread` prop and renders a numeric badge on
+  the Watchlist button when unread alerts are present.
+- **ResultRow** watchlist button stays fully visible (opacity 1) when the domain
+  is actively watched.
+
+---
+
 ## [0.7.0] — 2026-05-31
 
 ### Added

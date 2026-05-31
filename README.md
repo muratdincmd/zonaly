@@ -39,7 +39,7 @@ Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Querie
 ### History, sessions & watchlist
 - **Query history** — every search is saved automatically to SQLite; restore any past search (domains + TLD selection) with one click from the History panel; up to 100 entries (FIFO)
 - **Saved sessions** — save the current domain list + TLD selection as a named session; rename inline with a double-click; up to 50 sessions stored
-- **Watchlist** — bookmark any available or taken domain from the results; a dedicated Watchlist panel shows last-checked status and lets you re-check on demand; up to 200 entries
+- **Watchlist with monitoring** — bookmark any domain from results; the Watchlist panel shows last-checked status and a per-domain "Check now" button; configure per-entry monitoring settings (check interval: 1h–weekly, alert on available / change / expiry with configurable lead time); background auto-polling runs every 15 minutes; unread alert badge on the Watchlist button; up to 200 entries
 - **Export results** — download results as CSV or JSON after any query; opens the Downloads folder automatically
 
 ### Reliability
@@ -149,6 +149,8 @@ Panel features (invoke on demand):
   History panel  ──► get_history / delete_history_entry / clear_history
   Sessions tab   ──► save_session / get_sessions / delete_session / rename_session
   Watchlist panel ─► add_to_watchlist / remove_from_watchlist / get_watchlist / update_watchlist_entry
+  Monitoring      ──► update_watchlist_settings / check_watchlist_entry_now / check_due_watchlist /
+                      get_watchlist_stats / get_watchlist_alerts / mark_watchlist_alert_read / mark_all_watchlist_alerts_read
   Export toolbar ──► export_results → Blob download (CSV or JSON)
   Details modal  ──► fetch_domain_details → RDAP / WHOIS registrar + dates + nameservers
 ```
@@ -180,17 +182,18 @@ zonaly/
 │   ├── context/TabsContext.tsx     # per-tab state via useReducer
 │   ├── hooks/
 │   │   ├── useDomainCheck.ts       # invoke + listen wrappers
+│   │   ├── useMonitoring.ts        # background watchlist auto-check (15 min)
 │   │   ├── useScale.ts             # UI zoom persistence
 │   │   └── useToast.ts             # toast state management
 │   ├── i18n/locales/               # 14 language JSON files
 │   ├── theme/ThemeProvider.tsx     # system detect + manual override
 │   ├── types/
 │   │   ├── domain.ts               # DomainQuery / DomainResult / DomainStatus
-│   │   └── storage.ts              # HistoryEntry / SavedSession / WatchlistEntry
+│   │   └── storage.ts              # HistoryEntry / SavedSession / WatchlistEntry / WatchlistAlert / WatchlistStats
 │   └── utils/sanitizeDomains.ts   # URL → bare domain name sanitizer
 └── src-tauri/                      # Rust backend
     └── src/
-        ├── commands.rs             # all Tauri commands (check_domains, history, sessions, watchlist, export …)
+        ├── commands.rs             # all Tauri commands (check_domains, history, sessions, watchlist, monitoring, export …)
         ├── types.rs                # DomainQuery / DomainResult / DomainStatus / DomainDetails
         ├── db/                     # SQLite persistence (rusqlite bundled)
         │   ├── mod.rs              # Database struct, WAL setup, schema init
@@ -236,8 +239,9 @@ npm run tauri build      # production bundle → src-tauri/target/release/bundle
 
 # From src-tauri/
 cargo check
-cargo clippy
-cargo test               # 54 Rust unit tests
+cargo clippy -- -D warnings
+cargo test               # all Rust tests (Linux/macOS CI)
+cargo t                  # lib-only tests — use on Windows to avoid Application Control blocking the main binary
 cargo fmt
 
 # Regenerate app icons after editing scripts/icon.svg
@@ -256,7 +260,7 @@ node scripts/generate-icons.mjs
 | 5 — Testing | ✅ Done | 70 Vitest frontend tests, 54 Rust unit tests, sanitizer edge cases |
 | 6 — Caching & Reliability | ✅ Done | Bootstrap disk cache (24h TTL), request dedup, retry/backoff, 30s batch timeout |
 | 7 — Domain Intelligence | ✅ Done | Local query history, saved sessions, export CSV/JSON, domain watchlist, SQLite persistence |
-| 8 — Favorites & Monitoring | 🔜 Next | Star/bookmark domains, auto-check scheduling, expiry alerts, change detection |
+| 8 — Watchlist Monitoring | ✅ Done | Per-entry scheduling (1h–weekly), alert types (available/change/expiry), alert banner, unread badge, background auto-poll |
 | 9 — Background Service | ⬜ Planned | System tray, background checks, native OS notifications (expiry, availability changes) |
 | 10 — Settings Panel | ⬜ Planned | Settings modal: cache management, notification prefs, monitoring intervals, About |
 | 11 — Advanced DNS | ⬜ Planned | DNS record display (NS/MX/SOA/A), DNS health, registrar intelligence, parked domain detection |

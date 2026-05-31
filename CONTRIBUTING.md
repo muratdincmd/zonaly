@@ -55,20 +55,24 @@ See [README.md](README.md) for prerequisites and `npm run tauri dev` instruction
 
 - **Rust:** `cargo fmt` before committing; `cargo clippy -- -D warnings` must pass.
 - **TypeScript:** `npm run typecheck` must pass. No `any` without a comment explaining why.
-- **Tests:** `npm test` (Vitest) and `cargo test` (from `src-tauri/`) must both pass. Add tests for new pure utilities and Rust parsing logic.
+- **Tests:** `npm test` (Vitest) and `cargo test` (from `src-tauri/`) must both pass. Add tests for new pure utilities and Rust parsing logic. On Windows, use `cargo t` (alias for `cargo test --lib`) to avoid Application Control blocking the `main.rs` test binary.
 - **Commits:** Use [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`).
 - **Co-author lines:** Do not add `Co-Authored-By:` lines to commit messages.
 
 ## Running targeted Rust tests
 
 ```bash
-# All Rust tests
+# All Rust tests (CI / Linux / macOS)
 cd src-tauri && cargo test
 
-# Caching & reliability (Phase 6) — bootstrap cache, HTTP classification, backoff
-cargo test rdap::bootstrap
-cargo test rdap::client
-cargo test rdap::whois
+# Windows: lib-only tests (avoids Application Control blocking the main binary)
+cargo t
+
+# Specific modules
+cargo test rdap::bootstrap   # bootstrap cache freshness, disk round-trip
+cargo test rdap::client      # HTTP-status → DomainStatus, backoff constants
+cargo test rdap::whois       # .de/.tr WHOIS parsing, generic no-match
+cargo test db::watchlist     # monitoring settings, due-check, alert flows
 
 # Run a single test by name
 cargo test rdap::bootstrap::tests::fresh_cache_is_not_expired
