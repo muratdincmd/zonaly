@@ -167,7 +167,16 @@
     "noAlerts": "没有未读提醒",
     "save": "保存",
     "cancel": "取消",
-    "monitoringActive": "监控中"
+    "monitoringActive": "监控中",
+    "time": {
+      "just_now": "刚刚",
+      "mins_ago": "{{count}}分钟前",
+      "hours_ago": "{{count}}小时前",
+      "days_ago": "{{count}}天前",
+      "in_mins": "{{count}}分钟后",
+      "in_hours": "{{count}}小时后",
+      "in_days": "{{count}}天后"
+    }
   },
   "export": {
     "button": "导出：",
@@ -175,5 +184,11 @@
     "json": "JSON",
     "success": "{{label}} 已导出",
     "error": "导出失败"
+  },
+  "aria": {
+    "dismiss": "关闭",
+    "icann_lookup": "ICANN查询",
+    "select_language": "选择语言",
+    "visit_domain": "访问 {{domain}}"
   }
 }

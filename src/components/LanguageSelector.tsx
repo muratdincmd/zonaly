@@ -21,7 +21,7 @@ const LANGUAGES = [
 type LangCode = (typeof LANGUAGES)[number]["code"];
 
 export function LanguageSelector() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -81,7 +81,7 @@ export function LanguageSelector() {
       </button>
 
       {open && (
-        <div className="lang-menu" role="listbox" aria-label="Select language">
+        <div className="lang-menu" role="listbox" aria-label={t("aria.select_language")}>
           <div className="lang-grid">
             {LANGUAGES.map((lang) => {
               const active = lang.code === current.code;

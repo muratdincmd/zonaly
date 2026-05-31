@@ -119,7 +119,16 @@
     "noAlerts": "Keine ungelesenen Benachrichtigungen",
     "save": "Speichern",
     "cancel": "Abbrechen",
-    "monitoringActive": "Überwachung aktiv"
+    "monitoringActive": "Überwachung aktiv",
+    "time": {
+      "just_now": "Gerade eben",
+      "mins_ago": "vor {{count}}Min",
+      "hours_ago": "vor {{count}}Std",
+      "days_ago": "vor {{count}}T",
+      "in_mins": "in {{count}}Min",
+      "in_hours": "in {{count}}Std",
+      "in_days": "in {{count}}T"
+    }
   },
   "export": {
     "button": "Exportieren:",
@@ -176,5 +185,11 @@
       "transferperiod": "Transfer-Zeitraum",
       "renewperiod": "Verlängerungs-Zeitraum"
     }
+  },
+  "aria": {
+    "dismiss": "Schließen",
+    "icann_lookup": "ICANN-Suche",
+    "select_language": "Sprache wählen",
+    "visit_domain": "{{domain}} besuchen"
   }
 }
