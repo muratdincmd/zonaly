@@ -30,6 +30,17 @@ pub fn run() {
             commands::get_watchlist,
             commands::update_watchlist_entry,
             commands::export_results,
+            commands::add_favorite,
+            commands::remove_favorite,
+            commands::get_favorites,
+            commands::get_favorite_stats,
+            commands::update_favorite_settings,
+            commands::check_favorite_now,
+            commands::check_due_favorites,
+            commands::get_favorite_alerts,
+            commands::mark_alert_read,
+            commands::mark_all_alerts_read,
+            commands::is_favorited,
         ])
         .setup(|app| {
             // Resolve the per-app data directory for the RDAP bootstrap disk cache
