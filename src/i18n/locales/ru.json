@@ -167,7 +167,16 @@
     "noAlerts": "Нет непрочитанных уведомлений",
     "save": "Сохранить",
     "cancel": "Отмена",
-    "monitoringActive": "Мониторинг активен"
+    "monitoringActive": "Мониторинг активен",
+    "time": {
+      "just_now": "Только что",
+      "mins_ago": "{{count}}мин назад",
+      "hours_ago": "{{count}}ч назад",
+      "days_ago": "{{count}}д назад",
+      "in_mins": "через {{count}}мин",
+      "in_hours": "через {{count}}ч",
+      "in_days": "через {{count}}д"
+    }
   },
   "export": {
     "button": "Экспорт:",
@@ -175,5 +184,11 @@
     "json": "JSON",
     "success": "{{label}} экспортирован",
     "error": "Ошибка экспорта"
+  },
+  "aria": {
+    "dismiss": "Закрыть",
+    "icann_lookup": "Поиск ICANN",
+    "select_language": "Выбрать язык",
+    "visit_domain": "Открыть {{domain}}"
   }
 }

@@ -167,7 +167,16 @@
     "noAlerts": "لا توجد تنبيهات غير مقروءة",
     "save": "حفظ",
     "cancel": "إلغاء",
-    "monitoringActive": "المراقبة نشطة"
+    "monitoringActive": "المراقبة نشطة",
+    "time": {
+      "just_now": "للتو",
+      "mins_ago": "منذ {{count}}د",
+      "hours_ago": "منذ {{count}}س",
+      "days_ago": "منذ {{count}}ي",
+      "in_mins": "خلال {{count}}د",
+      "in_hours": "خلال {{count}}س",
+      "in_days": "خلال {{count}}ي"
+    }
   },
   "export": {
     "button": "تصدير:",
@@ -175,5 +184,11 @@
     "json": "JSON",
     "success": "تم تصدير {{label}}",
     "error": "فشل التصدير"
+  },
+  "aria": {
+    "dismiss": "إغلاق",
+    "icann_lookup": "بحث ICANN",
+    "select_language": "اختر اللغة",
+    "visit_domain": "زيارة {{domain}}"
   }
 }

@@ -1,7 +1,74 @@
 use rusqlite::{Connection, Result, params};
 use serde::{Deserialize, Serialize};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 const MAX_WATCHLIST: i64 = 200;
+
+#[cfg(test)]
+fn now_rfc3339() -> String {
+    let secs = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
+    let s = secs % 60;
+    let m = (secs / 60) % 60;
+    let h = (secs / 3600) % 24;
+    let days = secs / 86400;
+    let (year, month, day) = days_to_ymd(days);
+    format!("{year:04}-{month:02}-{day:02}T{h:02}:{m:02}:{s:02}Z")
+}
+
+fn days_to_ymd(days: u64) -> (u64, u64, u64) {
+    let z = days + 719468;
+    let era = z / 146097;
+    let doe = z - era * 146097;
+    let yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
+    let y = yoe + era * 400;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let d = doy - (153 * mp + 2) / 5 + 1;
+    let m = if mp < 10 { mp + 3 } else { mp - 9 };
+    let y = if m <= 2 { y + 1 } else { y };
+    (y, m, d)
+}
+
+fn add_seconds_to_iso(iso: &str, seconds: i64) -> String {
+    let base = iso_to_unix(iso).unwrap_or_else(|| {
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_secs()
+    });
+    let result = (base as i64 + seconds).max(0) as u64;
+    let s = result % 60;
+    let m = (result / 60) % 60;
+    let h = (result / 3600) % 24;
+    let days = result / 86400;
+    let (year, month, day) = days_to_ymd(days);
+    format!("{year:04}-{month:02}-{day:02}T{h:02}:{m:02}:{s:02}Z")
+}
+
+fn iso_to_unix(iso: &str) -> Option<u64> {
+    let s = iso.trim_end_matches('Z');
+    let parts: Vec<&str> = s.splitn(2, 'T').collect();
+    if parts.len() != 2 { return None; }
+    let date: Vec<u64> = parts[0].split('-').filter_map(|x| x.parse().ok()).collect();
+    let time: Vec<u64> = parts[1].split(':').filter_map(|x| x.parse().ok()).collect();
+    if date.len() < 3 || time.len() < 3 { return None; }
+    let (y, mo, d) = (date[0], date[1], date[2]);
+    let (h, mi, se) = (time[0], time[1], time[2]);
+    let days = days_from_ymd(y, mo, d)?;
+    Some(days * 86400 + h * 3600 + mi * 60 + se)
+}
+
+fn days_from_ymd(y: u64, m: u64, d: u64) -> Option<u64> {
+    let (y, m) = if m <= 2 { (y - 1, m + 9) } else { (y, m - 3) };
+    let era = y / 400;
+    let yoe = y - era * 400;
+    let doy = (153 * m + 2) / 5 + d - 1;
+    let doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+    Some(era * 146097 + doe - 719468)
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -177,11 +244,19 @@ pub fn update_settings(
     conn: &Connection,
     id: i64,
     s: &WatchlistSettings,
+    now: &str,
 ) -> Result<WatchlistEntry> {
     let (check_interval_hours, alert_on_available, alert_on_expiry, alert_on_change,
          expiry_alert_days) = (s.check_interval_hours, s.alert_on_available,
          s.alert_on_expiry, s.alert_on_change, s.expiry_alert_days);
     let notes = s.notes.as_deref();
+    // Recalculate next_check_at immediately so the new interval takes effect at once.
+    // If interval is 0 (disabled), clear next_check_at.
+    let next_check_at: Option<String> = if check_interval_hours > 0 {
+        Some(add_seconds_to_iso(now, check_interval_hours * 3600))
+    } else {
+        None
+    };
     conn.execute(
         "UPDATE watchlist SET
             check_interval_hours = ?1,
@@ -189,8 +264,9 @@ pub fn update_settings(
             alert_on_expiry      = ?3,
             alert_on_change      = ?4,
             expiry_alert_days    = ?5,
-            notes                = ?6
-         WHERE id = ?7",
+            notes                = ?6,
+            next_check_at        = ?7
+         WHERE id = ?8",
         params![
             check_interval_hours,
             alert_on_available as i64,
@@ -198,6 +274,7 @@ pub fn update_settings(
             alert_on_change as i64,
             expiry_alert_days,
             notes,
+            next_check_at,
             id
         ],
     )?;
@@ -425,6 +502,7 @@ mod tests {
     fn update_settings_persisted() {
         let conn = setup();
         let e = add(&conn, "foo", "io", "2026-01-01T00:00:00Z").unwrap();
+        let now = now_rfc3339();
         let updated = update_settings(&conn, e.id, &WatchlistSettings {
             check_interval_hours: 6,
             alert_on_available: false,
@@ -432,13 +510,15 @@ mod tests {
             alert_on_change: false,
             expiry_alert_days: 14,
             notes: Some("my note".to_string()),
-        }).unwrap();
+        }, &now).unwrap();
         assert_eq!(updated.check_interval_hours, 6);
         assert!(!updated.alert_on_available);
         assert!(updated.alert_on_expiry);
         assert!(!updated.alert_on_change);
         assert_eq!(updated.expiry_alert_days, 14);
         assert_eq!(updated.notes.as_deref(), Some("my note"));
+        // next_check_at should be set to ~6 hours from now
+        assert!(updated.next_check_at.is_some());
     }
 
     #[test]

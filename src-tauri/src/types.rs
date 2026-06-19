@@ -59,3 +59,31 @@ pub struct DomainDetails {
     pub nameservers: Vec<String>,
     pub statuses: Vec<String>,
 }
+
+/// Emitted to the frontend each time a watchlist alert is inserted, so the
+/// UI can fire a translated native OS notification immediately.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct WatchlistAlertEvent {
+    pub alert_type: String,
+    pub domain: String,
+    pub tld: String,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn watchlist_alert_event_serializes_camel_case() {
+        let e = WatchlistAlertEvent {
+            alert_type: "status_change".into(),
+            domain: "example".into(),
+            tld: "com".into(),
+        };
+        let json = serde_json::to_value(&e).unwrap();
+        assert_eq!(json["alertType"], "status_change");
+        assert_eq!(json["domain"], "example");
+        assert_eq!(json["tld"], "com");
+    }
+}

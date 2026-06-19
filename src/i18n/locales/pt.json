@@ -167,7 +167,16 @@
     "noAlerts": "Sem alertas não lidas",
     "save": "Salvar",
     "cancel": "Cancelar",
-    "monitoringActive": "Monitoramento ativo"
+    "monitoringActive": "Monitoramento ativo",
+    "time": {
+      "just_now": "Agora mesmo",
+      "mins_ago": "há {{count}}min",
+      "hours_ago": "há {{count}}h",
+      "days_ago": "há {{count}}d",
+      "in_mins": "em {{count}}min",
+      "in_hours": "em {{count}}h",
+      "in_days": "em {{count}}d"
+    }
   },
   "export": {
     "button": "Exportar:",
@@ -175,5 +184,11 @@
     "json": "JSON",
     "success": "{{label}} exportado",
     "error": "Falha na exportação"
+  },
+  "aria": {
+    "dismiss": "Fechar",
+    "icann_lookup": "Consulta ICANN",
+    "select_language": "Selecionar idioma",
+    "visit_domain": "Visitar {{domain}}"
   }
 }

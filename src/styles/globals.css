@@ -658,16 +658,12 @@ button {
   flex: 1;
 }
 
-/* Scaled content wrapper â€” only this div transforms */
+/* Main content area — no transform scaling; font scaling is on <html> via useScale */
 .app-main-inner {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   padding: 1.5rem 2rem 2rem;
-  transform-origin: top center;
-  transform: scale(var(--content-scale, 1));
-  width: calc(100% / var(--content-scale, 1));
-  margin: 0 auto;
 }
 
 /* â”€â”€ Footer â€” position:fixed pins it to viewport bottom regardless of scroll */
@@ -1332,7 +1328,7 @@ button {
 
 .modal-card {
   width: 100%;
-  max-width: 540px;
+  max-width: 33.75rem;
   max-height: calc(100vh - 4rem);
   background: var(--bg-elevated);
   border: 1px solid var(--border);
@@ -1801,7 +1797,8 @@ button {
   top: 0;
   right: 0;
   bottom: 0;
-  width: 340px;
+  /* rem-based width grows naturally when <html> font-size is scaled */
+  width: 21.25rem;
   max-width: 92vw;
   background: var(--bg-elevated);
   border-left: 1px solid var(--border);
@@ -2395,7 +2392,7 @@ button {
 
 .modal {
   width: 100%;
-  max-width: 460px;
+  max-width: 28.75rem;
   max-height: calc(100vh - 4rem);
   background: var(--bg-elevated);
   border: 1px solid var(--border);

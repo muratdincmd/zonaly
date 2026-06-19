@@ -277,7 +277,7 @@ function SourceBadge({ source }: { source?: "rdap" | "whois" }) {
 // ── Body content ──────────────────────────────────────────────────────────────
 
 function DetailsContent({ details }: { details: DomainDetails }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const hasAnyField =
     details.registrar ||
@@ -304,8 +304,8 @@ function DetailsContent({ details }: { details: DomainDetails }) {
               onClick={() => void invoke("open_url", {
                 url: `https://lookup.icann.org/en/lookup?name=${details.name}.${details.tld}`,
               })}
-              aria-label="ICANN Lookup"
-              title={`ICANN Lookup: ${details.name}.${details.tld}`}
+              aria-label={t("aria.icann_lookup")}
+              title={`${t("aria.icann_lookup")}: ${details.name}.${details.tld}`}
             >
               <svg width="11" height="11" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                 <path d="M4 2H2a1 1 0 00-1 1v5a1 1 0 001 1h5a1 1 0 001-1V6" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -318,7 +318,7 @@ function DetailsContent({ details }: { details: DomainDetails }) {
 
       {details.registered && (
         <>
-          <Field label={t("details.registered")} value={formatDate(details.registered)} />
+          <Field label={t("details.registered")} value={formatDate(details.registered, i18n.language)} />
           <DomainAge registered={details.registered} />
         </>
       )}
@@ -328,7 +328,7 @@ function DetailsContent({ details }: { details: DomainDetails }) {
       )}
 
       {details.updated && (
-        <Field label={t("details.updated")} value={formatDate(details.updated)} />
+        <Field label={t("details.updated")} value={formatDate(details.updated, i18n.language)} />
       )}
 
       {details.nameservers.length > 0 && (
@@ -361,7 +361,7 @@ function DetailsContent({ details }: { details: DomainDetails }) {
 // ── Expiry row with days-remaining badge ──────────────────────────────────────
 
 function ExpiryField({ isoDate }: { isoDate: string }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const d = new Date(isoDate);
   if (isNaN(d.getTime())) {
     return <Field label={t("details.expires")} value={isoDate} />;
@@ -386,7 +386,7 @@ function ExpiryField({ isoDate }: { isoDate: string }) {
     <>
       <dt className="modal-label">{t("details.expires")}</dt>
       <dd className="modal-value modal-expiry-row">
-        <span>{formatDate(isoDate)}</span>
+        <span>{formatDate(isoDate, i18n.language)}</span>
         <span className={`modal-expiry-badge modal-expiry-${urgency}`}>
           {badge}
         </span>
@@ -475,14 +475,14 @@ function isExpiredDate(iso: string | undefined): boolean {
   return !isNaN(d.getTime()) && d.getTime() < Date.now();
 }
 
-function formatDate(iso: string): string {
+function formatDate(iso: string, locale: string): string {
   const d = new Date(iso);
   if (isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString(undefined, {
+  return new Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "short",
     day: "numeric",
-  });
+  }).format(d);
 }
 
 function humanizeStatus(code: string, t: (key: string) => string): string {

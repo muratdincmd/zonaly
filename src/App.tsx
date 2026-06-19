@@ -23,6 +23,7 @@ import { TabsProvider, useTabs } from "./context/TabsContext";
 import { useMonitoring } from "./hooks/useMonitoring";
 import { useScale } from "./hooks/useScale";
 import { useToast } from "./hooks/useToast";
+import { useWatchlistNotifications } from "./hooks/useWatchlistNotifications";
 import type { DomainQuery, DomainResult } from "./types/domain";
 import type { HistoryEntry, SavedSession, WatchlistEntry } from "./types/storage";
 import { useCustomTitleBar } from "./utils/platform";
@@ -336,6 +337,7 @@ function AppShell() {
       .then((s) => setWatchlistUnread(s.unreadAlerts))
       .catch(console.error);
   });
+  useWatchlistNotifications();
 
   const restoreRef = useRef<((entry: HistoryEntry) => void) | null>(null);
   const loadSessionRef = useRef<((session: SavedSession) => void) | null>(null);

@@ -167,7 +167,16 @@
     "noAlerts": "Geen ongelezen meldingen",
     "save": "Opslaan",
     "cancel": "Annuleren",
-    "monitoringActive": "Monitoring actief"
+    "monitoringActive": "Monitoring actief",
+    "time": {
+      "just_now": "Zojuist",
+      "mins_ago": "{{count}}m geleden",
+      "hours_ago": "{{count}}u geleden",
+      "days_ago": "{{count}}d geleden",
+      "in_mins": "over {{count}}m",
+      "in_hours": "over {{count}}u",
+      "in_days": "over {{count}}d"
+    }
   },
   "export": {
     "button": "Exporteren:",
@@ -175,5 +184,11 @@
     "json": "JSON",
     "success": "{{label}} geëxporteerd",
     "error": "Exporteren mislukt"
+  },
+  "aria": {
+    "dismiss": "Sluiten",
+    "icann_lookup": "ICANN opzoeken",
+    "select_language": "Taal selecteren",
+    "visit_domain": "{{domain}} bezoeken"
   }
 }

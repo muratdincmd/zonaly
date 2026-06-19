@@ -167,7 +167,16 @@
     "noAlerts": "읽지 않은 알림 없음",
     "save": "저장",
     "cancel": "취소",
-    "monitoringActive": "모니터링 중"
+    "monitoringActive": "모니터링 중",
+    "time": {
+      "just_now": "방금",
+      "mins_ago": "{{count}}분 전",
+      "hours_ago": "{{count}}시간 전",
+      "days_ago": "{{count}}일 전",
+      "in_mins": "{{count}}분 후",
+      "in_hours": "{{count}}시간 후",
+      "in_days": "{{count}}일 후"
+    }
   },
   "export": {
     "button": "내보내기:",
@@ -175,5 +184,11 @@
     "json": "JSON",
     "success": "{{label}} 내보내기 완료",
     "error": "내보내기 실패"
+  },
+  "aria": {
+    "dismiss": "닫기",
+    "icann_lookup": "ICANN 조회",
+    "select_language": "언語 선택",
+    "visit_domain": "{{domain}} 방문"
   }
 }

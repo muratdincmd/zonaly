@@ -122,7 +122,7 @@ export function ResultRow({ result, onClick, watchedIds, onWatchlistChange }: Pr
             e.stopPropagation();
             openExternal(`https://${result.name}.${result.tld}`);
           }}
-          aria-label={`Visit ${result.name}.${result.tld}`}
+          aria-label={t("aria.visit_domain", { domain: `${result.name}.${result.tld}` })}
           title={`https://${result.name}.${result.tld}`}
           tabIndex={-1}
         >

@@ -167,7 +167,16 @@
     "noAlerts": "未読アラートなし",
     "save": "保存",
     "cancel": "キャンセル",
-    "monitoringActive": "監視中"
+    "monitoringActive": "監視中",
+    "time": {
+      "just_now": "たった今",
+      "mins_ago": "{{count}}分前",
+      "hours_ago": "{{count}}時間前",
+      "days_ago": "{{count}}日前",
+      "in_mins": "{{count}}分後",
+      "in_hours": "{{count}}時間後",
+      "in_days": "{{count}}日後"
+    }
   },
   "export": {
     "button": "エクスポート：",
@@ -175,5 +184,11 @@
     "json": "JSON",
     "success": "{{label}} をエクスポートしました",
     "error": "エクスポート失敗"
+  },
+  "aria": {
+    "dismiss": "閉じる",
+    "icann_lookup": "ICANN検索",
+    "select_language": "言語を選択",
+    "visit_domain": "{{domain}} を開く"
   }
 }

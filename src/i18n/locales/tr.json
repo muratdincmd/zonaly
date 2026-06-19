@@ -119,7 +119,16 @@
     "noAlerts": "Okunmamış uyarı yok",
     "save": "Kaydet",
     "cancel": "İptal",
-    "monitoringActive": "İzleme aktif"
+    "monitoringActive": "İzleme aktif",
+    "time": {
+      "just_now": "Az önce",
+      "mins_ago": "{{count}}dk önce",
+      "hours_ago": "{{count}}sa önce",
+      "days_ago": "{{count}}g önce",
+      "in_mins": "{{count}}dk içinde",
+      "in_hours": "{{count}}sa içinde",
+      "in_days": "{{count}}g içinde"
+    }
   },
   "export": {
     "button": "Dışa aktar:",
@@ -176,5 +185,11 @@
       "transferperiod": "Transfer süresi",
       "renewperiod": "Yenileme süresi"
     }
+  },
+  "aria": {
+    "dismiss": "Kapat",
+    "icann_lookup": "ICANN Sorgusu",
+    "select_language": "Dil seçin",
+    "visit_domain": "{{domain}} adresini ziyaret et"
   }
 }

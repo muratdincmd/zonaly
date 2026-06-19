@@ -6,6 +6,51 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.9.0] — 2026-06-20
+
+### Added
+
+- **System tray icon.** Zonaly now registers a tray icon (Windows/macOS/Linux) via
+  Tauri v2's built-in tray API. Left-click or the "Show Zonaly" menu item
+  shows/restores/focuses the main window. "Check Watchlist Now" runs
+  `check_due_watchlist` directly from the tray. "Quit" exits the app cleanly via
+  `app.exit(0)`. Window close behavior is unchanged — the app still quits when the
+  main window is closed; the tray is purely an additional access point.
+- **Tray alert badge.** The tray icon swaps to a red-dot variant whenever there are
+  unread watchlist alerts, and reverts to the plain icon once they're all read.
+  Driven by the same `unread_alerts` count already used for the in-app badge —
+  single source of truth, no separate state to drift.
+- **Native OS notifications.** Each new watchlist alert (domain became available,
+  registrar/status changed, expiring soon) now fires a native OS notification
+  immediately, regardless of whether the Watchlist panel is open. Backend emits a
+  `watchlist-alert-created` event; the frontend listens and sends a fully
+  translated notification via `@tauri-apps/plugin-notification`. Routine 15-minute
+  background polls that find nothing new stay silent — no notification spam.
+- **`tauri-plugin-autostart` registered** (not yet exposed in any UI — a toggle is
+  planned for the upcoming Settings panel). The plugin is initialized but autostart
+  stays off by default; nothing changes for existing users.
+- **2 new Rust dependencies:** `tauri-plugin-notification`, `tauri-plugin-autostart`.
+  **2 new npm dependencies:** `@tauri-apps/plugin-notification`,
+  `@tauri-apps/plugin-autostart`. `tauri`'s Cargo features extended with
+  `tray-icon` and `image-png`.
+- **New `src-tauri/src/tray.rs` module** — tray icon/menu setup, badge swapping.
+- **New `WatchlistAlertEvent` struct** (`types.rs`) shared between the Rust emitter
+  and the TypeScript listener.
+- **New `useWatchlistNotifications` hook** (`src/hooks/`) — requests notification
+  permission once, listens for `watchlist-alert-created`, fires the OS notification
+  with a translated title (reusing the existing `watchlist.alertType*` i18n keys).
+- **6 new Vitest tests** for the new hook; **1 new Rust unit test** for
+  `WatchlistAlertEvent` serialization.
+
+### Notes
+
+- Tray menu labels ("Show Zonaly", "Check Watchlist Now", "Quit") are English-only —
+  OS-native tray menus render outside the webview and can't reach i18next without
+  disproportionate complexity for 3 strings. Notification text, which users read far
+  more often, is fully translated.
+
+---
+
 ## [0.8.0] — 2026-05-31
 
 ### Added

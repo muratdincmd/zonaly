@@ -13,29 +13,42 @@ interface Props {
   onUnreadChange?: (count: number) => void;
 }
 
-function relativeTime(ts: string | null): string {
-  if (!ts) return "";
+type TFn = (k: string, o?: Record<string, unknown>) => string;
+
+function formatAbsDate(ts: string): string {
   try {
-    const diff = Date.now() - new Date(ts).getTime();
-    const mins = Math.floor(diff / 60000);
-    if (mins < 2)  return "Just now";
-    if (mins < 60) return `${mins}m ago`;
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24)  return `${hrs}h ago`;
-    return `${Math.floor(hrs / 24)}d ago`;
+    return new Date(ts).toLocaleDateString(undefined, { day: "numeric", month: "short" });
   } catch { return ts; }
 }
 
-function nextCheckLabel(ts: string | null, t: (k: string) => string): string {
+function relativeTime(ts: string | null, t: TFn): string {
+  if (!ts) return "";
+  try {
+    const diff = Date.now() - new Date(ts).getTime();
+    const totalMins = Math.floor(diff / 60000);
+    if (totalMins < 1)  return t("watchlist.time.just_now");
+    if (totalMins < 60) return t("watchlist.time.mins_ago", { count: totalMins });
+    const hrs = Math.floor(totalMins / 60);
+    if (hrs < 24)  return t("watchlist.time.hours_ago", { count: hrs });
+    const days = Math.floor(hrs / 24);
+    if (days < 7)  return t("watchlist.time.days_ago", { count: days });
+    return formatAbsDate(ts);
+  } catch { return ts; }
+}
+
+function nextCheckLabel(ts: string | null, t: TFn): string {
   if (!ts) return t("watchlist.neverChecked");
   try {
     const diff = new Date(ts).getTime() - Date.now();
     if (diff <= 0) return t("watchlist.overdue");
-    const mins = Math.ceil(diff / 60000);
-    if (mins < 60)  return `in ${mins}m`;
-    const hrs = Math.ceil(diff / 3600000);
-    if (hrs < 24)   return `in ${hrs}h`;
-    return `in ${Math.ceil(diff / 86400000)}d`;
+    const totalMins = Math.floor(diff / 60000);
+    if (totalMins < 1)  return t("watchlist.time.just_now");
+    if (totalMins < 60) return t("watchlist.time.in_mins", { count: totalMins });
+    const hrs = Math.floor(diff / 3600000);
+    if (hrs < 24)  return t("watchlist.time.in_hours", { count: hrs });
+    const days = Math.floor(diff / 86400000);
+    if (days < 7)  return t("watchlist.time.in_days", { count: days });
+    return formatAbsDate(ts);
   } catch { return ts; }
 }
 
@@ -45,12 +58,15 @@ function isOverdue(ts: string | null): boolean {
 }
 
 function StatusBadge({ status }: { status: string | null }) {
+  const { t } = useTranslation();
   if (!status) return null;
   const cls =
     status === "available" ? "side-panel-badge side-panel-badge--available"
     : status === "taken"   ? "side-panel-badge side-panel-badge--taken"
     : "side-panel-badge side-panel-badge--error";
-  return <span className={cls}>{status}</span>;
+  const key = `results.${status}`;
+  const label = t(key) === key ? status : t(key);
+  return <span className={cls}>{label}</span>;
 }
 
 function AlertTypeIcon({ type }: { type: string }) {
@@ -67,7 +83,15 @@ export function WatchlistPanel({ open, onClose, onWatchlistChange, onOpenDetails
   const [checking, setChecking] = useState<Set<number>>(new Set());
   const [checkingAll, setCheckingAll] = useState(false);
   const [settingsFor, setSettingsFor] = useState<WatchlistEntry | null>(null);
+  const [, setTick] = useState(0);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  // Re-render every minute so relative time labels stay current.
+  useEffect(() => {
+    if (!open) return;
+    const id = setInterval(() => setTick((n) => n + 1), 60_000);
+    return () => clearInterval(id);
+  }, [open]);
 
   const loadWatchlist = () => {
     invoke<WatchlistEntry[]>("get_watchlist")
@@ -242,7 +266,7 @@ export function WatchlistPanel({ open, onClose, onWatchlistChange, onOpenDetails
                         type="button"
                         className="wl-alert-dismiss"
                         onClick={() => void handleMarkRead(a.id)}
-                        aria-label="Dismiss"
+                        aria-label={t("aria.dismiss")}
                       >×</button>
                     </div>
                   ))}
@@ -287,14 +311,23 @@ export function WatchlistPanel({ open, onClose, onWatchlistChange, onOpenDetails
                       </span>
                       <span className="side-panel-item-meta">
                         <StatusBadge status={entry.lastStatus} />
-                        {entry.lastCheckedAt && (
+                        {(entry.lastCheckedAt || isMonitored) && (
                           <span className="side-panel-item-time">
-                            {relativeTime(entry.lastCheckedAt)}
-                          </span>
-                        )}
-                        {isMonitored && (
-                          <span className={`wl-next-check${overdue ? " wl-next-check--overdue" : ""}`}>
-                            {nextCheckLabel(entry.nextCheckAt, t)}
+                            {entry.lastCheckedAt && (
+                              <span className="wl-time-labeled">
+                                <span className="wl-time-label">{t("watchlist.lastChecked")}</span>
+                                {" "}{relativeTime(entry.lastCheckedAt, t)}
+                              </span>
+                            )}
+                            {entry.lastCheckedAt && isMonitored && (
+                              <span className="wl-time-sep" aria-hidden="true"> · </span>
+                            )}
+                            {isMonitored && (
+                              <span className={`wl-time-labeled${overdue ? " wl-next-check--overdue" : ""}`}>
+                                <span className="wl-time-label">{t("watchlist.nextCheck")}:</span>
+                                {" "}{nextCheckLabel(entry.nextCheckAt, t)}
+                              </span>
+                            )}
                           </span>
                         )}
                       </span>

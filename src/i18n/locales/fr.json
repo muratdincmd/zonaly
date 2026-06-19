@@ -167,7 +167,22 @@
     "noAlerts": "Aucune alerte non lue",
     "save": "Enregistrer",
     "cancel": "Annuler",
-    "monitoringActive": "Surveillance active"
+    "monitoringActive": "Surveillance active",
+    "time": {
+      "just_now": "À l'instant",
+      "mins_ago": "il y a {{count}}min",
+      "hours_ago": "il y a {{count}}h",
+      "days_ago": "il y a {{count}}j",
+      "in_mins": "dans {{count}}min",
+      "in_hours": "dans {{count}}h",
+      "in_days": "dans {{count}}j"
+    }
+  },
+  "aria": {
+    "dismiss": "Fermer",
+    "icann_lookup": "Recherche ICANN",
+    "select_language": "Choisir la langue",
+    "visit_domain": "Visiter {{domain}}"
   },
   "export": {
     "button": "Exporter :",
