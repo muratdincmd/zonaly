@@ -140,6 +140,27 @@ async function main() {
   }
 
   writeFileSync(join(iconsDir, "icon.icns"), icns);
+
+  // ── Tray icons ───────────────────────────────────────────────────────────
+  // Plain 32x32 tray icon, plus an "alert" variant with a small red dot
+  // overlay (top-right) used when the watchlist has unread alerts.
+  console.log("\nGenerating tray icons…");
+  const trayBase = await renderPng(32);
+  await sharp(trayBase).png().toFile(join(iconsDir, "tray-icon.png"));
+  console.log("  ✓  tray-icon.png (32px)");
+
+  const dotOverlay = Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+       <circle cx="25" cy="7" r="6" fill="#ef4444" stroke="#ffffff" stroke-width="1.5"/>
+     </svg>`,
+  );
+  const trayAlert = await sharp(trayBase)
+    .composite([{ input: dotOverlay, top: 0, left: 0 }])
+    .png()
+    .toBuffer();
+  await sharp(trayAlert).png().toFile(join(iconsDir, "tray-icon-alert.png"));
+  console.log("  ✓  tray-icon-alert.png (32px)");
+
   console.log("\nAll icons generated successfully.");
 }
 

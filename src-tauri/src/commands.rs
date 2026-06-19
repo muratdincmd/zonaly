@@ -8,7 +8,8 @@ use tokio::task::JoinSet;
 
 use crate::db::{self, Database, HistoryEntry, SavedSession, WatchlistAlert, WatchlistEntry, WatchlistSettings, WatchlistStats};
 use crate::rdap::RdapClient;
-use crate::types::{DomainDetails, DomainQuery, DomainResult, DomainStatus, ExportResult};
+use crate::tray;
+use crate::types::{DomainDetails, DomainQuery, DomainResult, DomainStatus, ExportResult, WatchlistAlertEvent};
 
 const OVERALL_CHECK_TIMEOUT_SECS: u64 = 30;
 
@@ -328,6 +329,7 @@ pub async fn check_watchlist_entry_now(
         {
             let msg = format!("{}.{} is now available!", entry.domain, entry.tld);
             let _ = db::watchlist::insert_alert(&conn, id, "available", &msg, &now);
+            emit_alert_created(&app, "available", &entry.domain, &entry.tld);
         }
         if entry.alert_on_change {
             let status_changed = entry.last_status.as_deref().is_some_and(|p| p != new_status);
@@ -336,6 +338,7 @@ pub async fn check_watchlist_entry_now(
             if status_changed || registrar_changed {
                 let msg = format!("{}.{} changed: status={new_status}", entry.domain, entry.tld);
                 let _ = db::watchlist::insert_alert(&conn, id, "status_change", &msg, &now);
+                emit_alert_created(&app, "status_change", &entry.domain, &entry.tld);
             }
         }
         if entry.alert_on_expiry {
@@ -346,8 +349,13 @@ pub async fn check_watchlist_entry_now(
                 {
                     let msg = format!("{}.{} expires in {days_left} day(s)", entry.domain, entry.tld);
                     let _ = db::watchlist::insert_alert(&conn, id, "expiry", &msg, &now);
+                    emit_alert_created(&app, "expiry", &entry.domain, &entry.tld);
                 }
             }
+        }
+
+        if let Ok(stats) = db::watchlist::get_stats(&conn, &now) {
+            tray::set_alert_badge(&app, stats.unread_alerts > 0);
         }
     }
 
@@ -393,15 +401,37 @@ pub fn get_watchlist_alerts(
 }
 
 #[tauri::command]
-pub fn mark_watchlist_alert_read(state: State<'_, Arc<Database>>, alert_id: i64) -> Result<(), String> {
+pub fn mark_watchlist_alert_read(
+    app: AppHandle,
+    state: State<'_, Arc<Database>>,
+    alert_id: i64,
+) -> Result<(), String> {
     let conn = state.conn.lock().unwrap();
-    db::watchlist::mark_alert_read(&conn, alert_id, &chrono_now()).map_err(|e| e.to_string())
+    db::watchlist::mark_alert_read(&conn, alert_id, &chrono_now()).map_err(|e| e.to_string())?;
+    refresh_tray_badge(&app, &conn);
+    Ok(())
 }
 
 #[tauri::command]
-pub fn mark_all_watchlist_alerts_read(state: State<'_, Arc<Database>>) -> Result<(), String> {
+pub fn mark_all_watchlist_alerts_read(app: AppHandle, state: State<'_, Arc<Database>>) -> Result<(), String> {
     let conn = state.conn.lock().unwrap();
-    db::watchlist::mark_all_alerts_read(&conn, &chrono_now()).map_err(|e| e.to_string())
+    db::watchlist::mark_all_alerts_read(&conn, &chrono_now()).map_err(|e| e.to_string())?;
+    refresh_tray_badge(&app, &conn);
+    Ok(())
+}
+
+fn refresh_tray_badge(app: &AppHandle, conn: &rusqlite::Connection) {
+    if let Ok(stats) = db::watchlist::get_stats(conn, &chrono_now()) {
+        tray::set_alert_badge(app, stats.unread_alerts > 0);
+    }
+}
+
+fn emit_alert_created(app: &AppHandle, alert_type: &str, domain: &str, tld: &str) {
+    let _ = app.emit("watchlist-alert-created", WatchlistAlertEvent {
+        alert_type: alert_type.to_string(),
+        domain: domain.to_string(),
+        tld: tld.to_string(),
+    });
 }
 
 fn chrono_now() -> String {

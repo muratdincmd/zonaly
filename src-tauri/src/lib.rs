@@ -1,6 +1,7 @@
 mod commands;
 mod db;
 mod rdap;
+mod tray;
 mod types;
 
 use std::sync::Arc;
@@ -12,6 +13,11 @@ use tauri::Manager;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            None,
+        ))
         .invoke_handler(tauri::generate_handler![
             commands::check_domains,
             commands::open_url,
@@ -61,6 +67,8 @@ pub fn run() {
                     let _ = win.set_decorations(false);
                 }
             }
+
+            tray::setup_tray(app.handle())?;
 
             Ok(())
         })

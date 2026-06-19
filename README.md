@@ -48,6 +48,11 @@ Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Querie
 - **Request deduplication** — duplicate domain+TLD queries within a batch share one network request
 - **30 s batch timeout** — unfinished queries are cancelled and surfaced as errors after 30 seconds
 
+### Background service & notifications
+- **System tray icon** — click or use "Show Zonaly" to restore the window, "Check Watchlist Now" to run a check on demand, "Quit" to exit; available on Windows, macOS, and Linux
+- **Tray alert badge** — the tray icon switches to a red-dot variant whenever there are unread watchlist alerts
+- **Native OS notifications** — a notification fires immediately when a watched domain becomes available, its registrar/status changes, or it's expiring soon — no need to have the Watchlist panel open; routine background polls that find nothing new stay silent
+
 ### Interface & UX
 - **14 languages** — EN, TR, DE, ES, FR, IT, PT, RU, ZH, JA, KO, AR, NL, PL; auto-detected from system locale, persisted across sessions
 - **RTL support** — full right-to-left layout when Arabic is selected
@@ -151,6 +156,9 @@ Panel features (invoke on demand):
   Watchlist panel ─► add_to_watchlist / remove_from_watchlist / get_watchlist / update_watchlist_entry
   Monitoring      ──► update_watchlist_settings / check_watchlist_entry_now / check_due_watchlist /
                       get_watchlist_stats / get_watchlist_alerts / mark_watchlist_alert_read / mark_all_watchlist_alerts_read
+                            └─► on new alert: emit("watchlist-alert-created") + tray badge update
+                                  └─► useWatchlistNotifications listens → sendNotification() (translated)
+  System tray    ──► Show Zonaly / Check Watchlist Now / Quit — built with tauri::tray (no JS round-trip)
   Export toolbar ──► export_results → Blob download (CSV or JSON)
   Details modal  ──► fetch_domain_details → RDAP / WHOIS registrar + dates + nameservers
 ```
@@ -184,7 +192,8 @@ zonaly/
 │   │   ├── useDomainCheck.ts       # invoke + listen wrappers
 │   │   ├── useMonitoring.ts        # background watchlist auto-check (15 min)
 │   │   ├── useScale.ts             # UI zoom persistence
-│   │   └── useToast.ts             # toast state management
+│   │   ├── useToast.ts             # toast state management
+│   │   └── useWatchlistNotifications.ts  # native OS notifications for watchlist alerts
 │   ├── i18n/locales/               # 14 language JSON files
 │   ├── theme/ThemeProvider.tsx     # system detect + manual override
 │   ├── types/
@@ -194,7 +203,8 @@ zonaly/
 └── src-tauri/                      # Rust backend
     └── src/
         ├── commands.rs             # all Tauri commands (check_domains, history, sessions, watchlist, monitoring, export …)
-        ├── types.rs                # DomainQuery / DomainResult / DomainStatus / DomainDetails
+        ├── types.rs                # DomainQuery / DomainResult / DomainStatus / DomainDetails / WatchlistAlertEvent
+        ├── tray.rs                 # system tray icon, menu, alert badge swapping
         ├── db/                     # SQLite persistence (rusqlite bundled)
         │   ├── mod.rs              # Database struct, WAL setup, schema init
         │   ├── history.rs          # history table CRUD
@@ -261,7 +271,7 @@ node scripts/generate-icons.mjs
 | 6 — Caching & Reliability | ✅ Done | Bootstrap disk cache (24h TTL), request dedup, retry/backoff, 30s batch timeout |
 | 7 — Domain Intelligence | ✅ Done | Local query history, saved sessions, export CSV/JSON, domain watchlist, SQLite persistence |
 | 8 — Watchlist Monitoring | ✅ Done | Per-entry scheduling (1h–weekly), alert types (available/change/expiry), alert banner, unread badge, background auto-poll |
-| 9 — Background Service | ⬜ Planned | System tray, background checks, native OS notifications (expiry, availability changes) |
+| 9 — Background Service | ✅ Done | System tray icon (show/check now/quit), tray alert badge, native OS notifications for watchlist alerts, autostart plugin registered (UI toggle deferred to Phase 10) |
 | 10 — Settings Panel | ⬜ Planned | Settings modal: cache management, notification prefs, monitoring intervals, About |
 | 11 — Advanced DNS | ⬜ Planned | DNS record display (NS/MX/SOA/A), DNS health, registrar intelligence, parked domain detection |
 
