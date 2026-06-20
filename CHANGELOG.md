@@ -6,6 +6,37 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.10.0] — 2026-06-20
+
+### Added
+
+- **Settings panel (Phase 10).** A new gear icon in the app footer opens a
+  Settings modal with five tabs:
+  - **General** — theme (light/dark/system, wired to the existing
+    `ThemeProvider`), language (embeds the existing `LanguageSelector`), and an
+    autostart-on-login toggle wired to the previously-registered
+    `tauri-plugin-autostart` (`enable()`/`disable()`/`isEnabled()`).
+  - **Cache** — shows the RDAP bootstrap cache's age and size, with a "Clear
+    Cache" button that clears both the on-disk file and the in-memory cache.
+  - **Notifications** — a global enable/disable toggle for native OS
+    notifications, plus default alert-type settings (available / status
+    change / expiry-within-N-days) applied to newly-created watchlist entries.
+  - **Monitoring** — default check interval for new watchlist entries, and a
+    configurable maximum concurrent request limit (1–30, default 10).
+  - **About** — app version, and links to the changelog, GitHub repo, and
+    releases page (opened via the existing `open_url` command).
+  - All global settings persist in a single `"zonaly.settings"` localStorage
+    blob (`src/hooks/useSettings.ts`); theme, language, and UI scale continue
+    to use their own existing storage keys, unchanged.
+- **Configurable RDAP concurrency.** `RdapClient`'s semaphore is now swappable
+  at runtime (`set_max_concurrency`) instead of being fixed for the process
+  lifetime — changing the setting takes effect for the next check without
+  disrupting any batch already in flight.
+- **New Tauri commands:** `get_cache_info`, `clear_rdap_cache`,
+  `set_max_concurrency`.
+- **i18n:** new `settings.*` namespace and `footer.settings` key added to all
+  14 supported languages.
+
 ## [0.9.0] — 2026-06-20
 
 ### Added

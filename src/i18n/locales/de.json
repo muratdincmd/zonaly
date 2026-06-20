@@ -51,7 +51,8 @@
   "footer": {
     "scaleLabel": "UI-Skalierung",
     "decrease": "Verkleinern",
-    "increase": "Vergrößern"
+    "increase": "Vergrößern",
+    "settings": "Einstellungen"
   },
   "tabs": {
     "newSearch": "Neue Suche",
@@ -191,5 +192,46 @@
     "icann_lookup": "ICANN-Suche",
     "select_language": "Sprache wählen",
     "visit_domain": "{{domain}} besuchen"
+  },
+  "settings": {
+    "panelTitle": "Einstellungen",
+    "tabs": {
+      "general": "Allgemein",
+      "cache": "Cache",
+      "notifications": "Benachrichtigungen",
+      "monitoring": "Überwachung",
+      "about": "Über"
+    },
+    "general": {
+      "language": "Sprache",
+      "theme": "Design",
+      "themeLight": "Hell",
+      "themeDark": "Dunkel",
+      "themeSystem": "System",
+      "autoStart": "Beim Anmelden automatisch starten"
+    },
+    "cache": {
+      "age": "Cache-Alter",
+      "size": "Cache-Größe",
+      "noCache": "Noch kein Cache vorhanden",
+      "clear": "Cache löschen",
+      "cleared": "Cache gelöscht"
+    },
+    "notifications": {
+      "enabled": "Benachrichtigungen aktivieren",
+      "defaultsLabel": "Standardbenachrichtigungen für neue Beobachtungslisten-Einträge",
+      "defaultExpiryDays": "Standard-Ablauffrist für Benachrichtigungen"
+    },
+    "monitoring": {
+      "defaultInterval": "Standard-Prüfintervall für neue Einträge",
+      "maxConcurrency": "Maximale gleichzeitige Anfragen",
+      "maxConcurrencyHint": "Höhere Werte prüfen schneller, können aber Ratenbegrenzungen auslösen"
+    },
+    "about": {
+      "version": "Version",
+      "changelog": "Änderungsprotokoll",
+      "github": "GitHub",
+      "checkUpdates": "Nach Updates suchen"
+    }
   }
 }

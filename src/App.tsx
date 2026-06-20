@@ -15,6 +15,7 @@ import {
   TLDS_NO_RDAP,
 } from "./components/ExtensionPicker";
 import { ResultsList } from "./components/ResultsList";
+import { SettingsModal } from "./components/SettingsModal";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { TitleBar } from "./components/TitleBar";
 import { Toast } from "./components/Toast";
@@ -22,6 +23,7 @@ import { WatchlistPanel } from "./components/WatchlistPanel";
 import { TabsProvider, useTabs } from "./context/TabsContext";
 import { useMonitoring } from "./hooks/useMonitoring";
 import { useScale } from "./hooks/useScale";
+import { readSettings } from "./hooks/useSettings";
 import { useToast } from "./hooks/useToast";
 import { useWatchlistNotifications } from "./hooks/useWatchlistNotifications";
 import type { DomainQuery, DomainResult } from "./types/domain";
@@ -329,7 +331,12 @@ function AppShell() {
 
   const [historyOpen, setHistoryOpen] = useState(false);
   const [watchlistOpen, setWatchlistOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [watchlistUnread, setWatchlistUnread] = useState(0);
+
+  useEffect(() => {
+    void invoke("set_max_concurrency", { value: readSettings().maxConcurrency });
+  }, []);
 
   useMonitoring(() => {
     // Re-fetch unread count without opening the panel
@@ -419,8 +426,9 @@ function AppShell() {
         onOpenDetails={(result) => openDetailsRef.current?.(result)}
         onUnreadChange={setWatchlistUnread}
       />
+      <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
-      <AppFooter />
+      <AppFooter onOpenSettings={() => setSettingsOpen(true)} />
     </div>
   );
 }

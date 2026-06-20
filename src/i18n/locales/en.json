@@ -51,7 +51,8 @@
   "footer": {
     "scaleLabel": "UI scale",
     "decrease": "Decrease scale",
-    "increase": "Increase scale"
+    "increase": "Increase scale",
+    "settings": "Settings"
   },
   "tabs": {
     "newSearch": "New Search",
@@ -190,6 +191,47 @@
       "addperiod": "Add period",
       "transferperiod": "Transfer period",
       "renewperiod": "Renew period"
+    }
+  },
+  "settings": {
+    "panelTitle": "Settings",
+    "tabs": {
+      "general": "General",
+      "cache": "Cache",
+      "notifications": "Notifications",
+      "monitoring": "Monitoring",
+      "about": "About"
+    },
+    "general": {
+      "language": "Language",
+      "theme": "Theme",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "themeSystem": "System",
+      "autoStart": "Start automatically on login"
+    },
+    "cache": {
+      "age": "Cache age",
+      "size": "Cache size",
+      "noCache": "No cache yet",
+      "clear": "Clear cache",
+      "cleared": "Cache cleared"
+    },
+    "notifications": {
+      "enabled": "Enable notifications",
+      "defaultsLabel": "Default alerts for new watchlist entries",
+      "defaultExpiryDays": "Default expiry alert window"
+    },
+    "monitoring": {
+      "defaultInterval": "Default check interval for new entries",
+      "maxConcurrency": "Maximum concurrent requests",
+      "maxConcurrencyHint": "Higher values check faster but may trigger rate limiting"
+    },
+    "about": {
+      "version": "Version",
+      "changelog": "Changelog",
+      "github": "GitHub",
+      "checkUpdates": "Check for updates"
     }
   }
 }

@@ -51,7 +51,8 @@
   "footer": {
     "scaleLabel": "مقياس الواجهة",
     "decrease": "تصغير",
-    "increase": "تكبير"
+    "increase": "تكبير",
+    "settings": "الإعدادات"
   },
   "tabs": {
     "newSearch": "بحث جديد",
@@ -190,5 +191,46 @@
     "icann_lookup": "بحث ICANN",
     "select_language": "اختر اللغة",
     "visit_domain": "زيارة {{domain}}"
+  },
+  "settings": {
+    "panelTitle": "الإعدادات",
+    "tabs": {
+      "general": "عام",
+      "cache": "ذاكرة التخزين المؤقت",
+      "notifications": "الإشعارات",
+      "monitoring": "المراقبة",
+      "about": "حول"
+    },
+    "general": {
+      "language": "اللغة",
+      "theme": "المظهر",
+      "themeLight": "فاتح",
+      "themeDark": "داكن",
+      "themeSystem": "النظام",
+      "autoStart": "البدء تلقائياً عند تسجيل الدخول"
+    },
+    "cache": {
+      "age": "عمر ذاكرة التخزين المؤقت",
+      "size": "حجم ذاكرة التخزين المؤقت",
+      "noCache": "لا توجد ذاكرة تخزين مؤقت حتى الآن",
+      "clear": "مسح ذاكرة التخزين المؤقت",
+      "cleared": "تم مسح ذاكرة التخزين المؤقت"
+    },
+    "notifications": {
+      "enabled": "تفعيل الإشعارات",
+      "defaultsLabel": "التنبيهات الافتراضية للإدخالات الجديدة في قائمة المراقبة",
+      "defaultExpiryDays": "نافذة التنبيه الافتراضية لانتهاء الصلاحية"
+    },
+    "monitoring": {
+      "defaultInterval": "فترة الفحص الافتراضية للإدخالات الجديدة",
+      "maxConcurrency": "الحد الأقصى للطلبات المتزامنة",
+      "maxConcurrencyHint": "القيم الأعلى تفحص بشكل أسرع لكنها قد تؤدي إلى تقييد المعدل"
+    },
+    "about": {
+      "version": "الإصدار",
+      "changelog": "سجل التغييرات",
+      "github": "GitHub",
+      "checkUpdates": "التحقق من التحديثات"
+    }
   }
 }

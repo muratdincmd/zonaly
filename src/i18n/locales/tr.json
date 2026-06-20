@@ -51,7 +51,8 @@
   "footer": {
     "scaleLabel": "Arayüz ölçeği",
     "decrease": "Küçült",
-    "increase": "Büyüt"
+    "increase": "Büyüt",
+    "settings": "Ayarlar"
   },
   "tabs": {
     "newSearch": "Yeni Arama",
@@ -191,5 +192,46 @@
     "icann_lookup": "ICANN Sorgusu",
     "select_language": "Dil seçin",
     "visit_domain": "{{domain}} adresini ziyaret et"
+  },
+  "settings": {
+    "panelTitle": "Ayarlar",
+    "tabs": {
+      "general": "Genel",
+      "cache": "Önbellek",
+      "notifications": "Bildirimler",
+      "monitoring": "İzleme",
+      "about": "Hakkında"
+    },
+    "general": {
+      "language": "Dil",
+      "theme": "Tema",
+      "themeLight": "Açık",
+      "themeDark": "Koyu",
+      "themeSystem": "Sistem",
+      "autoStart": "Girişte otomatik başlat"
+    },
+    "cache": {
+      "age": "Önbellek yaşı",
+      "size": "Önbellek boyutu",
+      "noCache": "Henüz önbellek yok",
+      "clear": "Önbelleği temizle",
+      "cleared": "Önbellek temizlendi"
+    },
+    "notifications": {
+      "enabled": "Bildirimleri etkinleştir",
+      "defaultsLabel": "Yeni izleme listesi girdileri için varsayılan uyarılar",
+      "defaultExpiryDays": "Varsayılan son kullanma uyarı süresi"
+    },
+    "monitoring": {
+      "defaultInterval": "Yeni girdiler için varsayılan kontrol aralığı",
+      "maxConcurrency": "Maksimum eşzamanlı istek",
+      "maxConcurrencyHint": "Daha yüksek değerler daha hızlı kontrol eder ancak hız sınırlamasına yol açabilir"
+    },
+    "about": {
+      "version": "Sürüm",
+      "changelog": "Değişiklik günlüğü",
+      "github": "GitHub",
+      "checkUpdates": "Güncellemeleri kontrol et"
+    }
   }
 }

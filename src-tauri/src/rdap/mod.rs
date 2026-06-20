@@ -10,7 +10,7 @@ use std::time::Duration;
 
 use tokio::sync::{watch, Mutex, Semaphore};
 
-use crate::types::{DomainDetails, DomainQuery, DomainResult, DomainStatus, Source};
+use crate::types::{CacheInfo, DomainDetails, DomainQuery, DomainResult, DomainStatus, Source};
 
 const MAX_CONCURRENCY: usize = 10;
 const REQUEST_TIMEOUT_SECS: u64 = 8;
@@ -24,8 +24,10 @@ pub struct RdapClient {
     http: reqwest::Client,
     /// In-memory bootstrap cache (populated on first use).
     bootstrap: Mutex<Option<HashMap<String, String>>>,
-    /// Semaphore bounding concurrent outbound requests.
-    pub semaphore: Arc<Semaphore>,
+    /// Semaphore bounding concurrent outbound requests. Held behind a
+    /// std Mutex so it can be swapped wholesale when the user changes the
+    /// max-concurrency setting; Tokio's Semaphore has no atomic resize API.
+    semaphore: std::sync::Mutex<Arc<Semaphore>>,
     /// On-disk cache directory for RDAP bootstrap JSON.
     cache_dir: Option<PathBuf>,
     /// In-flight deduplication: FQDN → watch sender.
@@ -42,9 +44,58 @@ impl RdapClient {
         Self {
             http,
             bootstrap: Mutex::new(None),
-            semaphore: Arc::new(Semaphore::new(MAX_CONCURRENCY)),
+            semaphore: std::sync::Mutex::new(Arc::new(Semaphore::new(MAX_CONCURRENCY))),
             cache_dir,
             inflight: Mutex::new(HashMap::new()),
+        }
+    }
+
+    /// Current semaphore handle. Callers should clone this once per batch/
+    /// request at spawn time; a later `set_max_concurrency` call swaps in a
+    /// fresh semaphore without affecting handles already cloned out.
+    pub fn current_semaphore(&self) -> Arc<Semaphore> {
+        self.semaphore.lock().expect("semaphore mutex poisoned").clone()
+    }
+
+    /// Replace the semaphore with a new one bounding `n` concurrent requests
+    /// (clamped to 1..=30). Already-running batches keep using the semaphore
+    /// they cloned at spawn time, so this never disrupts in-flight work.
+    pub fn set_max_concurrency(&self, n: usize) {
+        let n = n.clamp(1, 30);
+        let mut guard = self.semaphore.lock().expect("semaphore mutex poisoned");
+        *guard = Arc::new(Semaphore::new(n));
+    }
+
+    fn cache_file_path(&self) -> Option<PathBuf> {
+        self.cache_dir.as_ref().map(|d| d.join("rdap_bootstrap_cache.json"))
+    }
+
+    /// Clear both the in-memory bootstrap cache and the on-disk cache file.
+    /// Clearing only the disk file would leave the in-memory map serving
+    /// stale data until the app restarts.
+    pub async fn clear_bootstrap_cache(&self) -> Result<(), String> {
+        *self.bootstrap.lock().await = None;
+        if let Some(path) = self.cache_file_path() {
+            if path.exists() {
+                std::fs::remove_file(&path).map_err(|e| e.to_string())?;
+            }
+        }
+        Ok(())
+    }
+
+    /// Report the on-disk bootstrap cache's size and age, for the Settings UI.
+    pub fn cache_info(&self) -> CacheInfo {
+        let Some(path) = self.cache_file_path() else {
+            return CacheInfo { exists: false, size_bytes: 0, age_secs: 0 };
+        };
+        match std::fs::metadata(&path) {
+            Ok(meta) => {
+                let age_secs = bootstrap::cached_timestamp(&path)
+                    .map(|ts| bootstrap::now_secs().saturating_sub(ts))
+                    .unwrap_or(0);
+                CacheInfo { exists: true, size_bytes: meta.len(), age_secs }
+            }
+            Err(_) => CacheInfo { exists: false, size_bytes: 0, age_secs: 0 },
         }
     }
 
@@ -167,5 +218,88 @@ impl RdapClient {
             });
         }
         Err(format!("No RDAP or WHOIS server known for .{tld}"))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn set_max_concurrency_swaps_without_mutating_old_handle() {
+        let client = RdapClient::new(None);
+        let old = client.current_semaphore();
+        assert_eq!(old.available_permits(), MAX_CONCURRENCY);
+
+        client.set_max_concurrency(3);
+        let new = client.current_semaphore();
+        assert_eq!(new.available_permits(), 3);
+
+        // The handle captured before the resize is untouched — proves the
+        // swap-not-mutate guarantee that keeps in-flight batches unaffected.
+        assert_eq!(old.available_permits(), MAX_CONCURRENCY);
+        assert!(!Arc::ptr_eq(&old, &new));
+    }
+
+    #[test]
+    fn set_max_concurrency_clamps_to_valid_range() {
+        let client = RdapClient::new(None);
+
+        client.set_max_concurrency(0);
+        assert_eq!(client.current_semaphore().available_permits(), 1);
+
+        client.set_max_concurrency(999);
+        assert_eq!(client.current_semaphore().available_permits(), 30);
+    }
+
+    #[tokio::test]
+    async fn clear_bootstrap_cache_clears_memory_and_disk() {
+        let dir = std::env::temp_dir().join("zonaly_test_clear_cache");
+        std::fs::create_dir_all(&dir).unwrap();
+        let client = RdapClient::new(Some(dir.clone()));
+
+        // Seed both the in-memory and on-disk cache.
+        *client.bootstrap.lock().await = Some(HashMap::from([
+            ("com".to_string(), "https://rdap.example/".to_string()),
+        ]));
+        let cache_path = client.cache_file_path().unwrap();
+        std::fs::write(&cache_path, r#"{"timestamp_secs":1,"map":{}}"#).unwrap();
+        assert!(cache_path.exists());
+
+        client.clear_bootstrap_cache().await.unwrap();
+
+        assert!(client.bootstrap.lock().await.is_none());
+        assert!(!cache_path.exists());
+
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn cache_info_reports_missing_cache() {
+        let dir = std::env::temp_dir().join("zonaly_test_cache_info_missing");
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let client = RdapClient::new(Some(dir.clone()));
+
+        let info = client.cache_info();
+        assert!(!info.exists);
+        assert_eq!(info.size_bytes, 0);
+
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn cache_info_reports_existing_cache() {
+        let dir = std::env::temp_dir().join("zonaly_test_cache_info_existing");
+        std::fs::create_dir_all(&dir).unwrap();
+        let client = RdapClient::new(Some(dir.clone()));
+        let cache_path = client.cache_file_path().unwrap();
+        std::fs::write(&cache_path, r#"{"timestamp_secs":1,"map":{}}"#).unwrap();
+
+        let info = client.cache_info();
+        assert!(info.exists);
+        assert!(info.size_bytes > 0);
+
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }

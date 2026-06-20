@@ -43,6 +43,9 @@ pub fn run() {
             commands::mark_watchlist_alert_read,
             commands::mark_all_watchlist_alerts_read,
             commands::export_results,
+            commands::get_cache_info,
+            commands::clear_rdap_cache,
+            commands::set_max_concurrency,
         ])
         .setup(|app| {
             let data_dir = app.path().app_data_dir().ok();

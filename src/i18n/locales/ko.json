@@ -51,7 +51,8 @@
   "footer": {
     "scaleLabel": "UI 크기",
     "decrease": "축소",
-    "increase": "확대"
+    "increase": "확대",
+    "settings": "설정"
   },
   "tabs": {
     "newSearch": "새 검색",
@@ -190,5 +191,46 @@
     "icann_lookup": "ICANN 조회",
     "select_language": "언語 선택",
     "visit_domain": "{{domain}} 방문"
+  },
+  "settings": {
+    "panelTitle": "설정",
+    "tabs": {
+      "general": "일반",
+      "cache": "캐시",
+      "notifications": "알림",
+      "monitoring": "모니터링",
+      "about": "정보"
+    },
+    "general": {
+      "language": "언어",
+      "theme": "테마",
+      "themeLight": "라이트",
+      "themeDark": "다크",
+      "themeSystem": "시스템",
+      "autoStart": "로그인 시 자동 시작"
+    },
+    "cache": {
+      "age": "캐시 경과 시간",
+      "size": "캐시 크기",
+      "noCache": "아직 캐시가 없습니다",
+      "clear": "캐시 지우기",
+      "cleared": "캐시가 지워졌습니다"
+    },
+    "notifications": {
+      "enabled": "알림 활성화",
+      "defaultsLabel": "새 관심 목록 항목의 기본 알림",
+      "defaultExpiryDays": "기본 만료 알림 기간"
+    },
+    "monitoring": {
+      "defaultInterval": "새 항목의 기본 확인 간격",
+      "maxConcurrency": "최대 동시 요청 수",
+      "maxConcurrencyHint": "값이 높을수록 더 빠르게 확인하지만 속도 제한이 발생할 수 있습니다"
+    },
+    "about": {
+      "version": "버전",
+      "changelog": "변경 로그",
+      "github": "GitHub",
+      "checkUpdates": "업데이트 확인"
+    }
   }
 }

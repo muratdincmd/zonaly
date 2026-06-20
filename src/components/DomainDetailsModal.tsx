@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
+import { readSettings } from "../hooks/useSettings";
 import { WatchlistSettingsModal } from "./WatchlistSettingsModal";
 
 import type { DomainDetails, DomainResult } from "../types/domain";
@@ -71,10 +72,30 @@ export function DomainDetailsModal({ domain, onClose, exportCallbacks, onWatchli
         await invoke("remove_from_watchlist", { id: watchlistId });
         setWatchlistId(null);
       } else {
-        const entry = await invoke<WatchlistEntry>("add_to_watchlist", {
+        let entry = await invoke<WatchlistEntry>("add_to_watchlist", {
           domain: domain.name,
           tld: domain.tld,
         });
+        const defaults = readSettings();
+        const defaultsDiffer =
+          entry.checkIntervalHours !== defaults.defaultCheckIntervalHours ||
+          entry.alertOnAvailable !== defaults.defaultAlertOnAvailable ||
+          entry.alertOnChange !== defaults.defaultAlertOnChange ||
+          entry.alertOnExpiry !== defaults.defaultAlertOnExpiry ||
+          entry.expiryAlertDays !== defaults.defaultExpiryAlertDays;
+        if (defaultsDiffer) {
+          entry = await invoke<WatchlistEntry>("update_watchlist_settings", {
+            id: entry.id,
+            settings: {
+              checkIntervalHours: defaults.defaultCheckIntervalHours,
+              alertOnAvailable: defaults.defaultAlertOnAvailable,
+              alertOnExpiry: defaults.defaultAlertOnExpiry,
+              alertOnChange: defaults.defaultAlertOnChange,
+              expiryAlertDays: defaults.defaultExpiryAlertDays,
+              notes: entry.notes,
+            },
+          });
+        }
         setWatchlistId(entry.id);
         setWatchlistEntry(entry);
       }

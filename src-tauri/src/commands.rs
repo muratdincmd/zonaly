@@ -9,7 +9,7 @@ use tokio::task::JoinSet;
 use crate::db::{self, Database, HistoryEntry, SavedSession, WatchlistAlert, WatchlistEntry, WatchlistSettings, WatchlistStats};
 use crate::rdap::RdapClient;
 use crate::tray;
-use crate::types::{DomainDetails, DomainQuery, DomainResult, DomainStatus, ExportResult, WatchlistAlertEvent};
+use crate::types::{CacheInfo, DomainDetails, DomainQuery, DomainResult, DomainStatus, ExportResult, WatchlistAlertEvent};
 
 const OVERALL_CHECK_TIMEOUT_SECS: u64 = 30;
 
@@ -86,7 +86,7 @@ pub async fn fetch_domain_details(
     tld: String,
 ) -> Result<DomainDetails, String> {
     let client = state.inner().clone();
-    let _permit = client.semaphore.clone().acquire_owned().await.ok();
+    let _permit = client.current_semaphore().acquire_owned().await.ok();
     client.fetch_details(&name, &tld).await
 }
 
@@ -123,7 +123,7 @@ pub async fn check_domains(
         let collected = collected_results.clone();
 
         set.spawn(async move {
-            let _permit = client.semaphore.clone().acquire_owned().await.ok();
+            let _permit = client.current_semaphore().acquire_owned().await.ok();
             let result = client.check(&query).await;
             pending.lock().await.remove(&format!("{}.{}", result.name, result.tld));
             collected.lock().await.push(result.clone());
@@ -295,7 +295,7 @@ pub async fn check_watchlist_entry_now(
 
     let client = rdap_state.inner().clone();
     let query = DomainQuery { name: entry.domain.clone(), tld: entry.tld.clone() };
-    let _permit = client.semaphore.clone().acquire_owned().await.ok();
+    let _permit = client.current_semaphore().acquire_owned().await.ok();
     let result = client.check(&query).await;
 
     let new_status = match &result.status {
@@ -507,6 +507,24 @@ fn days_until_iso(iso: &str) -> i64 {
         Some(target) => (target as i64 - now as i64) / 86400,
         None => i64::MIN,
     }
+}
+
+// ── Settings: cache + concurrency ─────────────────────────────────────────────
+
+#[tauri::command]
+pub fn get_cache_info(state: State<'_, Arc<RdapClient>>) -> CacheInfo {
+    state.inner().cache_info()
+}
+
+#[tauri::command]
+pub async fn clear_rdap_cache(state: State<'_, Arc<RdapClient>>) -> Result<(), String> {
+    state.inner().clear_bootstrap_cache().await
+}
+
+#[tauri::command]
+pub fn set_max_concurrency(state: State<'_, Arc<RdapClient>>, value: usize) -> Result<(), String> {
+    state.inner().set_max_concurrency(value);
+    Ok(())
 }
 
 // ── Export ────────────────────────────────────────────────────────────────────
