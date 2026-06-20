@@ -52,7 +52,8 @@
     "scaleLabel": "UI scale",
     "decrease": "Decrease scale",
     "increase": "Increase scale",
-    "settings": "Settings"
+    "settings": "Settings",
+    "donate": "Donate"
   },
   "tabs": {
     "newSearch": "New Search",

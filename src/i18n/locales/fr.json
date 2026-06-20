@@ -52,7 +52,8 @@
     "scaleLabel": "Échelle de l'interface",
     "decrease": "Réduire l'échelle",
     "increase": "Augmenter l'échelle",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "donate": "Faire un don"
   },
   "tabs": {
     "newSearch": "Nouvelle recherche",

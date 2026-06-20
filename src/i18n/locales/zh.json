@@ -52,7 +52,8 @@
     "scaleLabel": "界面缩放",
     "decrease": "缩小",
     "increase": "放大",
-    "settings": "设置"
+    "settings": "设置",
+    "donate": "捐赠"
   },
   "tabs": {
     "newSearch": "新搜索",

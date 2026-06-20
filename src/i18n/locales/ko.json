@@ -52,7 +52,8 @@
     "scaleLabel": "UI 크기",
     "decrease": "축소",
     "increase": "확대",
-    "settings": "설정"
+    "settings": "설정",
+    "donate": "기부하기"
   },
   "tabs": {
     "newSearch": "새 검색",

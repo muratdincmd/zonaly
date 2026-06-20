@@ -52,7 +52,8 @@
     "scaleLabel": "UI-schaal",
     "decrease": "Verkleinen",
     "increase": "Vergroten",
-    "settings": "Instellingen"
+    "settings": "Instellingen",
+    "donate": "Doneren"
   },
   "tabs": {
     "newSearch": "Nieuw zoeken",

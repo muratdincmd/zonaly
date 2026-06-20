@@ -5,6 +5,7 @@ import { enable as enableAutostart, disable as disableAutostart, isEnabled as is
 import pkg from "../../package.json";
 import { useSettings } from "../hooks/useSettings";
 import { useTheme } from "../theme/ThemeProvider";
+import { DONATE_URL, GitHubIcon, HeartIcon } from "./AppFooter";
 import { changeLanguage, LANGUAGES } from "./LanguageSelector";
 
 interface CacheInfo {
@@ -357,6 +358,18 @@ function AboutTab() {
         <span>{t("settings.about.version")}:</span>
         <strong>v{pkg.version}</strong>
       </div>
+      <button
+        type="button"
+        className="footer-link footer-author settings-about-author"
+        onClick={() => openUrl("https://github.com/muratdincmd")}
+      >
+        <GitHubIcon />
+        muratdincmd
+      </button>
+      <button type="button" className="donate-btn" onClick={() => openUrl(DONATE_URL)}>
+        <HeartIcon className="footer-heart-icon" />
+        {t("footer.donate")}
+      </button>
       <button type="button" className="btn-secondary" onClick={() => openUrl("https://github.com/muratdincmd/zonaly/blob/main/CHANGELOG.md")}>
         {t("settings.about.changelog")}
       </button>

@@ -52,7 +52,8 @@
     "scaleLabel": "UI-Skalierung",
     "decrease": "Verkleinern",
     "increase": "Vergrößern",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "donate": "Spenden"
   },
   "tabs": {
     "newSearch": "Neue Suche",
