@@ -2649,3 +2649,36 @@ button {
 }
 
 .btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* == Settings: inline language grid (no popup — Settings has room to spare) ===*/
+
+.settings-lang-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.settings-lang-tile {
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.settings-lang-tile:hover {
+  border-color: var(--border-focus);
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg));
+}
+
+.settings-lang-tile--active {
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  color: var(--accent);
+}

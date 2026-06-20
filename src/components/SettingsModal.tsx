@@ -5,7 +5,7 @@ import { enable as enableAutostart, disable as disableAutostart, isEnabled as is
 import pkg from "../../package.json";
 import { useSettings } from "../hooks/useSettings";
 import { useTheme } from "../theme/ThemeProvider";
-import { LanguageSelector } from "./LanguageSelector";
+import { changeLanguage, LANGUAGES } from "./LanguageSelector";
 
 interface CacheInfo {
   exists: boolean;
@@ -81,10 +81,13 @@ export function SettingsModal({ open, onClose }: Props) {
 // ── General ────────────────────────────────────────────────────────────────────
 
 function GeneralTab() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { mode, setMode } = useTheme();
   const { settings, update } = useSettings();
   const [autoStart, setAutoStart] = useState(settings.autoStartEnabled);
+
+  const currentLang =
+    LANGUAGES.find((l) => i18n.language.startsWith(l.code)) ?? LANGUAGES[0];
 
   useEffect(() => {
     isAutostartEnabled()
@@ -124,7 +127,23 @@ function GeneralTab() {
 
       <div className="wl-settings-section">
         <span className="wl-settings-label">{t("settings.general.language")}</span>
-        <LanguageSelector />
+        <div className="settings-lang-grid" role="listbox" aria-label={t("aria.select_language")}>
+          {LANGUAGES.map((lang) => {
+            const active = lang.code === currentLang.code;
+            return (
+              <button
+                key={lang.code}
+                type="button"
+                role="option"
+                aria-selected={active}
+                className={`settings-lang-tile${active ? " settings-lang-tile--active" : ""}`}
+                onClick={() => changeLanguage(i18n, lang.code)}
+              >
+                {lang.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <div className="wl-settings-section">
