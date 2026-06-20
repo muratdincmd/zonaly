@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const LANGUAGES = [
+export const LANGUAGES = [
   { code: "en", label: "EN" },
   { code: "tr", label: "TR" },
   { code: "de", label: "DE" },
@@ -18,7 +18,12 @@ const LANGUAGES = [
   { code: "pl", label: "PL" },
 ] as const;
 
-type LangCode = (typeof LANGUAGES)[number]["code"];
+export type LangCode = (typeof LANGUAGES)[number]["code"];
+
+export function changeLanguage(i18n: { changeLanguage: (code: string) => void }, code: LangCode) {
+  void i18n.changeLanguage(code);
+  document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
+}
 
 export function LanguageSelector() {
   const { t, i18n } = useTranslation();
@@ -29,8 +34,7 @@ export function LanguageSelector() {
     LANGUAGES.find((l) => i18n.language.startsWith(l.code)) ?? LANGUAGES[0];
 
   const select = (code: LangCode) => {
-    void i18n.changeLanguage(code);
-    document.documentElement.dir = code === "ar" ? "rtl" : "ltr";
+    changeLanguage(i18n, code);
     setOpen(false);
   };
 

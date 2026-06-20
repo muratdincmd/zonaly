@@ -85,4 +85,23 @@ describe("useWatchlistNotifications", () => {
       body: "example.com",
     });
   });
+
+  it("does not send a notification when notificationsEnabled is false in settings", async () => {
+    window.localStorage.setItem("zonaly.settings", JSON.stringify({ notificationsEnabled: false }));
+    mockIsPermissionGranted.mockResolvedValue(true);
+    let capturedHandler: ((event: { payload: unknown }) => void) | undefined;
+    mockListen.mockImplementation((_event: string, handler: (e: { payload: unknown }) => void) => {
+      capturedHandler = handler;
+      return Promise.resolve(() => {});
+    });
+
+    renderHook(() => useWatchlistNotifications());
+
+    await waitFor(() => { expect(capturedHandler).toBeDefined(); });
+
+    capturedHandler!({ payload: { alertType: "available", domain: "example", tld: "com" } });
+
+    expect(mockSendNotification).not.toHaveBeenCalled();
+    window.localStorage.removeItem("zonaly.settings");
+  });
 });

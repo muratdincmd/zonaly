@@ -4,6 +4,9 @@ import { invoke } from "@tauri-apps/api/core";
 
 import pkg from "../../package.json";
 import { useScale } from "../hooks/useScale";
+import { ThemeToggle } from "./ThemeToggle";
+
+export const DONATE_URL = "https://muratdinc.com/donate?utm_source=zonaly";
 
 function ExternalLink({
   href,
@@ -34,7 +37,7 @@ function ExternalLink({
   );
 }
 
-function GitHubIcon() {
+export function GitHubIcon() {
   return (
     <svg
       viewBox="0 0 16 16"
@@ -50,6 +53,21 @@ function GitHubIcon() {
         1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82
         1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01
         1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+    </svg>
+  );
+}
+
+export function HeartIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M8 14.2l-.93-.85C3.9 10.4 1.6 8.32 1.6 5.75 1.6 3.65 3.25 2 5.35 2
+        c1.2 0 2.35.55 3.07 1.42L8 3.85l.58-.43C9.3 2.55 10.45 2 11.65 2
+        c2.1 0 3.75 1.65 3.75 3.75 0 2.57-2.3 4.65-5.47 7.62L8 14.2z" />
     </svg>
   );
 }
@@ -77,29 +95,37 @@ export function AppFooter() {
           <GitHubIcon />
           muratdincmd
         </ExternalLink>
+        <span className="footer-sep">·</span>
+        <ExternalLink href={DONATE_URL} className="donate-btn">
+          <HeartIcon className="footer-heart-icon" />
+          {t("footer.donate")}
+        </ExternalLink>
       </div>
 
-      {/* Right: scale control */}
-      <div className="scale-control" aria-label={t("footer.scaleLabel")}>
-        <button
-          type="button"
-          className="scale-btn"
-          onClick={decrease}
-          disabled={scale <= 70}
-          aria-label={t("footer.decrease")}
-        >
-          −
-        </button>
-        <span className="scale-value">{scale}%</span>
-        <button
-          type="button"
-          className="scale-btn"
-          onClick={increase}
-          disabled={scale >= 150}
-          aria-label={t("footer.increase")}
-        >
-          +
-        </button>
+      {/* Right: theme toggle + scale control */}
+      <div className="footer-right">
+        <ThemeToggle />
+        <div className="scale-control" aria-label={t("footer.scaleLabel")}>
+          <button
+            type="button"
+            className="scale-btn"
+            onClick={decrease}
+            disabled={scale <= 70}
+            aria-label={t("footer.decrease")}
+          >
+            −
+          </button>
+          <span className="scale-value">{scale}%</span>
+          <button
+            type="button"
+            className="scale-btn"
+            onClick={increase}
+            disabled={scale >= 150}
+            aria-label={t("footer.increase")}
+          >
+            +
+          </button>
+        </div>
       </div>
       </div>
     </footer>

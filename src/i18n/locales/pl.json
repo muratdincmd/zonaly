@@ -51,7 +51,9 @@
   "footer": {
     "scaleLabel": "Skala interfejsu",
     "decrease": "Zmniejsz skalę",
-    "increase": "Zwiększ skalę"
+    "increase": "Zwiększ skalę",
+    "settings": "Ustawienia",
+    "donate": "Wsparcie"
   },
   "tabs": {
     "newSearch": "Nowe wyszukiwanie",
@@ -190,5 +192,46 @@
     "icann_lookup": "Wyszukiwanie ICANN",
     "select_language": "Wybierz język",
     "visit_domain": "Odwiedź {{domain}}"
+  },
+  "settings": {
+    "panelTitle": "Ustawienia",
+    "tabs": {
+      "general": "Ogólne",
+      "cache": "Pamięć podręczna",
+      "notifications": "Powiadomienia",
+      "monitoring": "Monitorowanie",
+      "about": "O programie"
+    },
+    "general": {
+      "language": "Język",
+      "theme": "Motyw",
+      "themeLight": "Jasny",
+      "themeDark": "Ciemny",
+      "themeSystem": "Systemowy",
+      "autoStart": "Uruchamiaj automatycznie przy logowaniu"
+    },
+    "cache": {
+      "age": "Wiek pamięci podręcznej",
+      "size": "Rozmiar pamięci podręcznej",
+      "noCache": "Brak pamięci podręcznej",
+      "clear": "Wyczyść pamięć podręczną",
+      "cleared": "Pamięć podręczna wyczyszczona"
+    },
+    "notifications": {
+      "enabled": "Włącz powiadomienia",
+      "defaultsLabel": "Domyślne powiadomienia dla nowych wpisów listy obserwowanych",
+      "defaultExpiryDays": "Domyślny okres powiadomienia o wygaśnięciu"
+    },
+    "monitoring": {
+      "defaultInterval": "Domyślny interwał sprawdzania dla nowych wpisów",
+      "maxConcurrency": "Maksymalna liczba równoczesnych żądań",
+      "maxConcurrencyHint": "Wyższe wartości sprawdzają szybciej, ale mogą wywołać limitowanie szybkości"
+    },
+    "about": {
+      "version": "Wersja",
+      "changelog": "Dziennik zmian",
+      "github": "GitHub",
+      "checkUpdates": "Sprawdź aktualizacje"
+    }
   }
 }

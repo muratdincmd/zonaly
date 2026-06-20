@@ -727,6 +727,71 @@ button {
   flex-shrink: 0;
 }
 
+.footer-heart-icon {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+/* .footer-link is normally an <a>; reset button chrome when reused on a
+   <button> (e.g. inside the Settings modal's About tab). */
+.footer-link.settings-about-author {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+}
+
+/* Donate button — framed pill with a slow, soft glowing border. Text and
+   heart stay the fixed brand color; only the border/glow pulses. */
+.donate-btn {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 0.25rem;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 8px;
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+  line-height: 1.3;
+  animation: donate-glow 2.6s ease-in-out infinite;
+}
+
+.donate-btn:hover {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.donate-btn .footer-heart-icon {
+  width: 9px;
+  height: 9px;
+}
+
+@keyframes donate-glow {
+  0%, 100% {
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+  50% {
+    border-color: color-mix(in srgb, var(--accent) 85%, transparent);
+    box-shadow: 0 0 6px 1px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+}
+
+/* Right cluster: scale control + theme toggle */
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
 /* Scale control */
 .scale-control {
   display: flex;
@@ -2440,6 +2505,43 @@ button {
   overflow-y: auto;
 }
 
+/* == Settings Modal ============================================================*/
+
+.modal--settings {
+  max-width: 32rem;
+}
+
+.settings-tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0 1.25rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.settings-tab-btn {
+  padding: 0.6rem 0.5rem;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.settings-tab-btn:hover {
+  color: var(--text);
+}
+
+.settings-tab-btn--active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
 .wl-settings-section {
   display: flex;
   flex-direction: column;
@@ -2605,3 +2707,36 @@ button {
 }
 
 .btn-secondary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* == Settings: inline language grid (no popup — Settings has room to spare) ===*/
+
+.settings-lang-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.settings-lang-tile {
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.settings-lang-tile:hover {
+  border-color: var(--border-focus);
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg));
+}
+
+.settings-lang-tile--active {
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg));
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+  color: var(--accent);
+}

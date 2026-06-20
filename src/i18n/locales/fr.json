@@ -51,7 +51,9 @@
   "footer": {
     "scaleLabel": "Échelle de l'interface",
     "decrease": "Réduire l'échelle",
-    "increase": "Augmenter l'échelle"
+    "increase": "Augmenter l'échelle",
+    "settings": "Paramètres",
+    "donate": "Faire un don"
   },
   "tabs": {
     "newSearch": "Nouvelle recherche",
@@ -190,5 +192,46 @@
     "json": "JSON",
     "success": "{{label}} exporté",
     "error": "Échec de l'exportation"
+  },
+  "settings": {
+    "panelTitle": "Paramètres",
+    "tabs": {
+      "general": "Général",
+      "cache": "Cache",
+      "notifications": "Notifications",
+      "monitoring": "Surveillance",
+      "about": "À propos"
+    },
+    "general": {
+      "language": "Langue",
+      "theme": "Thème",
+      "themeLight": "Clair",
+      "themeDark": "Sombre",
+      "themeSystem": "Système",
+      "autoStart": "Démarrer automatiquement à l'ouverture de session"
+    },
+    "cache": {
+      "age": "Âge du cache",
+      "size": "Taille du cache",
+      "noCache": "Aucun cache pour le moment",
+      "clear": "Vider le cache",
+      "cleared": "Cache vidé"
+    },
+    "notifications": {
+      "enabled": "Activer les notifications",
+      "defaultsLabel": "Alertes par défaut pour les nouvelles entrées de la liste",
+      "defaultExpiryDays": "Délai d'alerte d'expiration par défaut"
+    },
+    "monitoring": {
+      "defaultInterval": "Intervalle de vérification par défaut pour les nouvelles entrées",
+      "maxConcurrency": "Nombre maximal de requêtes simultanées",
+      "maxConcurrencyHint": "Des valeurs plus élevées vérifient plus vite mais peuvent déclencher une limitation de débit"
+    },
+    "about": {
+      "version": "Version",
+      "changelog": "Journal des modifications",
+      "github": "GitHub",
+      "checkUpdates": "Vérifier les mises à jour"
+    }
   }
 }

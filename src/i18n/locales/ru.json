@@ -51,7 +51,9 @@
   "footer": {
     "scaleLabel": "Масштаб интерфейса",
     "decrease": "Уменьшить масштаб",
-    "increase": "Увеличить масштаб"
+    "increase": "Увеличить масштаб",
+    "settings": "Настройки",
+    "donate": "Поддержать"
   },
   "tabs": {
     "newSearch": "Новый поиск",
@@ -190,5 +192,46 @@
     "icann_lookup": "Поиск ICANN",
     "select_language": "Выбрать язык",
     "visit_domain": "Открыть {{domain}}"
+  },
+  "settings": {
+    "panelTitle": "Настройки",
+    "tabs": {
+      "general": "Общие",
+      "cache": "Кэш",
+      "notifications": "Уведомления",
+      "monitoring": "Мониторинг",
+      "about": "О программе"
+    },
+    "general": {
+      "language": "Язык",
+      "theme": "Тема",
+      "themeLight": "Светлая",
+      "themeDark": "Тёмная",
+      "themeSystem": "Системная",
+      "autoStart": "Запускать автоматически при входе в систему"
+    },
+    "cache": {
+      "age": "Возраст кэша",
+      "size": "Размер кэша",
+      "noCache": "Кэш пока отсутствует",
+      "clear": "Очистить кэш",
+      "cleared": "Кэш очищен"
+    },
+    "notifications": {
+      "enabled": "Включить уведомления",
+      "defaultsLabel": "Уведомления по умолчанию для новых записей списка",
+      "defaultExpiryDays": "Период предупреждения об истечении срока по умолчанию"
+    },
+    "monitoring": {
+      "defaultInterval": "Интервал проверки по умолчанию для новых записей",
+      "maxConcurrency": "Максимум одновременных запросов",
+      "maxConcurrencyHint": "Более высокие значения проверяют быстрее, но могут вызвать ограничение скорости"
+    },
+    "about": {
+      "version": "Версия",
+      "changelog": "Журнал изменений",
+      "github": "GitHub",
+      "checkUpdates": "Проверить обновления"
+    }
   }
 }

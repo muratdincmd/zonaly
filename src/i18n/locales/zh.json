@@ -51,7 +51,9 @@
   "footer": {
     "scaleLabel": "界面缩放",
     "decrease": "缩小",
-    "increase": "放大"
+    "increase": "放大",
+    "settings": "设置",
+    "donate": "捐赠"
   },
   "tabs": {
     "newSearch": "新搜索",
@@ -190,5 +192,46 @@
     "icann_lookup": "ICANN查询",
     "select_language": "选择语言",
     "visit_domain": "访问 {{domain}}"
+  },
+  "settings": {
+    "panelTitle": "设置",
+    "tabs": {
+      "general": "通用",
+      "cache": "缓存",
+      "notifications": "通知",
+      "monitoring": "监控",
+      "about": "关于"
+    },
+    "general": {
+      "language": "语言",
+      "theme": "主题",
+      "themeLight": "浅色",
+      "themeDark": "深色",
+      "themeSystem": "跟随系统",
+      "autoStart": "登录时自动启动"
+    },
+    "cache": {
+      "age": "缓存时长",
+      "size": "缓存大小",
+      "noCache": "暂无缓存",
+      "clear": "清除缓存",
+      "cleared": "缓存已清除"
+    },
+    "notifications": {
+      "enabled": "启用通知",
+      "defaultsLabel": "新监控列表项的默认提醒",
+      "defaultExpiryDays": "默认到期提醒天数"
+    },
+    "monitoring": {
+      "defaultInterval": "新条目的默认检查间隔",
+      "maxConcurrency": "最大并发请求数",
+      "maxConcurrencyHint": "数值越高检查越快，但可能触发限流"
+    },
+    "about": {
+      "version": "版本",
+      "changelog": "更新日志",
+      "github": "GitHub",
+      "checkUpdates": "检查更新"
+    }
   }
 }

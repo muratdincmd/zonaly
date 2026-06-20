@@ -51,7 +51,9 @@
   "footer": {
     "scaleLabel": "Escala da interface",
     "decrease": "Diminuir escala",
-    "increase": "Aumentar escala"
+    "increase": "Aumentar escala",
+    "settings": "Configurações",
+    "donate": "Doar"
   },
   "tabs": {
     "newSearch": "Nova pesquisa",
@@ -190,5 +192,46 @@
     "icann_lookup": "Consulta ICANN",
     "select_language": "Selecionar idioma",
     "visit_domain": "Visitar {{domain}}"
+  },
+  "settings": {
+    "panelTitle": "Configurações",
+    "tabs": {
+      "general": "Geral",
+      "cache": "Cache",
+      "notifications": "Notificações",
+      "monitoring": "Monitoramento",
+      "about": "Sobre"
+    },
+    "general": {
+      "language": "Idioma",
+      "theme": "Tema",
+      "themeLight": "Claro",
+      "themeDark": "Escuro",
+      "themeSystem": "Sistema",
+      "autoStart": "Iniciar automaticamente ao fazer login"
+    },
+    "cache": {
+      "age": "Idade do cache",
+      "size": "Tamanho do cache",
+      "noCache": "Ainda não há cache",
+      "clear": "Limpar cache",
+      "cleared": "Cache limpo"
+    },
+    "notifications": {
+      "enabled": "Ativar notificações",
+      "defaultsLabel": "Alertas padrão para novas entradas da lista",
+      "defaultExpiryDays": "Janela padrão de alerta de expiração"
+    },
+    "monitoring": {
+      "defaultInterval": "Intervalo de verificação padrão para novas entradas",
+      "maxConcurrency": "Máximo de solicitações simultâneas",
+      "maxConcurrencyHint": "Valores mais altos verificam mais rápido, mas podem acionar limitação de taxa"
+    },
+    "about": {
+      "version": "Versão",
+      "changelog": "Registro de alterações",
+      "github": "GitHub",
+      "checkUpdates": "Verificar atualizações"
+    }
   }
 }

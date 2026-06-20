@@ -24,7 +24,6 @@ vi.mock("react-i18next", () => ({
 vi.mock("./AppLogo", () => ({ AppLogo: () => <div data-testid="logo" /> }));
 vi.mock("./TabBar", () => ({ TabBar: () => <div data-testid="tabbar" /> }));
 vi.mock("./LanguageSelector", () => ({ LanguageSelector: () => <div data-testid="lang" /> }));
-vi.mock("./ThemeToggle", () => ({ ThemeToggle: () => <div data-testid="theme" /> }));
 
 // ── Context required by TabBar (even when mocked, the context may still be read)
 vi.mock("../context/TabsContext", () => ({

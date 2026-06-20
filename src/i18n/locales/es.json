@@ -51,7 +51,9 @@
   "footer": {
     "scaleLabel": "Escala de interfaz",
     "decrease": "Reducir escala",
-    "increase": "Aumentar escala"
+    "increase": "Aumentar escala",
+    "settings": "Configuración",
+    "donate": "Donar"
   },
   "tabs": {
     "newSearch": "Nueva búsqueda",
@@ -190,5 +192,46 @@
     "icann_lookup": "Búsqueda ICANN",
     "select_language": "Seleccionar idioma",
     "visit_domain": "Visitar {{domain}}"
+  },
+  "settings": {
+    "panelTitle": "Configuración",
+    "tabs": {
+      "general": "General",
+      "cache": "Caché",
+      "notifications": "Notificaciones",
+      "monitoring": "Supervisión",
+      "about": "Acerca de"
+    },
+    "general": {
+      "language": "Idioma",
+      "theme": "Tema",
+      "themeLight": "Claro",
+      "themeDark": "Oscuro",
+      "themeSystem": "Sistema",
+      "autoStart": "Iniciar automáticamente al iniciar sesión"
+    },
+    "cache": {
+      "age": "Antigüedad de la caché",
+      "size": "Tamaño de la caché",
+      "noCache": "Aún no hay caché",
+      "clear": "Borrar caché",
+      "cleared": "Caché borrada"
+    },
+    "notifications": {
+      "enabled": "Activar notificaciones",
+      "defaultsLabel": "Alertas predeterminadas para nuevas entradas de la lista",
+      "defaultExpiryDays": "Ventana predeterminada de alerta de vencimiento"
+    },
+    "monitoring": {
+      "defaultInterval": "Intervalo de verificación predeterminado para nuevas entradas",
+      "maxConcurrency": "Máximo de solicitudes simultáneas",
+      "maxConcurrencyHint": "Valores más altos verifican más rápido, pero pueden activar límites de velocidad"
+    },
+    "about": {
+      "version": "Versión",
+      "changelog": "Registro de cambios",
+      "github": "GitHub",
+      "checkUpdates": "Buscar actualizaciones"
+    }
   }
 }

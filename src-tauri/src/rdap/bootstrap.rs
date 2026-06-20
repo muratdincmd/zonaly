@@ -35,6 +35,12 @@ fn load_disk_cache(path: &PathBuf) -> Option<DiskCache> {
     serde_json::from_str(&data).ok()
 }
 
+/// Read just the timestamp of the on-disk bootstrap cache, without exposing
+/// the full `DiskCache` structure.
+pub fn cached_timestamp(path: &PathBuf) -> Option<u64> {
+    load_disk_cache(path).map(|c| c.timestamp_secs)
+}
+
 fn save_disk_cache(path: &PathBuf, map: &HashMap<String, String>) {
     let cache = DiskCache { timestamp_secs: now_secs(), map: map.clone() };
     if let Ok(json) = serde_json::to_string(&cache) {
@@ -147,5 +153,21 @@ mod tests {
         let roundtripped: DiskCache = serde_json::from_str(&json).unwrap();
         assert_eq!(roundtripped.timestamp_secs, 1_000_000);
         assert_eq!(roundtripped.map["com"], map["com"]);
+    }
+
+    #[test]
+    fn cached_timestamp_missing_file_is_none() {
+        let path = std::env::temp_dir().join("zonaly_test_missing_cache.json");
+        let _ = std::fs::remove_file(&path);
+        assert_eq!(cached_timestamp(&path), None);
+    }
+
+    #[test]
+    fn cached_timestamp_reads_existing_file() {
+        let path = std::env::temp_dir().join("zonaly_test_cached_timestamp.json");
+        let map = HashMap::new();
+        save_disk_cache(&path, &map);
+        assert!(cached_timestamp(&path).is_some());
+        let _ = std::fs::remove_file(&path);
     }
 }

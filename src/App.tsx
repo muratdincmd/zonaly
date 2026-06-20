@@ -15,13 +15,14 @@ import {
   TLDS_NO_RDAP,
 } from "./components/ExtensionPicker";
 import { ResultsList } from "./components/ResultsList";
-import { ThemeToggle } from "./components/ThemeToggle";
+import { SettingsModal } from "./components/SettingsModal";
 import { TitleBar } from "./components/TitleBar";
 import { Toast } from "./components/Toast";
 import { WatchlistPanel } from "./components/WatchlistPanel";
 import { TabsProvider, useTabs } from "./context/TabsContext";
 import { useMonitoring } from "./hooks/useMonitoring";
 import { useScale } from "./hooks/useScale";
+import { readSettings } from "./hooks/useSettings";
 import { useToast } from "./hooks/useToast";
 import { useWatchlistNotifications } from "./hooks/useWatchlistNotifications";
 import type { DomainQuery, DomainResult } from "./types/domain";
@@ -329,7 +330,12 @@ function AppShell() {
 
   const [historyOpen, setHistoryOpen] = useState(false);
   const [watchlistOpen, setWatchlistOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [watchlistUnread, setWatchlistUnread] = useState(0);
+
+  useEffect(() => {
+    void invoke("set_max_concurrency", { value: readSettings().maxConcurrency });
+  }, []);
 
   useMonitoring(() => {
     // Re-fetch unread count without opening the panel
@@ -355,6 +361,7 @@ function AppShell() {
         <TitleBar
           onOpenHistory={openHistory}
           onOpenWatchlist={openWatchlist}
+          onOpenSettings={() => setSettingsOpen(true)}
           watchlistUnread={watchlistUnread}
         />
       ) : (
@@ -387,8 +394,24 @@ function AppShell() {
                 <span className="titlebar-badge">{watchlistUnread > 9 ? "9+" : watchlistUnread}</span>
               )}
             </button>
+            <button
+              type="button"
+              className="panel-icon-btn"
+              onClick={() => setSettingsOpen(true)}
+              title={t("footer.settings")}
+              aria-label={t("footer.settings")}
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path
+                  d="M8 1.2l.85 1.5c.42-.08.86-.08 1.28 0l.92-1.43 1.66.78-.46 1.64c.32.29.6.62.83.98l1.68-.3.6 1.74-1.4 1.02c.06.43.06.86 0 1.3l1.4 1.02-.6 1.74-1.68-.3a4.9 4.9 0 0 1-.83.98l.46 1.64-1.66.78-.92-1.43c-.42.08-.86.08-1.28 0L8 14.8l-.85-1.5a4.9 4.9 0 0 1-1.28 0l-.92 1.43-1.66-.78.46-1.64a4.9 4.9 0 0 1-.83-.98l-1.68.3-.6-1.74 1.4-1.02a5.1 5.1 0 0 1 0-1.3L.64 6.55l.6-1.74 1.68.3c.23-.36.5-.69.83-.98l-.46-1.64 1.66-.78.92 1.43c.42-.08.86-.08 1.28 0L8 1.2z"
+                  stroke="currentColor"
+                  strokeWidth="1.1"
+                  strokeLinejoin="round"
+                />
+                <circle cx="8" cy="8" r="2.3" stroke="currentColor" strokeWidth="1.1"/>
+              </svg>
+            </button>
             <LanguageSelector />
-            <ThemeToggle />
           </div>
         </header>
       )}
@@ -419,6 +442,7 @@ function AppShell() {
         onOpenDetails={(result) => openDetailsRef.current?.(result)}
         onUnreadChange={setWatchlistUnread}
       />
+      <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
 
       <AppFooter />
     </div>

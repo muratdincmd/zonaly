@@ -51,7 +51,9 @@
   "footer": {
     "scaleLabel": "UI-schaal",
     "decrease": "Verkleinen",
-    "increase": "Vergroten"
+    "increase": "Vergroten",
+    "settings": "Instellingen",
+    "donate": "Doneren"
   },
   "tabs": {
     "newSearch": "Nieuw zoeken",
@@ -190,5 +192,46 @@
     "icann_lookup": "ICANN opzoeken",
     "select_language": "Taal selecteren",
     "visit_domain": "{{domain}} bezoeken"
+  },
+  "settings": {
+    "panelTitle": "Instellingen",
+    "tabs": {
+      "general": "Algemeen",
+      "cache": "Cache",
+      "notifications": "Meldingen",
+      "monitoring": "Monitoring",
+      "about": "Over"
+    },
+    "general": {
+      "language": "Taal",
+      "theme": "Thema",
+      "themeLight": "Licht",
+      "themeDark": "Donker",
+      "themeSystem": "Systeem",
+      "autoStart": "Automatisch starten bij inloggen"
+    },
+    "cache": {
+      "age": "Cache-leeftijd",
+      "size": "Cache-grootte",
+      "noCache": "Nog geen cache",
+      "clear": "Cache wissen",
+      "cleared": "Cache gewist"
+    },
+    "notifications": {
+      "enabled": "Meldingen inschakelen",
+      "defaultsLabel": "Standaardmeldingen voor nieuwe volglijstitems",
+      "defaultExpiryDays": "Standaard waarschuwingsperiode voor verlopen"
+    },
+    "monitoring": {
+      "defaultInterval": "Standaard controle-interval voor nieuwe items",
+      "maxConcurrency": "Maximaal aantal gelijktijdige verzoeken",
+      "maxConcurrencyHint": "Hogere waarden controleren sneller, maar kunnen ratelimiting veroorzaken"
+    },
+    "about": {
+      "version": "Versie",
+      "changelog": "Wijzigingslogboek",
+      "github": "GitHub",
+      "checkUpdates": "Controleren op updates"
+    }
   }
 }

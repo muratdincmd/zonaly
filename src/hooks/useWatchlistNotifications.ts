@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { isPermissionGranted, requestPermission, sendNotification } from "@tauri-apps/plugin-notification";
 import { useTranslation } from "react-i18next";
+import { readSettings } from "./useSettings";
 
 interface WatchlistAlertEvent {
   alertType: "available" | "status_change" | "expiry";
@@ -35,6 +36,7 @@ export function useWatchlistNotifications() {
       if (!granted) return;
 
       unlisten = await listen<WatchlistAlertEvent>("watchlist-alert-created", (event) => {
+        if (!readSettings().notificationsEnabled) return;
         const { alertType, domain, tld } = event.payload;
         sendNotification({
           title: t(TITLE_KEY[alertType]),

@@ -70,6 +70,15 @@ pub struct WatchlistAlertEvent {
     pub tld: String,
 }
 
+/// Snapshot of the on-disk RDAP bootstrap cache's state, for the Settings UI.
+#[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CacheInfo {
+    pub exists: bool,
+    pub size_bytes: u64,
+    pub age_secs: u64,
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
