@@ -55,27 +55,14 @@ function GitHubIcon() {
   );
 }
 
-function SettingsIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-      <circle cx="6.5" cy="6.5" r="2.1" stroke="currentColor" strokeWidth="1.2"/>
-      <path d="M6.5 1v1.6M6.5 10.4V12M1 6.5h1.6M10.4 6.5H12M2.8 2.8l1.1 1.2M9.1 9.1l1.1 1.1M10.2 2.8L9.1 3.9M3.9 9.1L2.8 10.2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-    </svg>
-  );
-}
-
-interface Props {
-  onOpenSettings: () => void;
-}
-
-export function AppFooter({ onOpenSettings }: Props) {
+export function AppFooter() {
   const { t } = useTranslation();
   const { scale, increase, decrease } = useScale();
 
   return (
     <footer className="app-footer">
       <div className="footer-inner">
-      {/* Left: version + author + settings */}
+      {/* Left: version + author */}
       <div className="footer-left">
         <ExternalLink
           href="https://github.com/muratdincmd/zonaly/releases"
@@ -91,16 +78,6 @@ export function AppFooter({ onOpenSettings }: Props) {
           <GitHubIcon />
           muratdincmd
         </ExternalLink>
-        <span className="footer-sep">·</span>
-        <button
-          type="button"
-          className="footer-link footer-settings-btn"
-          onClick={onOpenSettings}
-          aria-label={t("footer.settings")}
-          title={t("footer.settings")}
-        >
-          <SettingsIcon />
-        </button>
       </div>
 
       {/* Right: theme toggle + scale control */}
