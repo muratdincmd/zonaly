@@ -16,7 +16,6 @@ import {
 } from "./components/ExtensionPicker";
 import { ResultsList } from "./components/ResultsList";
 import { SettingsModal } from "./components/SettingsModal";
-import { ThemeToggle } from "./components/ThemeToggle";
 import { TitleBar } from "./components/TitleBar";
 import { Toast } from "./components/Toast";
 import { WatchlistPanel } from "./components/WatchlistPanel";
@@ -395,7 +394,6 @@ function AppShell() {
               )}
             </button>
             <LanguageSelector />
-            <ThemeToggle />
           </div>
         </header>
       )}

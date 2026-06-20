@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { AppLogo } from "./AppLogo";
 import { LanguageSelector } from "./LanguageSelector";
 import { TabBar } from "./TabBar";
-import { ThemeToggle } from "./ThemeToggle";
 
 // Window control button SVG icons
 function IconMinimize() {
@@ -114,7 +113,6 @@ export function TitleBar({ onOpenHistory, onOpenWatchlist, watchlistUnread = 0 }
         )}
 
         <LanguageSelector />
-        <ThemeToggle />
 
         <div className="titlebar-win-btns">
           <button

@@ -4,6 +4,7 @@ import { invoke } from "@tauri-apps/api/core";
 
 import pkg from "../../package.json";
 import { useScale } from "../hooks/useScale";
+import { ThemeToggle } from "./ThemeToggle";
 
 function ExternalLink({
   href,
@@ -102,27 +103,30 @@ export function AppFooter({ onOpenSettings }: Props) {
         </button>
       </div>
 
-      {/* Right: scale control */}
-      <div className="scale-control" aria-label={t("footer.scaleLabel")}>
-        <button
-          type="button"
-          className="scale-btn"
-          onClick={decrease}
-          disabled={scale <= 70}
-          aria-label={t("footer.decrease")}
-        >
-          −
-        </button>
-        <span className="scale-value">{scale}%</span>
-        <button
-          type="button"
-          className="scale-btn"
-          onClick={increase}
-          disabled={scale >= 150}
-          aria-label={t("footer.increase")}
-        >
-          +
-        </button>
+      {/* Right: theme toggle + scale control */}
+      <div className="footer-right">
+        <ThemeToggle />
+        <div className="scale-control" aria-label={t("footer.scaleLabel")}>
+          <button
+            type="button"
+            className="scale-btn"
+            onClick={decrease}
+            disabled={scale <= 70}
+            aria-label={t("footer.decrease")}
+          >
+            −
+          </button>
+          <span className="scale-value">{scale}%</span>
+          <button
+            type="button"
+            className="scale-btn"
+            onClick={increase}
+            disabled={scale >= 150}
+            aria-label={t("footer.increase")}
+          >
+            +
+          </button>
+        </div>
       </div>
       </div>
     </footer>

@@ -734,6 +734,13 @@ button {
   font: inherit;
 }
 
+/* Right cluster: scale control + theme toggle */
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
 /* Scale control */
 .scale-control {
   display: flex;
