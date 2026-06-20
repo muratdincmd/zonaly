@@ -10,11 +10,14 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- **Settings panel (Phase 10).** A new gear icon in the app footer opens a
-  Settings modal with five tabs:
+- **Settings panel (Phase 10).** A gear icon in the title bar (next to the
+  history/watchlist buttons) opens a Settings modal with five tabs:
   - **General** — theme (light/dark/system, wired to the existing
-    `ThemeProvider`), language (embeds the existing `LanguageSelector`), and an
-    autostart-on-login toggle wired to the previously-registered
+    `ThemeProvider`); language as an inline, always-visible pill grid (the
+    header's popup `LanguageSelector` isn't reused here — it gets clipped
+    inside the modal's scrollable body, so the General tab renders its own
+    grid sharing the same `LANGUAGES` list and `changeLanguage()` helper);
+    an autostart-on-login toggle wired to the previously-registered
     `tauri-plugin-autostart` (`enable()`/`disable()`/`isEnabled()`).
   - **Cache** — shows the RDAP bootstrap cache's age and size, with a "Clear
     Cache" button that clears both the on-disk file and the in-memory cache.
@@ -23,8 +26,9 @@ Versions follow [Semantic Versioning](https://semver.org/).
     change / expiry-within-N-days) applied to newly-created watchlist entries.
   - **Monitoring** — default check interval for new watchlist entries, and a
     configurable maximum concurrent request limit (1–30, default 10).
-  - **About** — app version, and links to the changelog, GitHub repo, and
-    releases page (opened via the existing `open_url` command).
+  - **About** — app version; a GitHub link to the developer plus a Donate
+    button right under it; links to the changelog, GitHub repo, and releases
+    page (all opened via the existing `open_url` command).
   - All global settings persist in a single `"zonaly.settings"` localStorage
     blob (`src/hooks/useSettings.ts`); theme, language, and UI scale continue
     to use their own existing storage keys, unchanged.
@@ -34,8 +38,23 @@ Versions follow [Semantic Versioning](https://semver.org/).
   disrupting any batch already in flight.
 - **New Tauri commands:** `get_cache_info`, `clear_rdap_cache`,
   `set_max_concurrency`.
-- **i18n:** new `settings.*` namespace and `footer.settings` key added to all
-  14 supported languages.
+- **Donate button.** A heart-icon "Donate" button (in the footer, and mirrored
+  in Settings' About tab) opens `https://muratdinc.com/donate?utm_source=zonaly`.
+  Framed like the app's other buttons (not a full pill), with a slow glowing
+  border animation — only the border/glow pulses, text and heart stay the
+  fixed brand color.
+- **i18n:** new `settings.*` namespace, `footer.settings`, and `footer.donate`
+  keys added to all 14 supported languages.
+
+### Changed
+
+- **Theme toggle moved** from the title bar into the app footer, next to the
+  UI scale control (left of it).
+- **Settings gear icon moved** from the footer into the title bar (and the
+  non-custom-titlebar fallback header), sized to match the existing
+  history/watchlist icon buttons. Its icon was also redrawn — the previous
+  8-spoke design read as a sun rather than a gear; it's now a standard
+  6-tooth gear outline.
 
 ## [0.9.0] — 2026-06-20
 

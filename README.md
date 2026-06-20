@@ -56,12 +56,14 @@ Built with [Tauri v2](https://v2.tauri.app/) (Rust) + React + TypeScript. Querie
 ### Interface & UX
 - **14 languages** — EN, TR, DE, ES, FR, IT, PT, RU, ZH, JA, KO, AR, NL, PL; auto-detected from system locale, persisted across sessions
 - **RTL support** — full right-to-left layout when Arabic is selected
-- **Light / dark theme** — system preference auto-detected, manual override persisted
+- **Light / dark theme** — system preference auto-detected, manual override persisted; toggle lives in the footer next to the UI scale control
 - **Animated theme toggle** — sliding pill switch with sun/moon icon inside the thumb
+- **Settings panel** — gear icon in the title bar opens a modal covering General (theme, language, autostart-on-login), Cache (RDAP bootstrap cache age/size, manual clear), Notifications (global on/off, default alert types for new watchlist entries), Monitoring (default check interval, max concurrent requests), and About (version, GitHub, changelog, releases, Donate)
 - **Fixed header & footer** — header always visible at top, footer always at bottom
 - **UI scale control** — resize the content area from 70% to 150% via footer +/− buttons, persisted across sessions
+- **Donate button** — heart-icon button in the footer and Settings' About tab, with a slow glowing-border animation
 - **Custom app icon** — indigo Z lettermark with globe arc overlays
-- **Custom title bar (Windows)** — branded frameless title bar with logo, tab bar, language selector, theme toggle, and window controls; native chrome on macOS/Linux
+- **Custom title bar (Windows)** — branded frameless title bar with logo, tab bar, language selector, history/watchlist/settings icon buttons, and window controls; native chrome on macOS/Linux
 - **Splashscreen** — transparent animated splash while the app loads, eliminating flash of unstyled content
 - **Installer branding** — custom NSIS banner/sidebar (Windows) and DMG background (macOS); icon cache auto-refreshed after install on Windows
 
@@ -161,6 +163,9 @@ Panel features (invoke on demand):
   System tray    ──► Show Zonaly / Check Watchlist Now / Quit — built with tauri::tray (no JS round-trip)
   Export toolbar ──► export_results → Blob download (CSV or JSON)
   Details modal  ──► fetch_domain_details → RDAP / WHOIS registrar + dates + nameservers
+  Settings modal ──► get_cache_info / clear_rdap_cache / set_max_concurrency
+                            └─► RdapClient's semaphore is swapped (not mutated) on concurrency change,
+                                so an in-flight batch keeps running at its original permit count
 ```
 
 **Why RDAP over WHOIS?** RDAP is a structured, standardized HTTPS/JSON protocol — availability is a clean HTTP status code (200 = taken, 404 = available) instead of brittle, registry-specific text parsing. The app fetches the [IANA RDAP bootstrap](https://data.iana.org/rdap/dns.json) on first run to discover the correct server per TLD; ccTLDs without RDAP fall back to port-43 WHOIS automatically.
@@ -174,36 +179,39 @@ zonaly/
 │   ├── App.tsx                     # single-page layout + all top-level state
 │   ├── components/
 │   │   ├── AppLogo.tsx             # Z lettermark + wordmark
-│   │   ├── AppFooter.tsx           # version, GitHub link, scale control
+│   │   ├── AppFooter.tsx           # version, GitHub link, Donate button, theme toggle, scale control
 │   │   ├── DomainInput.tsx         # textarea with sanitization
 │   │   ├── ExtensionPicker.tsx     # categorized TLD checkboxes
 │   │   ├── HistoryPanel.tsx        # History + Saved sessions slide-in panel
 │   │   ├── WatchlistPanel.tsx      # Watchlist slide-in panel
 │   │   ├── DomainDetailsModal.tsx  # registrar / dates / nameservers modal
+│   │   ├── SettingsModal.tsx       # General / Cache / Notifications / Monitoring / About tabs
 │   │   ├── ResultsList.tsx         # available / taken / error groups + export toolbar
 │   │   ├── ResultRow.tsx           # single result row with watchlist + external link
 │   │   ├── TabBar.tsx              # multi-tab bar (Windows title bar)
-│   │   ├── TitleBar.tsx            # custom frameless title bar (Windows)
-│   │   ├── ThemeToggle.tsx         # animated sun/moon toggle
-│   │   ├── LanguageSelector.tsx    # 3-column language grid
+│   │   ├── TitleBar.tsx            # custom frameless title bar (Windows) — incl. settings gear icon
+│   │   ├── ThemeToggle.tsx         # animated sun/moon toggle (lives in AppFooter)
+│   │   ├── LanguageSelector.tsx    # header popup grid; exports LANGUAGES/changeLanguage() reused by SettingsModal
 │   │   └── Toast.tsx               # auto-dismissing notification
 │   ├── context/TabsContext.tsx     # per-tab state via useReducer
 │   ├── hooks/
 │   │   ├── useDomainCheck.ts       # invoke + listen wrappers
 │   │   ├── useMonitoring.ts        # background watchlist auto-check (15 min)
 │   │   ├── useScale.ts             # UI zoom persistence
+│   │   ├── useSettings.ts          # zonaly.settings localStorage blob (+ plain readSettings() export)
 │   │   ├── useToast.ts             # toast state management
 │   │   └── useWatchlistNotifications.ts  # native OS notifications for watchlist alerts
 │   ├── i18n/locales/               # 14 language JSON files
 │   ├── theme/ThemeProvider.tsx     # system detect + manual override
 │   ├── types/
 │   │   ├── domain.ts               # DomainQuery / DomainResult / DomainStatus
+│   │   ├── settings.ts             # ZonalySettings interface + DEFAULT_SETTINGS
 │   │   └── storage.ts              # HistoryEntry / SavedSession / WatchlistEntry / WatchlistAlert / WatchlistStats
 │   └── utils/sanitizeDomains.ts   # URL → bare domain name sanitizer
 └── src-tauri/                      # Rust backend
     └── src/
-        ├── commands.rs             # all Tauri commands (check_domains, history, sessions, watchlist, monitoring, export …)
-        ├── types.rs                # DomainQuery / DomainResult / DomainStatus / DomainDetails / WatchlistAlertEvent
+        ├── commands.rs             # all Tauri commands (check_domains, history, sessions, watchlist, monitoring, settings/cache, export …)
+        ├── types.rs                # DomainQuery / DomainResult / DomainStatus / DomainDetails / WatchlistAlertEvent / CacheInfo
         ├── tray.rs                 # system tray icon, menu, alert badge swapping
         ├── db/                     # SQLite persistence (rusqlite bundled)
         │   ├── mod.rs              # Database struct, WAL setup, schema init
@@ -211,7 +219,7 @@ zonaly/
         │   ├── sessions.rs         # sessions table CRUD
         │   └── watchlist.rs        # watchlist table CRUD
         └── rdap/                   # RDAP + WHOIS backend
-            ├── mod.rs              # RdapClient: semaphore, dedup, bootstrap cache
+            ├── mod.rs              # RdapClient: swappable semaphore, dedup, bootstrap cache (clear/info)
             ├── bootstrap.rs        # IANA bootstrap fetch + 24h disk cache
             ├── client.rs           # per-domain HTTP query + retry/backoff
             ├── details.rs          # RDAP domain details parser
@@ -242,7 +250,7 @@ npm run tauri dev        # hot-reload for both Rust and React
 
 ```bash
 npm run typecheck        # tsc --noEmit
-npm test                 # Vitest unit tests (70 tests, run once)
+npm test                 # Vitest unit tests (100 tests, run once)
 npm run test:watch       # Vitest in watch mode
 npm run test:coverage    # Vitest + lcov coverage report
 npm run tauri build      # production bundle → src-tauri/target/release/bundle/
@@ -250,7 +258,7 @@ npm run tauri build      # production bundle → src-tauri/target/release/bundle
 # From src-tauri/
 cargo check
 cargo clippy -- -D warnings
-cargo test               # all Rust tests (Linux/macOS CI)
+cargo test               # all Rust tests (66 tests; Linux/macOS CI)
 cargo t                  # lib-only tests — use on Windows to avoid Application Control blocking the main binary
 cargo fmt
 
@@ -272,7 +280,7 @@ node scripts/generate-icons.mjs
 | 7 — Domain Intelligence | ✅ Done | Local query history, saved sessions, export CSV/JSON, domain watchlist, SQLite persistence |
 | 8 — Watchlist Monitoring | ✅ Done | Per-entry scheduling (1h–weekly), alert types (available/change/expiry), alert banner, unread badge, background auto-poll |
 | 9 — Background Service | ✅ Done | System tray icon (show/check now/quit), tray alert badge, native OS notifications for watchlist alerts, autostart plugin registered (UI toggle deferred to Phase 10) |
-| 10 — Settings Panel | ⬜ Planned | Settings modal: cache management, notification prefs, monitoring intervals, About |
+| 10 — Settings Panel | ✅ Done | Settings modal: general (theme/language/autostart), cache management, notification prefs, monitoring intervals, About (incl. Donate) |
 | 11 — Advanced DNS | ⬜ Planned | DNS record display (NS/MX/SOA/A), DNS health, registrar intelligence, parked domain detection |
 
 ## Contributing
