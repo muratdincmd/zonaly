@@ -1,0 +1,17 @@
+---
+description: Kebab-case installer artifact filenames (no spaces)
+alwaysApply: true
+---
+
+# Installer artifacts
+
+Display name (`productName`, Start Menu) may contain spaces or capitals.
+
+**Bundle filenames must be kebab-case** from `package.json` `name`:
+
+`{name}_{version}_{arch}-setup.exe` — e.g. `my-image_0.1.86_x64-setup.exe`
+
+- Tauri 2.11 has no installer-filename setting. Wrap `tauri` with `scripts/tauri.mjs` + `scripts/rename-bundle-artifacts.mjs`.
+- Rename **only the current version**. Do not rewrite leftover older files in `target/`.
+- Electron: set `artifactName` to kebab-case; do not interpolate `${productName}` into filenames.
+- Do not change `productName` / window title just to fix the filename.

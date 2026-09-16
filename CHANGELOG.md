@@ -6,6 +6,14 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.10.1] — 2026-09-16
+
+### Changed
+
+- Windows NSIS/MSI artifacts are kebab-case (`zonaly_<version>_x64-setup.exe`) after `tauri build`. Display name stays **Zonaly**. Only the current version is renamed; leftover files in `target/` stay as they are.
+
+---
+
 ## [0.10.0] — 2026-06-20
 
 ### Added
